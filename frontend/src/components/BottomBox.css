@@ -1,0 +1,10 @@
+.bottom-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgb(112, 162, 36);
+  border: 1px solid #ddd;
+  padding: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
