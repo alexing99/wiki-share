@@ -10,7 +10,7 @@ function CreateUserForm() {
     event.preventDefault();
 
     try {
-      const response = await fetch("/api/users", {
+      const response = await fetch("http://localhost:4578/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
