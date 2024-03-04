@@ -14,7 +14,7 @@
 import { useState } from "react";
 
 function LoginForm() {
-  const [email, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
@@ -31,7 +31,7 @@ function LoginForm() {
 
       if (response.ok) {
         console.log("login successful!");
-        setName("");
+        setEmail("");
         setPassword("");
       } else {
         const error = await response.json();
@@ -46,9 +46,9 @@ function LoginForm() {
     <form onSubmit={handleSubmit}>
       <label>Email:</label>
       <input
-        type="eamil"
+        type="email"
         value={email}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
         required
       />
       <br />
