@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import BottomBox from "./components/BottomBox";
 import "./App.css";
 import CreateUserForm from "./components/CreateUserForm";
+import LoginForm from "./components/LoginForm";
 
 function App() {
   const [article, setArticle] = useState(null);
@@ -156,6 +157,7 @@ function App() {
         </form>
       </div> */}
       <CreateUserForm />
+      <LoginForm />
       <form onSubmit={handleSearch}>
         <input
           className={"searchbar"}

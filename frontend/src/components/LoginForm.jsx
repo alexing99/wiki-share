@@ -1,31 +1,41 @@
+// return (
+//   <div className="login-form">
+//     <h1>please log in</h1>
+//     <form action="/log-in" method="POST">
+//       <label for="username">Username</label>
+//       <input name="username" placeholder="username" type="text" />
+//       <label for="password">Password</label>
+//       <input name="password" type="password" />
+//       <button>Log In</button>
+//     </form>
+//   </div>
+// );
+
 import { useState } from "react";
 
-function CreateUserForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+function LoginForm() {
+  const [email, setName] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
-    console.log("bet");
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4578/users", {
+      const response = await fetch("http://localhost:4578/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
-        console.log("User created successfully!");
+        console.log("login successful!");
         setName("");
-        setEmail("");
         setPassword("");
       } else {
         const error = await response.json();
-        console.error("Error creating user:", error);
+        console.error("Error logging in:", error);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -34,19 +44,11 @@ function CreateUserForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Name:</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <br />
       <label>Email:</label>
       <input
-        type="email"
+        type="eamil"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
         required
       />
       <br />
@@ -58,9 +60,9 @@ function CreateUserForm() {
         required
       />
       <br />
-      <button type="submit">Create User</button>
+      <button type="submit">Login</button>
     </form>
   );
 }
 
-export default CreateUserForm;
+export default LoginForm;
