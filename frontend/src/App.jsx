@@ -3,6 +3,7 @@ import BottomBox from "./components/BottomBox";
 import "./App.css";
 import CreateUserForm from "./components/CreateUserForm";
 import LoginForm from "./components/LoginForm";
+import Cookies from "universal-cookie";
 
 function App() {
   const [article, setArticle] = useState(null);
@@ -10,6 +11,9 @@ function App() {
   const [selectedText, setSelectedText] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showText, setShowText] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [showCreateUserForm, setShowCreateUserForm] = useState(false); // Track visibility of create user form
+  const [showLoginForm, setShowLoginForm] = useState(false); // Track visibility of login form
   // const [pageViews, setPageViews] = useState(null);
   // const [articleTitle, setArticleTitle] = useState(null);
 
@@ -20,8 +24,26 @@ function App() {
   useEffect(() => {
     // fetchRandomArticle();
     // handleArticleClick();
+
     addSelectionListener();
   }, []);
+
+  console.log(Cookies);
+
+  useEffect(() => {
+    // Check if token exists in cookies when component mounts
+    const cookies = new Cookies();
+    const token = cookies.get("token");
+    if (token) {
+      setLoggedIn(true);
+      console.log("ur in");
+    } else {
+      setLoggedIn(false);
+      console.log("nooo");
+    }
+  }, []); // Run this effect only once when component mounts
+
+  console.log("h", isLoggedIn);
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -90,74 +112,57 @@ function App() {
     }
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleCreateUserClick = () => {
+    setShowCreateUserForm(true);
+    setShowLoginForm(false);
+  };
 
-  //   try {
-  //     const response = await fetch("/api/users", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ name, email, password }),
-  //     });
+  const handleLoginClick = () => {
+    setShowLoginForm(true);
+    setShowCreateUserForm(false);
+  };
 
-  //     if (response.ok) {
-  //       console.log("User created successfully!");
+  const handleLogOut = () => {
+    const cookies = new Cookies();
+    cookies.remove("token");
 
-  //       setName("");
-  //       setEmail("");
-  //       setPassword("");
-  //     } else {
-  //       const error = await response.json();
-  //       console.error("Error creating user:", error);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error);
-  //   }
-  // };
+    setLoggedIn(false);
+  };
 
   return (
     <div className="App">
       <h1>Wiki Passion</h1>
-      {/* <div>
-        <h1>Sign Up</h1> */}
-      {/* <form id="signup-form" onSubmit={handleSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <br />
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <br />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <br />
-          <button type="submit">Sign Up</button>
-        </form>
-      </div> */}
-      <CreateUserForm />
-      <LoginForm />
+      {!isLoggedIn && (
+        <>
+          <div>
+            {!showCreateUserForm && (
+              <div>
+                <button onClick={handleCreateUserClick}>Create Account</button>
+              </div>
+            )}
+            {!showLoginForm && (
+              <div>
+                <button onClick={handleLoginClick}>Log In</button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      <br />
+
+      {/* Render create user form if showCreateUserForm is true */}
+      {showCreateUserForm && <CreateUserForm />}
+
+      {/* Render login form if showLoginForm is true */}
+      {showLoginForm && <LoginForm />}
+
+      {isLoggedIn && (
+        <>
+          <button onClick={handleLogOut}>Log Out</button>
+        </>
+      )}
+
       <form onSubmit={handleSearch}>
         <input
           className={"searchbar"}

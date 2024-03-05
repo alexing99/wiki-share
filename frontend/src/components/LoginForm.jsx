@@ -12,6 +12,7 @@
 // );
 
 import { useState } from "react";
+import Cookies from "universal-cookie";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -30,9 +31,17 @@ function LoginForm() {
       });
 
       if (response.ok) {
+        // if successful, the token will be returned here
         console.log("login successful!");
+        const data = await response.json();
+        const token = data.token;
+
+        // Save the token to cookies
+        const cookies = new Cookies();
+        cookies.set("token", token, { path: "/" }); // Adjust path as needed
         setEmail("");
         setPassword("");
+        window.location.href = "/";
       } else {
         const error = await response.json();
         console.error("Error logging in:", error);
