@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Cookies from "universal-cookie";
 
 function CreateUserForm() {
   const [name, setName] = useState("");
@@ -35,6 +36,7 @@ function CreateUserForm() {
         setName("");
         setEmail("");
         setPassword("");
+        autoLogin(email, password);
       } else {
         const error = await response.json();
         console.error("Error creating user:", error);
@@ -46,6 +48,37 @@ function CreateUserForm() {
   const validatePassword = (password) => {
     const regex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
     return regex.test(password);
+  };
+
+  const autoLogin = async (email, password) => {
+    try {
+      const response = await fetch("http://localhost:4578/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        // if successful, the token will be returned here
+        console.log("login successful!");
+        const data = await response.json();
+        const token = data.token;
+
+        // Save the token to cookies
+        const cookies = new Cookies();
+        cookies.set("token", token, { path: "/" }); // Adjust path as needed
+        setEmail("");
+        setPassword("");
+        window.location.href = "/";
+      } else {
+        const error = await response.json();
+        console.error("Error logging in:", error);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (

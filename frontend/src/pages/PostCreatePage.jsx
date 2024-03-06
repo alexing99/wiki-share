@@ -1,25 +1,15 @@
 import { useState, useEffect } from "react";
-import "../src/App.css";
-import Cookies from "universal-cookie";
-// import { Route, Switch } from "react-router-dom";
+import "../../src/App.css";
 
-import BottomBox from "./components/BottomBox";
-import CreateUserForm from "./components/CreateUserForm";
-import LoginForm from "./components/LoginForm";
-import Navbar from "./components/NavBar";
-// import Feed from "./pages/Feed";
-// import Profile from "./pages/UserPage";
-// import PostCreator from "./pages/PostCreatePage";
+import BottomBox from "../components/BottomBox";
+import Navbar from "../components/NavBar";
 
-function App() {
+function PostCreation() {
   const [article, setArticle] = useState(null);
 
   const [selectedText, setSelectedText] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showText, setShowText] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [showCreateUserForm, setShowCreateUserForm] = useState(false); // Track visibility of create user form
-  const [showLoginForm, setShowLoginForm] = useState(false); // Track visibility of login form
   // const [pageViews, setPageViews] = useState(null);
   // const [articleTitle, setArticleTitle] = useState(null);
 
@@ -33,23 +23,6 @@ function App() {
 
     addSelectionListener();
   }, []);
-
-  console.log(Cookies);
-
-  useEffect(() => {
-    // Check if token exists in cookies when component mounts
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    if (token) {
-      setLoggedIn(true);
-      console.log("ur in");
-    } else {
-      setLoggedIn(false);
-      console.log("nooo");
-    }
-  }, []); // Run this effect only once when component mounts
-
-  console.log("h", isLoggedIn);
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -118,71 +91,9 @@ function App() {
     }
   };
 
-  const handleCreateUserClick = () => {
-    setShowCreateUserForm(true);
-    setShowLoginForm(false);
-  };
-
-  const handleLoginClick = () => {
-    setShowLoginForm(true);
-    setShowCreateUserForm(false);
-  };
-
-  const handleLogOut = () => {
-    const cookies = new Cookies();
-    cookies.remove("token");
-
-    setLoggedIn(false);
-  };
-
   return (
-    <div className="App">
-      <h1>Wiki Passion</h1>
-
-      {/* <Switch>
-        <Route exact path="/">
-          <Feed />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-        <Route path="/create-post">
-          <PostCreator />
-        </Route>
-      </Switch> */}
-
-      {!isLoggedIn && (
-        <>
-          <div>
-            {!showCreateUserForm && (
-              <div>
-                <button onClick={handleCreateUserClick}>Create Account</button>
-              </div>
-            )}
-            {!showLoginForm && (
-              <div>
-                <button onClick={handleLoginClick}>Log In</button>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-
-      <br />
-
-      {/* Render create user form if showCreateUserForm is true */}
-      {showCreateUserForm && <CreateUserForm />}
-
-      {/* Render login form if showLoginForm is true */}
-      {showLoginForm && <LoginForm />}
-
-      {isLoggedIn && (
-        <>
-          <button onClick={handleLogOut}>Log Out</button>
-        </>
-      )}
-      <Navbar></Navbar>
-
+    <>
+      <Navbar></Navbar>{" "}
       <form onSubmit={handleSearch}>
         <input
           className={"searchbar"}
@@ -193,7 +104,6 @@ function App() {
         />
         <button type="submit">Search</button>
       </form>
-
       {article && (
         <div
           id="article"
@@ -201,11 +111,10 @@ function App() {
           onClick={handleLinkClick}
         ></div>
       )}
-
       {/* Bottom box component */}
       {showText && <BottomBox selectedText={selectedText} />}
-    </div>
+    </>
   );
 }
 
-export default App;
+export default PostCreation;

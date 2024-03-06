@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+img {
+  user-select: none;
+}
+
+h1 {
+  user-select: none;
+}
+
+.searchbar {
+  user-select: none;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 2px;
+}

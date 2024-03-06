@@ -1,16 +1,3 @@
-// return (
-//   <div className="login-form">
-//     <h1>please log in</h1>
-//     <form action="/log-in" method="POST">
-//       <label for="username">Username</label>
-//       <input name="username" placeholder="username" type="text" />
-//       <label for="password">Password</label>
-//       <input name="password" type="password" />
-//       <button>Log In</button>
-//     </form>
-//   </div>
-// );
-
 import { useState } from "react";
 import Cookies from "universal-cookie";
 
