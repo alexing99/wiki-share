@@ -20,3 +20,6 @@ Content-Type: application/json
     "email": "alexinglis7799@gmail.com",
     "password": "Fidelis99"
 }
+###
+
+GET http://localhost:4578/users/:65e7658b225fac15d63b08fe

@@ -29,7 +29,21 @@ router.post("/", async (req, res) => {
 
 // Route for fetching user profiles
 router.get("/:id", async (req, res) => {
-  // Implement logic to fetch user profile by ID
+  try {
+    const userId = req.params.id;
+    console.log(userId);
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If user found, send user information in the response
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 // Route for updating user profiles

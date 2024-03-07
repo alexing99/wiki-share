@@ -1,6 +1,22 @@
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  // const handleCreateUserClick = () => {
+  //     setShowCreateUserForm(true);
+  //     setShowLoginForm(false);
+  //   };
+
+  //   const handleLoginClick = () => {
+  //     setShowLoginForm(true);
+  //     setShowCreateUserForm(false);
+  //   };
+
+  //   const handleLogOut = () => {
+  //     const cookies = new Cookies();
+  //     cookies.remove("token");
+
+  //     setLoggedIn(false);
+  //   };
   return (
     <nav>
       <ul>

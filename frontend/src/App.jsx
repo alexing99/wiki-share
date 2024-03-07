@@ -7,9 +7,6 @@ import BottomBox from "./components/BottomBox";
 import CreateUserForm from "./components/CreateUserForm";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/NavBar";
-// import Feed from "./pages/Feed";
-// import Profile from "./pages/UserPage";
-// import PostCreator from "./pages/PostCreatePage";
 
 function App() {
   const [article, setArticle] = useState(null);
