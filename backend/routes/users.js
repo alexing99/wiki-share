@@ -47,35 +47,50 @@ router.get("/:id", async (req, res) => {
 });
 
 // Route for updating user profiles
-router.put("/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   // Implement logic to update user profile by ID
+  const userId = req.params.id;
+  const { name, email, password } = req.body; // Assuming the request body contains the updated name and email
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user's name and email
+    if (name) {
+      user.name = name;
+    }
+
+    // Update user's email if present in request body
+    if (email) {
+      user.email = email;
+    }
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+    await user.save();
+
+    res.status(200).json({ message: "User information updated successfully" });
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 // Route for deleting user accounts
 router.delete("/:id", async (req, res) => {
-  // Implement logic to delete user account by ID
+  try {
+    const userId = req.params.id;
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "User account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user account");
+    res.status(500).json({ message: "Server Error" });
+  }
 });
-//   try {
-//     // Extract user data from request body
-//     const { name, email, password } = req.body;
-
-//     // Create a new user instance
-//     const newUser = new User({
-//       name,
-//       email,
-//       password,
-//     });
-
-//     // Save the new user to the database
-//     const savedUser = await newUser.save();
-
-//     // Send a success response
-//     res.status(201).json(savedUser);
-//   } catch (error) {
-//     // Send an error response if something goes wrong
-//     console.error("Error creating user:", error);
-//     res.status(500).json({ message: "Error creating user" });
-//   }
-// });
 
 export default router;

@@ -13,8 +13,6 @@ const router = express.Router();
 // Route for user login
 router.post("/", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
-    console.log(user);
-    console.log("o", process.env.JWT_SECRET);
     if (err) {
       return next(err);
     }
