@@ -7,6 +7,7 @@ import passport from "./passport-config.js";
 
 import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
+import postRoutes from "./routes/posts.js";
 
 // import User from "../models/user.js";
 
@@ -27,6 +28,7 @@ app.use(passport.session());
 // Routes
 app.use("/users", userRoutes);
 app.use("/login", loginRoutes);
+app.use("/posts", postRoutes);
 
 // MongoDB connection
 mongoose

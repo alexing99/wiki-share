@@ -10,6 +10,7 @@ function PostCreation() {
   const [selectedText, setSelectedText] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showText, setShowText] = useState(false);
+  const [wikiURL, setWikiURL] = useState("");
   // const [pageViews, setPageViews] = useState(null);
   // const [articleTitle, setArticleTitle] = useState(null);
 
@@ -32,9 +33,11 @@ function PostCreation() {
           searchQuery
         )}?redirects=1`
       );
+
       if (!response.ok) {
         throw new Error("Failed to fetch search results");
       }
+      setWikiURL(response.url);
 
       let html = await response.text();
 
@@ -112,7 +115,7 @@ function PostCreation() {
         ></div>
       )}
       {/* Bottom box component */}
-      {showText && <BottomBox selectedText={selectedText} />}
+      {showText && <BottomBox selectedText={selectedText} wikiURL={wikiURL} />}
     </>
   );
 }
