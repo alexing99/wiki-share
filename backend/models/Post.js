@@ -5,9 +5,9 @@ const postSchema = new mongoose.Schema({
   article: String,
   content: String,
   timestamp: Date,
-  tags: [String],
+  //   tags: [String],
 });
 
-const Post = mongoose.model("Post", PostSchema);
+const Post = mongoose.model("Post", postSchema);
 
 export default Post;

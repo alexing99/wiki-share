@@ -6,6 +6,7 @@ import "./index.css";
 import Feed from "./pages/Feed";
 import Profile from "./pages/UserPage";
 import PostCreator from "./pages/PostCreatePage";
+import { UserProvider } from "./UserContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </React.StrictMode>
 );

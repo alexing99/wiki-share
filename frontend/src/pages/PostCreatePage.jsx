@@ -4,6 +4,8 @@ import "../../src/App.css";
 import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
 
+import { useLocation } from "react-router-dom";
+
 function PostCreation() {
   const [article, setArticle] = useState(null);
 

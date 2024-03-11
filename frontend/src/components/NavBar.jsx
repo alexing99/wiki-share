@@ -17,6 +17,7 @@ function Navbar() {
 
   //     setLoggedIn(false);
   //   };
+
   return (
     <nav>
       <ul>
