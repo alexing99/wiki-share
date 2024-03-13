@@ -25,7 +25,14 @@ router.post("/", async (req, res) => {
 });
 
 // Route for getting all posts for feed
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  try {
+    const allPosts = await Post.find({});
+    res.status(200).json(allPosts);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 
 // Route for fetching single post
 router.get("/:id", async (req, res) => {});

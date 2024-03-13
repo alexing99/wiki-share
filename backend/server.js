@@ -31,6 +31,8 @@ app.use("/login", loginRoutes);
 app.use("/posts", postRoutes);
 
 // MongoDB connection
+mongoose.set("strictQuery", false); // or true based on your preference
+
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,

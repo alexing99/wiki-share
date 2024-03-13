@@ -4,15 +4,50 @@ import "../../src/App.css";
 import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
 
-import { useLocation } from "react-router-dom";
-
-function PostCreation() {
+// eslint-disable-next-line react/prop-types
+function PostCreation({ stepPost }) {
+  console.log(stepPost);
+  const [replyMode, setReplyMode] = useState(false);
+  const [replyArticle, setReplyArticle] = useState();
   const [article, setArticle] = useState(null);
 
   const [selectedText, setSelectedText] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showText, setShowText] = useState(false);
   const [wikiURL, setWikiURL] = useState("");
+
+  const getReplyArticle = async () => {
+    if (stepPost) {
+      // const [linkLimit, setLinkLimit] = useState(false);
+      setReplyMode(true);
+      setReplyArticle(stepPost);
+      console.log("hmm", replyArticle);
+      try {
+        const response = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+            stepPost
+          )}?redirects=1`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch search results");
+        }
+        setWikiURL(response.url);
+
+        let html = await response.text();
+
+        html = html.replace(
+          /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+          ""
+        );
+        setArticle(html);
+      } catch (error) {
+        console.error(error);
+        setArticle("No Articles");
+      }
+    }
+  };
+
   // const [pageViews, setPageViews] = useState(null);
   // const [articleTitle, setArticleTitle] = useState(null);
 
@@ -23,7 +58,7 @@ function PostCreation() {
   useEffect(() => {
     // fetchRandomArticle();
     // handleArticleClick();
-
+    getReplyArticle();
     addSelectionListener();
   }, []);
 
@@ -98,17 +133,22 @@ function PostCreation() {
 
   return (
     <>
-      <Navbar></Navbar>{" "}
-      <form onSubmit={handleSearch}>
-        <input
-          className={"searchbar"}
-          type="text"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
-          placeholder="Enter article title"
-        />
-        <button type="submit">Search</button>
-      </form>
+      {!replyMode && (
+        <>
+          <Navbar></Navbar>{" "}
+          <form onSubmit={handleSearch}>
+            <input
+              className={"searchbar"}
+              type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Enter article title"
+            />
+            <button type="submit">Search</button>
+          </form>
+        </>
+      )}
+
       {article && (
         <div
           id="article"
