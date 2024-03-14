@@ -73,7 +73,7 @@ function Feed() {
   return (
     <>
       <Navbar></Navbar>
-      <p>feed here</p>
+
       <ul>
         {gotPosts.map((post) => (
           <li key={post._id}>
@@ -98,7 +98,7 @@ function Feed() {
               }}
             >
               {showPostCreation && post.article === selectedArticle && (
-                <PostCreation stepPost={post.article} />
+                <PostCreation stepPost={post} />
               )}
             </div>
           </li>

@@ -6,9 +6,9 @@ import Navbar from "../components/NavBar";
 
 // eslint-disable-next-line react/prop-types
 function PostCreation({ stepPost }) {
-  console.log(stepPost);
+  const [articleFrom, setArticleFrom] = useState(stepPost);
   const [replyMode, setReplyMode] = useState(false);
-  const [replyArticle, setReplyArticle] = useState();
+  // const [replyArticle, setReplyArticle] = useState();
   const [article, setArticle] = useState(null);
 
   const [selectedText, setSelectedText] = useState(null);
@@ -20,12 +20,11 @@ function PostCreation({ stepPost }) {
     if (stepPost) {
       // const [linkLimit, setLinkLimit] = useState(false);
       setReplyMode(true);
-      setReplyArticle(stepPost);
-      console.log("hmm", replyArticle);
+
       try {
         const response = await fetch(
           `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-            stepPost
+            articleFrom.article
           )}?redirects=1`
         );
 
@@ -123,6 +122,9 @@ function PostCreation({ stepPost }) {
           throw new Error("Failed to fetch linked article");
         }
         const html = await response.text();
+
+        setWikiURL(response.url);
+        console.log("bettt", wikiURL);
         setArticle(html);
       } catch (error) {
         console.error(error);
@@ -157,7 +159,15 @@ function PostCreation({ stepPost }) {
         ></div>
       )}
       {/* Bottom box component */}
-      {showText && <BottomBox selectedText={selectedText} wikiURL={wikiURL} />}
+      {showText && (
+        <BottomBox
+          key={wikiURL}
+          selectedText={selectedText}
+          wikiURL={wikiURL}
+          replyMode={replyMode}
+          articleFrom={articleFrom}
+        />
+      )}
     </>
   );
 }

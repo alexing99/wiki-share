@@ -38,7 +38,28 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {});
 
 // Route for updating a post
-router.patch("/:id", async (req, res) => {});
+router.patch("/:id", async (req, res) => {
+  // Implement logic to update user profile by ID
+  const postId = req.params.id;
+  const { replyingWith } = req.body;
+
+  try {
+    console.log({ replyingWith });
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "post not found" });
+    }
+
+    post.replies.push(replyingWith);
+
+    await post.save();
+
+    res.status(200).json({ message: "post information updated successfully" });
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
 // Route for deleting a post
 router.delete("/:id", async (req, res) => {});

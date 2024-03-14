@@ -1,14 +1,15 @@
 import "./BottomBox.css";
 
-import { useUser } from "../UserContext";
+import { useUser } from "../UserContext.jsx";
 
 /* eslint-disable react/prop-types */
 
-const BottomBox = ({ selectedText, wikiURL }) => {
+const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
   const user = useUser();
 
   const postPost = async () => {
     let content = selectedText;
+    console.log(wikiURL);
 
     const author = user.name;
     const url = wikiURL;
@@ -28,7 +29,31 @@ const BottomBox = ({ selectedText, wikiURL }) => {
       });
 
       if (response.ok) {
-        console.log("Post created successfully!");
+        const postData = await response.json();
+        const replyingWith = postData._id;
+        console.log("Post created successfully!", replyingWith);
+        if (replyMode) {
+          try {
+            const nextResponse = await fetch(
+              `http://localhost:4578/posts/${articleFrom._id}`,
+              {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ replyingWith }),
+              }
+            );
+            if (nextResponse.ok) {
+              console.log("reply post created successfully");
+            } else {
+              const error = await response.json();
+              console.error("Error creating reply post:", error);
+            }
+          } catch (error) {
+            console.error("Error creating post:", error);
+          }
+        }
       } else {
         const error = await response.json();
         console.error("Error creating post:", error);
