@@ -10,6 +10,8 @@ function Feed() {
   }, []);
 
   const [gotPosts, setGotPosts] = useState([]);
+  const [parentPosts, setParentPosts] = useState({}); // Store parent posts
+
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
 
@@ -25,6 +27,18 @@ function Feed() {
         console.log(posts);
         setGotPosts(posts);
         console.log(gotPosts);
+        const parentPostIds = new Set(posts.map((post) => post.parentPost));
+        const parentPostsData = await Promise.all(
+          Array.from(parentPostIds).map(fetchParentPost)
+        );
+        const parentPostsMap = {};
+        parentPostsData.forEach((post) => {
+          if (post) {
+            // Check if post is not null
+            parentPostsMap[post._id] = post.article;
+          }
+        });
+        setParentPosts(parentPostsMap);
       } else {
         const error = await response.json();
         console.error("Error retreiving posts:", error);
@@ -69,7 +83,27 @@ function Feed() {
   //     setArticle("No Articles");
   //   }
   // };
+  const fetchParentPost = async (postId) => {
+    console.log(postId, "hmm");
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
 
+      if (response.ok) {
+        console.log("Parent post retrieved!");
+        const parentPostData = await response.json();
+        return parentPostData;
+      } else {
+        const error = await response.json();
+        console.error("Error retrieving parent post:", error);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -80,6 +114,16 @@ function Feed() {
             <h3>{post.article}</h3>
             <p>{post.content}</p>
             <p>From: {post.author}</p>
+
+            <p>Parent: {parentPosts[post.parentPost]}</p>
+
+            {/* <ul>
+              {post.children.map((child) => (
+                <li key={child._id}>
+                  <h4>{child.article}</h4>
+                </li>
+              ))}
+            </ul> */}
             <button onClick={() => toggleDetails(post.article)}>
               Show Article
             </button>
@@ -98,7 +142,7 @@ function Feed() {
               }}
             >
               {showPostCreation && post.article === selectedArticle && (
-                <PostCreation stepPost={post} />
+                <PostCreation parentPost={post} />
               )}
             </div>
           </li>

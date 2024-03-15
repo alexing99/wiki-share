@@ -10,15 +10,29 @@ const router = express.Router();
 // Route handler for creating a new post
 router.post("/", async (req, res) => {
   try {
-    const post = new Post({
-      author: req.body.author,
-      content: req.body.content,
-      article: req.body.article,
-      timestamp: Date.now(),
-    });
+    if (req.body.parent != "") {
+      console.log("parent", req.body.parent);
+      const post = new Post({
+        author: req.body.author,
+        content: req.body.content,
+        article: req.body.article,
+        timestamp: Date.now(),
+        parentPost: req.body.parent,
+      });
 
-    const newPost = await post.save();
-    res.status(201).json(newPost);
+      const newPost = await post.save();
+      res.status(201).json(newPost);
+    } else {
+      const post = new Post({
+        author: req.body.author,
+        content: req.body.content,
+        article: req.body.article,
+        timestamp: Date.now(),
+      });
+
+      const newPost = await post.save();
+      res.status(201).json(newPost);
+    }
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -35,7 +49,20 @@ router.get("/", async (req, res) => {
 });
 
 // Route for fetching single post
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  const postId = req.params.id;
+
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    console.error("Error retrieving post:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
 
 // Route for updating a post
 router.patch("/:id", async (req, res) => {
@@ -50,7 +77,7 @@ router.patch("/:id", async (req, res) => {
       return res.status(404).json({ message: "post not found" });
     }
 
-    post.replies.push(replyingWith);
+    post.children.push(replyingWith);
 
     await post.save();
 

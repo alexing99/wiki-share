@@ -15,17 +15,24 @@ const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
     const url = wikiURL;
     const parts = url.split("/");
     const article = parts[parts.length - 1].split("?")[0];
-    console.log("article", article);
-    console.log("selected", selectedText);
-    console.log("name", author);
+    let parent = "";
+    // console.log("articleFrom", parent);
+    // console.log("article", article);
+    // console.log("selected", selectedText);
+    // console.log("name", author);
+    if (replyMode) {
+      parent = articleFrom._id;
+      console.log(parent, "ye");
+    }
 
     try {
+      console.log(parent);
       const response = await fetch("http://localhost:4578/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ article, content, author }),
+        body: JSON.stringify({ article, content, author, parent }),
       });
 
       if (response.ok) {

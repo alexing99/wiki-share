@@ -5,7 +5,8 @@ const postSchema = new mongoose.Schema({
   article: { type: String, required: true },
   content: { type: String, required: true },
   timestamp: { type: Date, required: true },
-  replies: [
+  parentPost: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+  children: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post", // Reference to the same Post schema for nested replieschema}],

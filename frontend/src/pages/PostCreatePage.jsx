@@ -5,8 +5,7 @@ import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
 
 // eslint-disable-next-line react/prop-types
-function PostCreation({ stepPost }) {
-  const [articleFrom, setArticleFrom] = useState(stepPost);
+function PostCreation({ parentPost }) {
   const [replyMode, setReplyMode] = useState(false);
   // const [replyArticle, setReplyArticle] = useState();
   const [article, setArticle] = useState(null);
@@ -15,9 +14,9 @@ function PostCreation({ stepPost }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showText, setShowText] = useState(false);
   const [wikiURL, setWikiURL] = useState("");
-
+  let articleFrom = parentPost;
   const getReplyArticle = async () => {
-    if (stepPost) {
+    if (parentPost) {
       // const [linkLimit, setLinkLimit] = useState(false);
       setReplyMode(true);
 
