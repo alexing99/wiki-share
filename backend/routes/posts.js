@@ -48,6 +48,41 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Route for fetching root posts
+router.get("/rootposts", async (req, res) => {
+  try {
+    const allRoots = await Post.find({
+      $or: [{ parentPost: { $exists: false } }],
+    });
+    res.status(200).json(allRoots);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+//Route for fetching children of particular roots
+router.get("/:id/children", async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Find the post with the given postId
+    const parentPost = await Post.findById(postId);
+
+    if (!parentPost) {
+      return res.status(404).json({ message: "Parent post not found" });
+    }
+
+    const childrenIds = parentPost.children;
+
+    // Fetch the children posts using their IDs
+    const children = await Post.find({ _id: { $in: childrenIds } });
+
+    res.status(200).json(children);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 // Route for fetching single post
 router.get("/:id", async (req, res) => {
   const postId = req.params.id;

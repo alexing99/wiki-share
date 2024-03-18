@@ -53,6 +53,7 @@ const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
             );
             if (nextResponse.ok) {
               console.log("reply post created successfully");
+              window.location.reload();
             } else {
               const error = await response.json();
               console.error("Error creating reply post:", error);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import Cookies from "universal-cookie";
 
@@ -25,6 +25,10 @@ function Profile() {
   const userId = decodedPayload.id;
   console.log(userId);
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   const getUserInfo = async () => {
     try {
       const response = await fetch(`http://localhost:4578/users/${userId}`, {
@@ -45,7 +49,7 @@ function Profile() {
       console.error("Error:", error);
     }
   };
-  getUserInfo();
+
   const deleteUser = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete your account?"
