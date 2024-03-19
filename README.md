@@ -1,19 +1,24 @@
 # wiki-share
 
--useeffect on some files instead of calling it manually
 -disable links from navbar as they are getting called as wikis
 -vertical and horizontal scrolling for posts not articles. starts with top post or first, scroll down for next
+-color code, roots with children, roots without children, children with children, children without children
+-should maybe say where in the article the quote is from
+-pre-load parent and top reply to prepare for swipe
+-highlight text
 
 - -use the like .... thing
 
 Next Step
--may need to have an optional property for where posts come from
--separate posting for replies and next steps
--might need a mode for this too
+
+-backward functionality
+-bring back the article window
+-sibling
+-swipe functionality
+-multiple carousels
+-no siblings?
+-display only most recent of walk? prolly
 -linklimit
--auto open your recent post
--back to post article after link click
--post redirect
 
 -
 -

@@ -156,10 +156,15 @@
 
 import { useState, useEffect } from "react";
 import Carousel from "../components/Carousel"; // Assume you have a Carousel component
+import PostCreation from "./PostCreatePage";
+import Navbar from "../components/NavBar";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(null);
+  const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
+  const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
+
   //   const [currentLevel, setCurrentLevel] = useState(0);
   //   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
 
@@ -191,9 +196,11 @@ function Feed() {
   //     );
   //   };
 
-  const handleNextButtonClick = (post) => {
-    console.log(post);
-    fetchChildrenData(post);
+  const handleNextButtonClick = (postid) => {
+    fetchChildrenData(postid);
+  };
+  const handlePrevButtonClick = (postid) => {
+    fetchParentPost(postid.parentPost);
   };
 
   //   const handleBackButtonClick = () => {
@@ -220,20 +227,103 @@ function Feed() {
       console.error(`Error fetching descendants for post ${post}:`, error);
     }
   };
+  const fetchParentPost = async (postId) => {
+    console.log(postId, "hmm");
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        const parentPost = await response.json();
+        setCurrentPost(parentPost);
+        console.log("Parent post retrieved!");
+        // return parentPostData;
+      } else {
+        const error = await response.json();
+        console.error("Error retrieving parent post:", error);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
+
+  const preToggle = (rootPost) => {
+    if (currentPost === null) {
+      setCurrentPost(rootPost);
+    }
+    toggleDetails();
+  };
+
+  const toggleDetails = async () => {
+    setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
+    setSelectedArticle(currentPost.article); // Store selected article
+  };
+
+  //     try {
+  //       const response = await fetch(
+  //         `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+  //           articleName
+  //         )}?redirects=1`
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch search results");
+  //       }
+  //       // setWikiURL(response.url);
+
+  //       let html = await response.text();
+
+  //       html = html.replace(
+  //         /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+  //         ""
+  //       );
+  //       setArticle(html);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setArticle("No Articles");
+  //     }
+  //   };
 
   return (
     <div>
+      {" "}
+      <Navbar></Navbar>
       {rootPosts.map((rootPost, index) => (
-        <Carousel
-          key={index}
-          rootPost={rootPost}
-          currentPost={currentPost}
-          //   currentLevel={currentLevel}
-          //   currentIndex={currentCarouselIndex === index ? currentPost : null}
-          //   onBackButtonClick={handleBackButtonClick}
-          onNextButtonClick={handleNextButtonClick}
-          //   onCarouselChange={() => handleCarouselChange(index)}
-        />
+        <>
+          <Carousel
+            key={index}
+            rootPost={rootPost}
+            currentPost={currentPost}
+            //   currentLevel={currentLevel}
+            //   currentIndex={currentCarouselIndex === index ? currentPost : null}
+            //   onBackButtonClick={handleBackButtonClick}
+            onNextButtonClick={handleNextButtonClick}
+            onPrevButtonClick={handlePrevButtonClick}
+            //   onCarouselChange={() => handleCarouselChange(index)}
+          />
+          <button onClick={() => preToggle(rootPost)}>Show Article</button>{" "}
+          <div
+            id={`details-${currentPost?.article}`}
+            style={{
+              width: "700px",
+              height: "1500px",
+              backgroundColor: "lightgray",
+              overflow: "auto",
+              border: "solid",
+              display:
+                showPostCreation && currentPost.article === selectedArticle
+                  ? "block"
+                  : "none", // Conditionally show/hide the details div based on showPostCreation state and selected article
+            }}
+          >
+            {showPostCreation && currentPost.article === selectedArticle && (
+              <PostCreation parentPost={currentPost} />
+            )}
+          </div>
+        </>
       ))}
     </div>
   );
