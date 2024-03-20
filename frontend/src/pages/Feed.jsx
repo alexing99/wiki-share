@@ -162,6 +162,8 @@ import Navbar from "../components/NavBar";
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(null);
+  const [currentChildren, setCurrentChildren] = useState(null);
+  const [currentChildLevel, setCurrentChildLevel] = useState();
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
 
@@ -203,6 +205,19 @@ function Feed() {
     fetchParentPost(postid.parentPost);
   };
 
+  const handleUpClick = () => {
+    console.log("up");
+    const prevSibling = currentChildren[currentChildLevel + 1];
+    setCurrentPost(prevSibling);
+    setCurrentChildLevel(currentChildLevel + 1);
+  };
+  const handleDownClick = () => {
+    console.log("down");
+    const nextSibling = currentChildren[currentChildLevel - 1];
+    setCurrentPost(nextSibling);
+    setCurrentChildLevel(currentChildLevel - 1);
+  };
+
   //   const handleBackButtonClick = () => {
   //     setCurrentLevel(-1);
   //   };
@@ -219,7 +234,10 @@ function Feed() {
       );
       if (response.ok) {
         const data = await response.json();
-        setCurrentPost(data[0]);
+
+        setCurrentPost(data[data.length - 1]);
+        setCurrentChildren(data);
+        setCurrentChildLevel(data.length - 1);
       } else {
         console.error(`Failed to fetch descendants for post ${post}`);
       }
@@ -297,11 +315,15 @@ function Feed() {
             key={index}
             rootPost={rootPost}
             currentPost={currentPost}
+            currentChildren={currentChildren}
+            currentChildLevel={currentChildLevel}
             //   currentLevel={currentLevel}
             //   currentIndex={currentCarouselIndex === index ? currentPost : null}
             //   onBackButtonClick={handleBackButtonClick}
             onNextButtonClick={handleNextButtonClick}
             onPrevButtonClick={handlePrevButtonClick}
+            onUpClick={handleUpClick}
+            onDownClick={handleDownClick}
             //   onCarouselChange={() => handleCarouselChange(index)}
           />
           <button onClick={() => preToggle(rootPost)}>Show Article</button>{" "}
