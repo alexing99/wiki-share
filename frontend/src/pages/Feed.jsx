@@ -162,7 +162,7 @@ import Navbar from "../components/NavBar";
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState(null);
-  const [currentChildren, setCurrentChildren] = useState(null);
+  const [currentChildren, setCurrentChildren] = useState([]);
   const [currentChildLevel, setCurrentChildLevel] = useState();
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
@@ -198,11 +198,32 @@ function Feed() {
   //     );
   //   };
 
-  const handleNextButtonClick = (postid) => {
-    fetchChildrenData(postid);
+  const handleNextButtonClick = async (postid) => {
+    await fetchChildrenData(postid);
+    // try {
+    //   const children = await fetchChildrenData(postid);
+
+    //   if (children && children.length > 0) {
+    //     const newestPost = children[currentChildren.length - 1];
+
+    //     setCurrentPost(newestPost);
+    //     setCurrentChildLevel(children.length - 1);
+    //     console.log("next", newestPost);
+    //   }
+    // } catch (error) {
+    //   console.error(`Error:`, error);
+    // }
   };
-  const handlePrevButtonClick = (postid) => {
-    fetchParentPost(postid.parentPost);
+  const handlePrevButtonClick = async (postid) => {
+    const parent = postid.parentPost;
+    try {
+      await fetchParentPost(parent);
+
+      // await fetchChildrenData(parent.parentPost, true);
+    } catch (error) {
+      console.error(`Error:`, error);
+    }
+    console.log("back");
   };
 
   const handleUpClick = () => {
@@ -227,17 +248,22 @@ function Feed() {
   //     setCurrentCarouselIndex(index);
   //   };
 
-  const fetchChildrenData = async (post) => {
+  const fetchChildrenData = async (post, isCalledfromPrevClick) => {
     try {
       const response = await fetch(
         `http://localhost:4578/posts/${post}/children`
       );
       if (response.ok) {
         const data = await response.json();
+        if (!isCalledfromPrevClick) {
+          setCurrentPost(data[data.length - 1]);
+          setCurrentChildLevel(data.length - 1);
+        }
 
-        setCurrentPost(data[data.length - 1]);
         setCurrentChildren(data);
-        setCurrentChildLevel(data.length - 1);
+
+        console.log("children got");
+        return data;
       } else {
         console.error(`Failed to fetch descendants for post ${post}`);
       }
@@ -256,7 +282,31 @@ function Feed() {
         const parentPost = await response.json();
         setCurrentPost(parentPost);
         console.log("Parent post retrieved!");
-        // return parentPostData;
+        if (parentPost.children.length != 0) {
+          try {
+            const children = await fetchChildrenData(
+              parentPost.parentPost,
+              true
+            );
+            setCurrentChildren(children);
+            const parentIndex = children.findIndex(
+              (child) => child._id === parentPost._id
+            );
+            console.log(currentChildren, "see");
+            if (parentIndex !== -1) {
+              setCurrentChildLevel(parentIndex);
+              console.log(parentIndex, "hmmmmmmm");
+            } else {
+              console.error(
+                "Parent post not found in the current children array"
+              );
+            }
+          } catch (error) {
+            console.error(error);
+          }
+
+          // return parentPostData;
+        }
       } else {
         const error = await response.json();
         console.error("Error retrieving parent post:", error);

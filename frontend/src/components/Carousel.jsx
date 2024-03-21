@@ -52,6 +52,7 @@ function Carousel({
   if (!currentPost) {
     currentPost = rootPost;
   }
+  console.log("currenpost", currentPost);
 
   const handleNextButtonClick = () => {
     onNextButtonClick(currentPost._id);
