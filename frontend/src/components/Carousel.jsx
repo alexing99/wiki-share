@@ -54,6 +54,43 @@ function Carousel({
   }
   console.log("currenpost", currentPost);
 
+  // const [touchStartX, setTouchStartX] = useState(0);
+  // const [touchEndX, setTouchEndX] = useState(0);
+
+  // useEffect(() => {
+  //   const handleSwipe = () => {
+  //     const deltaX = touchEndX - touchStartX;
+  //     const deltaY = Math.abs(touchEndX - touchStartX);
+
+  //     if (deltaY < 50) {
+  //       // Adjust this threshold according to your preference
+  //       if (deltaX > 50) {
+  //         onPrevButtonClick(currentPost);
+  //       } else if (deltaX < -50) {
+  //         onNextButtonClick(currentPost._id);
+  //       }
+  //     }
+  //   };
+
+  //   if (touchStartX && touchEndX) {
+  //     handleSwipe();
+  //   }
+  // }, [
+  //   touchStartX,
+  //   touchEndX,
+  //   currentPost,
+  //   onNextButtonClick,
+  //   onPrevButtonClick,
+  // ]);
+
+  // const handleTouchStart = (event) => {
+  //   setTouchStartX(event.touches[0].clientX);
+  // };
+
+  // const handleTouchMove = (event) => {
+  //   setTouchEndX(event.touches[0].clientX);
+  // };
+
   const handleNextButtonClick = () => {
     onNextButtonClick(currentPost._id);
   };
@@ -66,7 +103,11 @@ function Carousel({
   console.log(currentChildren?.length, currentChildLevel);
 
   return (
-    <div className="carousel">
+    <div
+      className="carousel"
+      // onTouchStart={handleTouchStart}
+      // onTouchMove={handleTouchMove}
+    >
       <h2>{currentPost.article}</h2>
       <p>{currentPost.content}</p>
       <div className="carousel-navigation">
