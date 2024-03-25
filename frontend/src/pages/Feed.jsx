@@ -231,12 +231,14 @@ function Feed() {
     const prevSibling = currentChildren[currentChildLevel + 1];
     setCurrentPost(prevSibling);
     setCurrentChildLevel(currentChildLevel + 1);
+    setShowPostCreation(false);
   };
   const handleDownClick = () => {
     console.log("down");
     const nextSibling = currentChildren[currentChildLevel - 1];
     setCurrentPost(nextSibling);
     setCurrentChildLevel(currentChildLevel - 1);
+    setShowPostCreation(false);
   };
 
   //   const handleBackButtonClick = () => {
@@ -326,6 +328,7 @@ function Feed() {
   };
 
   const toggleDetails = async () => {
+    console.log("k", currentPost);
     setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
     setSelectedArticle(currentPost.article); // Store selected article
   };
@@ -376,7 +379,9 @@ function Feed() {
             onDownClick={handleDownClick}
             //   onCarouselChange={() => handleCarouselChange(index)}
           />
-          <button onClick={() => preToggle(rootPost)}>Show Article</button>{" "}
+
+          <button onClick={() => preToggle(rootPost)}>Show Article</button>
+
           <div
             id={`details-${currentPost?.article}`}
             style={{

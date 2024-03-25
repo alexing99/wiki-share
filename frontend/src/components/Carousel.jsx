@@ -16,6 +16,7 @@ function Carousel({
   const [atEnd, setAtEnd] = useState(false);
   const [atEldest, setAtEldest] = useState(false);
   const [atNewest, setAtNewest] = useState(false);
+  const [currentParent, setCurrentParent] = useState();
 
   useEffect(() => {
     if (currentPost._id === rootPost._id) {
@@ -54,42 +55,66 @@ function Carousel({
   }
   console.log("currenpost", currentPost);
 
-  // const [touchStartX, setTouchStartX] = useState(0);
-  // const [touchEndX, setTouchEndX] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
+  const [touchEndY, setTouchEndY] = useState(null);
 
-  // useEffect(() => {
-  //   const handleSwipe = () => {
-  //     const deltaX = touchEndX - touchStartX;
-  //     const deltaY = Math.abs(touchEndX - touchStartX);
+  const handleTouchStart = (event) => {
+    const touches = event.touches;
+    console.log("touch");
+    if (touches && touches.length === 2) {
+      // Store the coordinates of the two touch points
+      setTouchStartX(touches[0].clientX);
+      setTouchStartY(touches[0].clientY);
+      setTouchEndX(touches[1].clientX);
+      setTouchEndY(touches[1].clientY);
+    }
+  };
 
-  //     if (deltaY < 50) {
-  //       // Adjust this threshold according to your preference
-  //       if (deltaX > 50) {
-  //         onPrevButtonClick(currentPost);
-  //       } else if (deltaX < -50) {
-  //         onNextButtonClick(currentPost._id);
-  //       }
-  //     }
-  //   };
+  const handleTouchMove = (event) => {
+    const touches = event.touches;
+    if (touches && touches.length === 2) {
+      // Update the coordinates of the two touch points as they move
+      setTouchEndX(touches[0].clientX);
+      setTouchEndY(touches[0].clientY);
+      setTouchStartX(touches[1].clientX);
+      setTouchStartY(touches[1].clientY);
+    }
+  };
 
-  //   if (touchStartX && touchEndX) {
-  //     handleSwipe();
-  //   }
-  // }, [
-  //   touchStartX,
-  //   touchEndX,
-  //   currentPost,
-  //   onNextButtonClick,
-  //   onPrevButtonClick,
-  // ]);
+  const handleTouchEnd = () => {
+    // Calculate the horizontal and vertical distances traveled by the fingers
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
 
-  // const handleTouchStart = (event) => {
-  //   setTouchStartX(event.touches[0].clientX);
-  // };
+    // Determine the direction of the swipe based on the distances
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        // Swipe to the right
+        onNextButtonClick();
+      } else {
+        // Swipe to the left
+        onPrevButtonClick();
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        // Swipe down
+        onDownClick();
+      } else {
+        // Swipe up
+        onUpClick();
+      }
+    }
 
-  // const handleTouchMove = (event) => {
-  //   setTouchEndX(event.touches[0].clientX);
-  // };
+    // Reset touch coordinates
+    setTouchStartX(null);
+    setTouchStartY(null);
+    setTouchEndX(null);
+    setTouchEndY(null);
+  };
 
   const handleNextButtonClick = () => {
     onNextButtonClick(currentPost._id);
@@ -102,14 +127,64 @@ function Carousel({
 
   console.log(currentChildren?.length, currentChildLevel);
 
+  useEffect(() => {
+    fetchParentPost(currentPost.parentPost);
+  }, [currentPost]);
+
+  const fetchParentPost = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        const parentPost = await response.json();
+        setCurrentParent(parentPost);
+      } else {
+        const error = await response.json();
+        console.error("Error retrieving parent post:", error);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
+
+  const formattedTimestamp = new Date(currentPost.timestamp).toLocaleDateString(
+    "en-US",
+    {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }
+  );
+
   return (
     <div
       className="carousel"
-      // onTouchStart={handleTouchStart}
-      // onTouchMove={handleTouchMove}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
-      <h2>{currentPost.article}</h2>
+      <div className="article-headers">
+        {!atRoot && (
+          <div>
+            {" "}
+            <h3>{rootPost.article}</h3>
+            <p>...</p>
+            <h2>{currentParent?.article}</h2>
+          </div>
+        )}
+
+        <h1>{currentPost.article}</h1>
+      </div>
       <p>{currentPost.content}</p>
+      <p>{currentPost.author}</p>
+      <p>{formattedTimestamp}</p>
       <div className="carousel-navigation">
         {!atRoot && (
           <button onClick={handlePreviousButtonClick}>Previous</button>
