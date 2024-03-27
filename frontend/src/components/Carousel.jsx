@@ -11,6 +11,7 @@ function Carousel({
   onPrevButtonClick,
   onUpClick,
   onDownClick,
+  goToPost,
 }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -122,8 +123,11 @@ function Carousel({
   const handlePreviousButtonClick = () => {
     onPrevButtonClick(currentPost);
   };
-  //check for children and turn off next button
-  //check for parent and turn off back button
+
+  const handleRootPostClick = () => {
+    console.log("rootback");
+    goToPost(rootPost._id);
+  };
 
   console.log(currentChildren?.length, currentChildLevel);
 
@@ -174,14 +178,19 @@ function Carousel({
         {!atRoot && (
           <div>
             {" "}
-            <h3>{rootPost.article}</h3>
+            <a href="#" onClick={() => handleRootPostClick()}>
+              {rootPost.article}
+            </a>
             <p>...</p>
-            <h2>{currentParent?.article}</h2>
+            <a href="#" onClick={() => handlePreviousButtonClick()}>
+              {currentParent?.article}
+            </a>
           </div>
         )}
 
         <h1>{currentPost.article}</h1>
       </div>
+
       <p>{currentPost.content}</p>
       <p>{currentPost.author}</p>
       <p>{formattedTimestamp}</p>

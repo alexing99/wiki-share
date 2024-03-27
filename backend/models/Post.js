@@ -12,6 +12,8 @@ const postSchema = new mongoose.Schema({
       ref: "Post", // Reference to the same Post schema for nested replieschema}],
     },
   ],
+  // relevancyScore: { type: Number, required: true },
+  // interestScore: { type: Number, require: true },
 });
 
 const Post = mongoose.model("Post", postSchema);

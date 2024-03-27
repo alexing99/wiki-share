@@ -4,7 +4,13 @@ import { useUser } from "../UserContext.jsx";
 
 /* eslint-disable react/prop-types */
 
-const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
+const BottomBox = ({
+  selectedText,
+  wikiURL,
+  replyMode,
+  articleFrom,
+  goToPost,
+}) => {
   const user = useUser();
 
   const postPost = async () => {
@@ -16,10 +22,7 @@ const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
     const parts = url.split("/");
     const article = parts[parts.length - 1].split("?")[0];
     let parent = "";
-    // console.log("articleFrom", parent);
-    // console.log("article", article);
-    // console.log("selected", selectedText);
-    // console.log("name", author);
+
     if (replyMode) {
       parent = articleFrom._id;
       console.log(parent, "ye");
@@ -40,30 +43,27 @@ const BottomBox = ({ selectedText, wikiURL, replyMode, articleFrom }) => {
         const replyingWith = postData._id;
         console.log("Post created successfully!", replyingWith);
         if (replyMode) {
-          try {
-            const nextResponse = await fetch(
-              `http://localhost:4578/posts/${articleFrom._id}`,
-              {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ replyingWith }),
-              }
-            );
-            if (nextResponse.ok) {
-              console.log("reply post created successfully");
-              window.location.reload();
-            } else {
-              const error = await response.json();
-              console.error("Error creating reply post:", error);
+          const nextResponse = await fetch(
+            `http://localhost:4578/posts/${articleFrom._id}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ replyingWith }),
             }
-          } catch (error) {
-            console.error("Error creating post:", error);
+          );
+          if (nextResponse.ok) {
+            console.log("reply post created successfully", nextResponse);
+            goToPost(nextResponse);
+            window.location.reload();
+          } else {
+            const error = await nextResponse.text();
+            console.error("Error creating reply post:", error);
           }
         }
       } else {
-        const error = await response.json();
+        const error = await response.text();
         console.error("Error creating post:", error);
       }
     } catch (error) {

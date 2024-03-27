@@ -18,8 +18,9 @@ router.post("/", async (req, res) => {
         content: req.body.content,
         article: articleTitle,
         timestamp: Date.now(),
-
         parentPost: req.body.parent,
+        // relevancyScore: 0,
+        // interestScore: 0,
       });
 
       const newPost = await post.save();
@@ -30,6 +31,8 @@ router.post("/", async (req, res) => {
         content: req.body.content,
         article: articleTitle,
         timestamp: Date.now(),
+        // relevancyScore: 0,
+        // interestScore: 0,
       });
 
       const newPost = await post.save();

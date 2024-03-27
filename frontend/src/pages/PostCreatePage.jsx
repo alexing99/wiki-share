@@ -5,7 +5,7 @@ import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
 
 // eslint-disable-next-line react/prop-types
-function PostCreation({ parentPost }) {
+function PostCreation({ parentPost, goToPost }) {
   const [replyMode, setReplyMode] = useState(false);
   // const [replyArticle, setReplyArticle] = useState();
   const [article, setArticle] = useState(null);
@@ -191,6 +191,7 @@ function PostCreation({ parentPost }) {
               wikiURL={wikiURL}
               replyMode={replyMode}
               articleFrom={articleFrom}
+              goToPost={goToPost}
             />
           )}
           <style>

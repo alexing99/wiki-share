@@ -197,6 +197,23 @@ function Feed() {
   //       parentPostId ? rootPosts.find((post) => post._id === parentPostId) : null
   //     );
   //   };
+  const goToPost = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        const postData = await response.json();
+        setCurrentPost(postData);
+        setShowPostCreation(false); // Hide post creation when navigating to a new post
+      } else {
+        console.error("Failed to fetch post data:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching post data:", error);
+    }
+  };
 
   const handleNextButtonClick = async (postid) => {
     await fetchChildrenData(postid);
@@ -368,6 +385,7 @@ function Feed() {
             key={index}
             rootPost={rootPost}
             currentPost={currentPost}
+            setCurrentPost={setCurrentPost}
             currentChildren={currentChildren}
             currentChildLevel={currentChildLevel}
             //   currentLevel={currentLevel}
@@ -377,6 +395,7 @@ function Feed() {
             onPrevButtonClick={handlePrevButtonClick}
             onUpClick={handleUpClick}
             onDownClick={handleDownClick}
+            goToPost={goToPost}
             //   onCarouselChange={() => handleCarouselChange(index)}
           />
 
@@ -397,7 +416,7 @@ function Feed() {
             }}
           >
             {showPostCreation && currentPost.article === selectedArticle && (
-              <PostCreation parentPost={currentPost} />
+              <PostCreation parentPost={currentPost} goToPost={goToPost} />
             )}
           </div>
         </>

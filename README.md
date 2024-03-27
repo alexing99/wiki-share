@@ -12,17 +12,27 @@
 -fix show root article bugs
 -show where the link is in a sentence (or just highlight them with links to the post?)
 
-Next Step
+Next Steps
+
+1. go to post after creation
+2. display currentlevel out of how many (for each post show how deep it can go)
+3. voting
+4. sort (relevance, depth, interest, new)
+5. save posts and show them and creations in user
+6.
 
 -double click bug when trying to open root article and others randomly
 -still showing references
--levels deep and levels to go
+-make headers link to post (easy: clicking parent is just clicking previous, and the root just goes to the beginning)
+-if root post is equal to parent dont display parent
+-display levels deep and levels to go
 -swipe functionality
 -upvotes and downvotes (relavant or not relavant to parent)
 -display root and most recent parent
 -multiple carousels
 -display sort
 -loading thing (full page?)
+-if quote is quote use single quote
 
 -
 -
