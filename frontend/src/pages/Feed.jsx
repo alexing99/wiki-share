@@ -158,6 +158,7 @@ import { useState, useEffect } from "react";
 import Carousel from "../components/Carousel"; // Assume you have a Carousel component
 import PostCreation from "./PostCreatePage";
 import Navbar from "../components/NavBar";
+import Tree from "../components/Tree";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
@@ -167,6 +168,9 @@ function Feed() {
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
 
+  // const [currentLevel, setCurrentLevel] = useState([]);
+  // const [totalLevels, setTotalLevels] = useState([]);
+
   //   const [currentLevel, setCurrentLevel] = useState(0);
   //   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
 
@@ -174,6 +178,13 @@ function Feed() {
     // Fetch root posts when component mounts
     fetchRootPosts();
   }, []);
+  // useEffect(() => {
+  //   // Calculate total levels when the root post is fetched or the current level changes
+  //   if (rootPosts) {
+  //     const rootPost = rootPosts[0];
+  //     calculateTotalLevels(rootPost);
+  //   }
+  // }, [currentLevel]);
 
   const fetchRootPosts = async () => {
     try {
@@ -189,6 +200,17 @@ function Feed() {
       console.error("Error fetching root posts:", error);
     }
   };
+
+  // const calculateTotalLevels = (node, depth = 0) => {
+  //   if (!node || !node.children || node.children.length === 0) {
+  //     setTotalLevels(Math.max(totalLevels, depth));
+  //     return;
+  //   }
+
+  //   for (const child of node.children) {
+  //     calculateTotalLevels(child, depth + 1);
+  //   }
+  // };
 
   //   const handleBackButtonClick = () => {
   //     // Replace current post with its parent post
@@ -398,6 +420,7 @@ function Feed() {
             goToPost={goToPost}
             //   onCarouselChange={() => handleCarouselChange(index)}
           />
+          <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
 
           <button onClick={() => preToggle(rootPost)}>Show Article</button>
 

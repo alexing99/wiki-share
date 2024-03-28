@@ -40,6 +40,7 @@ const BottomBox = ({
 
       if (response.ok) {
         const postData = await response.json();
+        const newPostId = postData._id;
         const replyingWith = postData._id;
         console.log("Post created successfully!", replyingWith);
         if (replyMode) {
@@ -54,9 +55,9 @@ const BottomBox = ({
             }
           );
           if (nextResponse.ok) {
-            console.log("reply post created successfully", nextResponse);
-            goToPost(nextResponse);
-            window.location.reload();
+            console.log("reply post created successfully");
+            goToPost(newPostId);
+            // window.location.reload();
           } else {
             const error = await nextResponse.text();
             console.error("Error creating reply post:", error);
@@ -65,6 +66,7 @@ const BottomBox = ({
       } else {
         const error = await response.text();
         console.error("Error creating post:", error);
+        // goToPost()
       }
     } catch (error) {
       console.error("Error creating post:", error);
