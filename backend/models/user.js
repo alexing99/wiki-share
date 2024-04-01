@@ -5,6 +5,18 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   memberSince: Date,
+  interestedIn: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
+  foundRelevant: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post", // Reference to the same Post schema for nested replieschema}],
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

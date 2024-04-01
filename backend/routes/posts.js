@@ -19,8 +19,8 @@ router.post("/", async (req, res) => {
         article: articleTitle,
         timestamp: Date.now(),
         parentPost: req.body.parent,
-        // relevancyScore: 0,
-        // interestScore: 0,
+        relevancyScore: 0,
+        interestScore: 0,
       });
 
       const newPost = await post.save();
@@ -31,8 +31,8 @@ router.post("/", async (req, res) => {
         content: req.body.content,
         article: articleTitle,
         timestamp: Date.now(),
-        // relevancyScore: 0,
-        // interestScore: 0,
+        relevancyScore: 0,
+        interestScore: 0,
       });
 
       const newPost = await post.save();
@@ -121,6 +121,38 @@ router.patch("/:id", async (req, res) => {
 
     await post.save();
 
+    res.status(200).json({ message: "post information updated successfully" });
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.patch("/:id/score", async (req, res) => {
+  const postId = req.params.id;
+  const vote = req.query.vote;
+  const action = req.query.action;
+  console.log(action, vote, postId);
+
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "post not found" });
+    }
+    if (vote === "interest") {
+      if (action === "up") {
+        ++post.interestScore;
+      } else if (action === "down") {
+        --post.interestScore;
+      }
+    } else if (vote === "relevance") {
+      if (action === "up") {
+        ++post.relevancyScore;
+      } else if (action === "down") {
+        --post.relevancyScore;
+      }
+    }
+    await post.save();
     res.status(200).json({ message: "post information updated successfully" });
   } catch (error) {
     console.error("Error updating user information:", error);

@@ -140,7 +140,6 @@ function PostCreation({ parentPost, goToPost }) {
       }
     }
   };
-
   const handleBackButtonClick = async () => {
     setLinkClickLimit(1); // Reset link click limit
     getReplyArticle(); // Reload the parent article
@@ -150,7 +149,7 @@ function PostCreation({ parentPost, goToPost }) {
     <>
       {!replyMode && (
         <>
-          <Navbar></Navbar>{" "}
+          <Navbar className="navbar"></Navbar>{" "}
           <form onSubmit={handleSearch}>
             <input
               className={"searchbar"}
@@ -181,7 +180,7 @@ function PostCreation({ parentPost, goToPost }) {
           ></div>
         </div>
       )}
-      {linkClickLimit === 0 && (
+      {(linkClickLimit === 0 || !replyMode) && (
         <>
           {/* Bottom box component */}
           {showText && (

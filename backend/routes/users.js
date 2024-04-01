@@ -82,6 +82,49 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// route for adding or removing scores
+router.patch("/:id/score", async (req, res) => {
+  // Implement logic to update user profile by ID
+  const userId = req.params.id;
+  const post = req.query.post;
+  const field = req.query.field;
+  const action = req.query.action;
+
+  console.log("3", post, field, action);
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (field === "interest") {
+      if (action === "add") {
+        user.interestedIn.push(post);
+      } else if (action === "remove") {
+        user.interestedIn = user.interestedIn.filter(
+          (id) => id.toString() !== post
+        );
+      }
+    } else if (field === "relevance") {
+      if (action === "add") {
+        user.foundRelevant.push(post);
+      } else if (action === "remove") {
+        user.foundRelevant = user.foundRelevant.filter(
+          (id) => id.toString() !== post
+        );
+      }
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: "User information updated successfully" });
+  } catch (error) {
+    console.error("Error updating user information:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Route for deleting user accounts
 router.delete("/:id", async (req, res) => {
   try {
