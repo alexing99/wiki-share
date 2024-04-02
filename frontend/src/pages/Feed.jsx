@@ -1,164 +1,9 @@
-// import Navbar from "../components/NavBar";
-// import { useEffect, useState } from "react";
-// import PostCreation from "./PostCreatePage";
-
-// function Feed() {
-//   //   const [article, setArticle] = useState(null);
-//   //   const [selectedText, setSelectedText] = useState(null);
-//   useEffect(() => {
-//     getPosts();
-//   }, []);
-
-//   const [gotPosts, setGotPosts] = useState([]);
-//   const [parentPosts, setParentPosts] = useState({}); // Store parent posts
-
-//   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
-//   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
-
-//   const getPosts = async () => {
-//     try {
-//       const response = await fetch(`http://localhost:4578/posts`, {
-//         method: "GET",
-//       });
-
-//       if (response.ok) {
-//         console.log("posts retreived!");
-//         const posts = await response.json();
-//         console.log(posts);
-//         setGotPosts(posts);
-//         console.log(gotPosts);
-//         const parentPostIds = new Set(posts.map((post) => post.parentPost));
-//         const parentPostsData = await Promise.all(
-//           Array.from(parentPostIds).map(fetchParentPost)
-//         );
-//         const parentPostsMap = {};
-//         parentPostsData.forEach((post) => {
-//           if (post) {
-//             // Check if post is not null
-//             parentPostsMap[post._id] = post.article;
-//           }
-//         });
-//         setParentPosts(parentPostsMap);
-//       } else {
-//         const error = await response.json();
-//         console.error("Error retreiving posts:", error);
-//       }
-//     } catch (error) {
-//       console.error("Error:", error);
-//     }
-//   };
-//   //   const toggleDetails = async (articleName) => {
-//   //     const detailsDiv = document.getElementById(`details-${articleName}`);
-//   //     if (detailsDiv) {
-//   //       detailsDiv.style.display =
-//   //         detailsDiv.style.display === "none" ? "block" : "none";
-
-//   //     }
-//   //   };
-//   const toggleDetails = async (articleName) => {
-//     setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
-//     setSelectedArticle(articleName); // Store selected article
-//   };
-//   //   try {
-//   //     const response = await fetch(
-//   //       `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-//   //         articleName
-//   //       )}?redirects=1`
-//   //     );
-
-//   //     if (!response.ok) {
-//   //       throw new Error("Failed to fetch search results");
-//   //     }
-//   //     // setWikiURL(response.url);
-
-//   //     let html = await response.text();
-
-//   //     html = html.replace(
-//   //       /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
-//   //       ""
-//   //     );
-//   //     setArticle(html);
-//   //   } catch (error) {
-//   //     console.error(error);
-//   //     setArticle("No Articles");
-//   //   }
-//   // };
-//   const fetchParentPost = async (postId) => {
-//     console.log(postId, "hmm");
-//     try {
-//       const response = await fetch(`http://localhost:4578/posts/${postId}`, {
-//         method: "GET",
-//       });
-
-//       if (response.ok) {
-//         console.log("Parent post retrieved!");
-//         const parentPostData = await response.json();
-//         return parentPostData;
-//       } else {
-//         const error = await response.json();
-//         console.error("Error retrieving parent post:", error);
-//         return null;
-//       }
-//     } catch (error) {
-//       console.error("Error:", error);
-//       return null;
-//     }
-//   };
-//   return (
-//     <>
-//       <Navbar></Navbar>
-
-//       <ul>
-//         {gotPosts.map((post) => (
-//           <li key={post._id}>
-//             <h3>{post.article}</h3>
-//             <p>{post.content}</p>
-//             <p>From: {post.author}</p>
-
-//             <p>Parent: {parentPosts[post.parentPost]}</p>
-
-//             {/* <ul>
-//               {post.children.map((child) => (
-//                 <li key={child._id}>
-//                   <h4>{child.article}</h4>
-//                 </li>
-//               ))}
-//             </ul> */}
-//             <button onClick={() => toggleDetails(post.article)}>
-//               Show Article
-//             </button>
-//             <div
-//               id={`details-${post.article}`}
-//               style={{
-//                 width: "700px",
-//                 height: "1500px",
-//                 backgroundColor: "lightgray",
-//                 overflow: "auto",
-//                 border: "solid",
-//                 display:
-//                   showPostCreation && post.article === selectedArticle
-//                     ? "block"
-//                     : "none", // Conditionally show/hide the details div based on showPostCreation state and selected article
-//               }}
-//             >
-//               {showPostCreation && post.article === selectedArticle && (
-//                 <PostCreation parentPost={post} />
-//               )}
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </>
-//   );
-// }
-
-// export default Feed;
-
 import { useState, useEffect } from "react";
 import Carousel from "../components/Carousel"; // Assume you have a Carousel component
 import PostCreation from "./PostCreatePage";
 import Navbar from "../components/NavBar";
 import Tree from "../components/Tree";
+import { calculateDepth } from "../components/calculateDepth";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
@@ -166,7 +11,8 @@ function Feed() {
   const [currentChildren, setCurrentChildren] = useState([]);
   const [currentChildLevel, setCurrentChildLevel] = useState();
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
-  const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article
+  const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
+  const [sort, setSort] = useState("New");
 
   // const [currentLevel, setCurrentLevel] = useState([]);
   // const [totalLevels, setTotalLevels] = useState([]);
@@ -178,6 +24,7 @@ function Feed() {
     // Fetch root posts when component mounts
     fetchRootPosts();
   }, []);
+
   // useEffect(() => {
   //   // Calculate total levels when the root post is fetched or the current level changes
   //   if (rootPosts) {
@@ -238,20 +85,9 @@ function Feed() {
   };
 
   const handleNextButtonClick = async (postid) => {
-    await fetchChildrenData(postid);
-    // try {
-    //   const children = await fetchChildrenData(postid);
-
-    //   if (children && children.length > 0) {
-    //     const newestPost = children[currentChildren.length - 1];
-
-    //     setCurrentPost(newestPost);
-    //     setCurrentChildLevel(children.length - 1);
-    //     console.log("next", newestPost);
-    //   }
-    // } catch (error) {
-    //   console.error(`Error:`, error);
-    // }
+    if (postid) {
+      await fetchChildrenData(postid);
+    }
   };
   const handlePrevButtonClick = async (postid) => {
     const parent = postid.parentPost;
@@ -267,16 +103,16 @@ function Feed() {
 
   const handleUpClick = () => {
     console.log("up");
-    const prevSibling = currentChildren[currentChildLevel + 1];
+    const prevSibling = currentChildren[currentChildLevel - 1];
     setCurrentPost(prevSibling);
-    setCurrentChildLevel(currentChildLevel + 1);
+    setCurrentChildLevel(currentChildLevel - 1);
     setShowPostCreation(false);
   };
   const handleDownClick = () => {
     console.log("down");
-    const nextSibling = currentChildren[currentChildLevel - 1];
+    const nextSibling = currentChildren[currentChildLevel + 1];
     setCurrentPost(nextSibling);
-    setCurrentChildLevel(currentChildLevel - 1);
+    setCurrentChildLevel(currentChildLevel + 1);
     setShowPostCreation(false);
   };
 
@@ -288,23 +124,79 @@ function Feed() {
   //     // Change the current carousel index
   //     setCurrentCarouselIndex(index);
   //   };
+  // async function comparePostsByDepth(postA, postB) {
+  //   console.log(postA, "l");
+  //   // Compare posts by their depth
+  //   const depthA = await calculateDepth(postA);
+  //   const depthB = await calculateDepth(postB);
+  //   console.log(depthA - depthB);
+  //   return depthB - depthA; // Return a negative value if postA is shallower, positive if postB is shallower, and 0 if they have the same depth
+  // }
 
   const fetchChildrenData = async (post, isCalledfromPrevClick) => {
     try {
       const response = await fetch(
         `http://localhost:4578/posts/${post}/children`
       );
+
       if (response.ok) {
         const data = await response.json();
-        if (!isCalledfromPrevClick) {
-          setCurrentPost(data[data.length - 1]);
-          setCurrentChildLevel(data.length - 1);
+        let sortedData;
+        switch (sort) {
+          case "New":
+            sortedData = data
+              .slice()
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            break;
+          case "Relevancy":
+            sortedData = data
+              .slice()
+              .sort((a, b) => b.relevancyScore - a.relevancyScore);
+            console.log(sortedData, "sorted by relevancy score");
+            break;
+          case "Interest":
+            sortedData = data
+              .slice()
+              .sort((a, b) => b.interestScore - a.interestScore);
+            console.log(sortedData, "sorted by interest score");
+            break;
+          case "Length":
+            // Map each post to a Promise calculating its depth
+            // eslint-disable-next-line no-case-declarations
+            const depthPromises = data.map((post) => calculateDepth(post));
+            // Wait for all depth calculations to finish
+            Promise.all(depthPromises).then((depths) => {
+              // Sort posts based on depth
+              sortedData = data
+                .slice()
+                .sort(
+                  (a, b) => depths[data.indexOf(b)] - depths[data.indexOf(a)]
+                );
+              console.log(sortedData, "sorted by length");
+
+              // Once sorting is done, update state or perform other operations
+              if (!isCalledfromPrevClick) {
+                setCurrentPost(sortedData[0]);
+                setCurrentChildLevel(0);
+              }
+              setCurrentChildren(sortedData);
+            });
+            break;
+          default:
+            console.error("Invalid sort option");
         }
 
-        setCurrentChildren(data);
+        if (sort != "Length") {
+          if (!isCalledfromPrevClick) {
+            setCurrentPost(sortedData[0]);
+            setCurrentChildLevel(0);
+          }
 
+          setCurrentChildren(sortedData);
+        }
         console.log("children got");
-        return data;
+        return sortedData;
       } else {
         console.error(`Failed to fetch descendants for post ${post}`);
       }
@@ -313,7 +205,6 @@ function Feed() {
     }
   };
   const fetchParentPost = async (postId) => {
-    console.log(postId, "hmm");
     try {
       const response = await fetch(`http://localhost:4578/posts/${postId}`, {
         method: "GET",
@@ -372,30 +263,13 @@ function Feed() {
     setSelectedArticle(currentPost.article); // Store selected article
   };
 
-  //     try {
-  //       const response = await fetch(
-  //         `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-  //           articleName
-  //         )}?redirects=1`
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch search results");
-  //       }
-  //       // setWikiURL(response.url);
-
-  //       let html = await response.text();
-
-  //       html = html.replace(
-  //         /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
-  //         ""
-  //       );
-  //       setArticle(html);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setArticle("No Articles");
-  //     }
-  //   };
+  const handleSort = (event) => {
+    setSort(event.target.value);
+  };
+  useEffect(() => {
+    // Fetch root posts when component mounts
+    fetchChildrenData(currentPost?.parentPost);
+  }, [sort]);
 
   return (
     <div>
@@ -403,6 +277,15 @@ function Feed() {
       <Navbar></Navbar>
       {rootPosts.map((rootPost, index) => (
         <>
+          <div>
+            <label htmlFor="dropdown">Sort By:</label>
+            <select id="dropdown" onChange={handleSort}>
+              <option value="New">New</option>
+              <option value="Length">Longest Route</option>
+              <option value="Relevancy">Relevancy</option>
+              <option value="Interest">Interest</option>
+            </select>
+          </div>
           <Carousel
             key={index}
             rootPost={rootPost}

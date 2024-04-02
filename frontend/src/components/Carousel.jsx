@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { useState, useEffect } from "react";
-
+import { useUser } from "../UserContext";
 import Cookies from "universal-cookie";
 
 function Carousel({
@@ -18,13 +18,13 @@ function Carousel({
 }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
-  const [atEldest, setAtEldest] = useState(false);
-  const [atNewest, setAtNewest] = useState(false);
-  const [currentParent, setCurrentParent] = useState();
+  const [atLast, setAtLast] = useState(false);
+  const [atFirst, setAtFirst] = useState(false);
+  const [currentParent, setCurrentParent] = useState(useUser());
 
   const [hasVotedInterest, setHasVotedInterest] = useState(false);
   const [hasVotedRelevance, setHasVotedRelevance] = useState(false);
-  // const [currentUserRef, setCurrentUserRef] = useState(null);
+
   const [currentUser, setCurrentUser] = useState();
 
   // useEffect(() => {
@@ -66,7 +66,6 @@ function Carousel({
   // Check if the current user has voted for interest on the current post
   useEffect(() => {
     getUserData();
-    console.log("why", currentUser?.interestedIn);
     if (currentUser?.interestedIn?.includes(currentPost._id)) {
       setHasVotedInterest(true);
       console.log("interested already");
@@ -78,23 +77,20 @@ function Carousel({
     // Check if the current user has voted for relevance on the current post
     if (currentUser?.foundRelevant?.includes(currentPost._id)) {
       setHasVotedRelevance(true);
-      console.log("relevanted already");
     } else {
       setHasVotedRelevance(false);
-      console.log("not relevant");
     }
   }, []);
 
   useEffect(() => {
-    console.log("oooh");
     if (currentPost._id === rootPost._id) {
       setAtRoot(true);
-      setAtEldest(true);
-      setAtNewest(true);
+      setAtLast(true);
+      setAtFirst(true);
     } else {
       setAtRoot(false);
-      setAtEldest(false);
-      setAtNewest(false);
+      setAtLast(false);
+      setAtFirst(false);
     }
 
     if (
@@ -108,11 +104,11 @@ function Carousel({
     }
 
     if (currentChildren?.length === currentChildLevel + 1) {
-      setAtNewest(true);
+      setAtLast(true);
     }
 
     if (currentChildLevel === 0) {
-      setAtEldest(true);
+      setAtFirst(true);
     }
   }, [currentPost, rootPost, currentChildLevel, currentChildren]);
 
@@ -371,8 +367,8 @@ function Carousel({
         {!atRoot && (
           <button onClick={handlePreviousButtonClick}>Previous</button>
         )}
-        {!atNewest && <button onClick={onUpClick}>/\</button>}
-        {!atEldest && <button onClick={onDownClick}>\/</button>}
+        {!atFirst && <button onClick={onUpClick}>/\</button>}
+        {!atLast && <button onClick={onDownClick}>\/</button>}
 
         {!atEnd && <button onClick={handleNextButtonClick}>Next</button>}
       </div>

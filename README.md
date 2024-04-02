@@ -5,8 +5,6 @@
 -color code, roots with children, roots without children, children with children, children without children
 -should maybe say where in the article the quote is from
 -pre-load parent and top reply to prepare for swipe
--highlight text
--pictures
 -use the like .... thing
 -why the double click on show article
 -fix show root article bugs
@@ -14,12 +12,15 @@
 
 Next Steps
 
-3. voting
 4. make fetch request better
 5. pictures
-6. sort (relevance, depth, interest, new)
-7. save posts and show them and creations in user
-8. start
+6. show liked posts and creations in user
+7. multiple carosells
+8. start stylin
+9. scrolls to quote in article and highlights when opening
+10. root post errors and warnings
+
+- woah what if it like was it and once you start scrolling the window widens and the other words fade in
 
 -double click bug when trying to open root article and others randomly
 -still showing references
