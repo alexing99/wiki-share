@@ -345,8 +345,12 @@ function Carousel({
             </a>
           </div>
         )}
-
         <h1>{currentPost.article}</h1>
+        <img
+          src={`https://en.wikipedia.org/wiki/Special:FilePath/${currentPost.image}`}
+          alt=""
+          height="100px"
+        />{" "}
       </div>
       <p>{currentPost.content}</p>
       <p>{currentPost.author}</p>

@@ -15,6 +15,25 @@ function PostCreation({ parentPost, goToPost }) {
   const [showText, setShowText] = useState(false);
   const [wikiURL, setWikiURL] = useState("");
   const [linkClickLimit, setLinkClickLimit] = useState(1);
+  const [imageString, setImageString] = useState(null);
+
+  const extractMainImage = (html) => {
+    console.log("extracting");
+    // Regular expression to extract the main image URL from the HTML content
+
+    const regex = /image\d":{"wt":"([^"]+)"/g;
+    let matches = [];
+    let match;
+    while ((match = regex.exec(html)) !== null) {
+      matches.push(match[1]);
+    }
+    if (matches) {
+      console.log(matches[0]);
+      return matches[0];
+    } else {
+      return null;
+    }
+  };
 
   let articleFrom = parentPost;
   const getReplyArticle = async () => {
@@ -35,6 +54,8 @@ function PostCreation({ parentPost, goToPost }) {
         setWikiURL(response.url);
 
         let html = await response.text();
+        const imageURL = extractMainImage(html);
+        setImageString(imageURL);
 
         html = html.replace(
           /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
@@ -64,28 +85,68 @@ function PostCreation({ parentPost, goToPost }) {
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-          searchQuery
-        )}?redirects=1`
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch search results");
+    const urlRegex =
+      /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+)(?:\.[a-zA-Z]{2,})+(?:\/\S*)?$/;
+
+    if (urlRegex.test(searchQuery)) {
+      console.log("h");
+      const articleTitle = searchQuery
+        .substring(searchQuery.lastIndexOf("/") + 1)
+        .replace(/_/g, " ");
+      console.log(articleTitle);
+      try {
+        const response = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+            articleTitle
+          )}?redirects=1`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch search results");
+        }
+        setWikiURL(response.url);
+
+        let html = await response.text();
+        const imageURL = extractMainImage(html);
+        setImageString(imageURL);
+
+        html = html.replace(
+          /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+          ""
+        );
+        setArticle(html);
+      } catch (error) {
+        console.error(error);
+        setArticle("No Articles");
       }
-      setWikiURL(response.url);
+    } else {
+      if (searchQuery)
+        try {
+          const response = await fetch(
+            `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+              searchQuery
+            )}?redirects=1`
+          );
 
-      let html = await response.text();
+          if (!response.ok) {
+            throw new Error("Failed to fetch search results");
+          }
+          setWikiURL(response.url);
 
-      html = html.replace(
-        /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
-        ""
-      );
-      setArticle(html);
-    } catch (error) {
-      console.error(error);
-      setArticle("No Articles");
+          let html = await response.text();
+          const imageURL = extractMainImage(html);
+          setImageString(imageURL);
+
+          html = html.replace(
+            /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+            ""
+          );
+          setArticle(html);
+        } catch (error) {
+          console.error(error);
+          setArticle("No Articles");
+        }
     }
   };
 
@@ -112,25 +173,26 @@ function PostCreation({ parentPost, goToPost }) {
   const handleLinkClick = async (event) => {
     event.preventDefault();
 
-    const linkWord = event.target.textContent.trim();
-    if (
-      event.target.nodeName === "A" &&
-      event.target.hasAttribute("href") &&
-      linkClickLimit > 0
-    ) {
+    const linkURL = event.target.getAttribute("href");
+    if (event.target.nodeName === "A" && linkURL && linkClickLimit > 0) {
+      const articleTitle = linkURL
+        .substring(linkURL.lastIndexOf("/") + 1)
+        .replace(/_/g, " ");
       try {
         const response = await fetch(
           `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-            linkWord
+            articleTitle
           )}?redirects=1`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch linked article");
         }
         const html = await response.text();
+        const imageURL = extractMainImage(html);
+        setImageString(imageURL);
 
         setWikiURL(response.url);
-        console.log("bettt", wikiURL);
+
         setArticle(html);
         setLinkClickLimit(linkClickLimit - 1);
         setSelectedText(null);
@@ -156,7 +218,7 @@ function PostCreation({ parentPost, goToPost }) {
               type="text"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Enter article title"
+              placeholder="Enter article title or link"
             />
             <button type="submit">Search</button>
           </form>
@@ -191,6 +253,7 @@ function PostCreation({ parentPost, goToPost }) {
               replyMode={replyMode}
               articleFrom={articleFrom}
               goToPost={goToPost}
+              imageString={imageString}
             />
           )}
           <style>

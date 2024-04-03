@@ -10,6 +10,7 @@ const BottomBox = ({
   replyMode,
   articleFrom,
   goToPost,
+  imageString,
 }) => {
   const user = useUser();
 
@@ -35,7 +36,7 @@ const BottomBox = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ article, content, author, parent }),
+        body: JSON.stringify({ article, content, author, parent, imageString }),
       });
 
       if (response.ok) {

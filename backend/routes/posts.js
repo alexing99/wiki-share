@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
         author: req.body.author,
         content: req.body.content,
         article: articleTitle,
+        image: req.body.imageString,
         timestamp: Date.now(),
         parentPost: req.body.parent,
         relevancyScore: 0,
@@ -30,6 +31,7 @@ router.post("/", async (req, res) => {
         author: req.body.author,
         content: req.body.content,
         article: articleTitle,
+        image: req.body.imageString,
         timestamp: Date.now(),
         relevancyScore: 0,
         interestScore: 0,
@@ -132,7 +134,6 @@ router.patch("/:id/score", async (req, res) => {
   const postId = req.params.id;
   const vote = req.query.vote;
   const action = req.query.action;
-  console.log(action, vote, postId);
 
   try {
     const post = await Post.findById(postId);

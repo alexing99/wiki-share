@@ -4,6 +4,7 @@ const postSchema = new mongoose.Schema({
   author: { type: String, required: true },
   article: { type: String, required: true },
   content: { type: String, required: true },
+  image: { type: String, required: false, default: null },
   timestamp: { type: Date, required: true },
   parentPost: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
   children: [

@@ -274,7 +274,12 @@ function Feed() {
   return (
     <div>
       {" "}
-      <Navbar></Navbar>
+      <Navbar></Navbar>{" "}
+      {/* <img
+        src={`https://en.wikipedia.org/wiki/Special:FilePath/${currentPost.image}`}
+        alt=""
+        height="100px"
+      /> */}
       {rootPosts.map((rootPost, index) => (
         <>
           <div>
@@ -286,6 +291,7 @@ function Feed() {
               <option value="Interest">Interest</option>
             </select>
           </div>
+
           <Carousel
             key={index}
             rootPost={rootPost}
