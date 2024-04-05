@@ -3,6 +3,7 @@ import "../../src/App.css";
 
 import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
+import * as cheerio from "cheerio";
 
 // eslint-disable-next-line react/prop-types
 function PostCreation({ parentPost, goToPost }) {
@@ -18,23 +19,39 @@ function PostCreation({ parentPost, goToPost }) {
   const [imageString, setImageString] = useState(null);
 
   const extractMainImage = (html) => {
-    console.log("extracting");
-    // Regular expression to extract the main image URL from the HTML content
+    // console.log("extracting");
+    // // Regular expression to extract the main image URL from the HTML content
 
-    const regex = /image\d":{"wt":"([^"]+)"/g;
-    let matches = [];
-    let match;
-    while ((match = regex.exec(html)) !== null) {
-      matches.push(match[1]);
-    }
-    if (matches) {
-      console.log(matches[0]);
-      return matches[0];
-    } else {
-      return null;
-    }
+    // const regex = /image\d":{"wt":"([^"]+)"/g;
+    // let matches = [];
+    // let match;
+    // while ((match = regex.exec(html)) !== null) {
+    //   matches.push(match[1]);
+    // }
+    // if (matches) {
+    //   console.log(matches[0]);
+    //   return matches[0];
+    // } else {
+    //   return null;
+    // }
+    let mainImageUrl = null;
+    const $ = cheerio.load(html);
+    // Traverse the DOM tree to find the first image URL in the article
+    $("img").each((index, element) => {
+      if (!mainImageUrl) {
+        const imageUrl = $(element).attr("src");
+        if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
+          // Set the main image URL
+          mainImageUrl = imageUrl;
+          // Exit the loop once the main image URL is found
+          return false;
+        }
+      }
+    });
+    console.log(mainImageUrl);
+
+    return mainImageUrl;
   };
-
   let articleFrom = parentPost;
   const getReplyArticle = async () => {
     if (parentPost) {
@@ -54,6 +71,7 @@ function PostCreation({ parentPost, goToPost }) {
         setWikiURL(response.url);
 
         let html = await response.text();
+        // console.log(html, "hu");
         const imageURL = extractMainImage(html);
         setImageString(imageURL);
 

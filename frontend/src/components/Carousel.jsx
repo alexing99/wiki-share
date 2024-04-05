@@ -3,18 +3,21 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../UserContext";
 import Cookies from "universal-cookie";
+import Tree from "../components/Tree";
+import { calculateDepth } from "../components/calculateDepth";
+import PostCreation from "../pages/PostCreatePage";
 
 function Carousel({
   rootPost,
-  currentPost,
-  setCurrentPost,
-  currentChildren,
-  currentChildLevel,
-  onNextButtonClick,
-  onPrevButtonClick,
-  onUpClick,
-  onDownClick,
-  goToPost,
+  // currentPost,
+  // setCurrentPost,
+  // currentChildren,
+  // currentChildLevel,
+  // onNextButtonClick,
+  // onPrevButtonClick,
+  // onUpClick,
+  // onDownClick,
+  // goToPost,
 }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -27,15 +30,195 @@ function Carousel({
 
   const [currentUser, setCurrentUser] = useState();
 
-  // useEffect(() => {
-  //   setCurrentUserRef(currentUser); // Store reference on component mount
-  // }, [currentUser]);
+  const [currentPost, setCurrentPost] = useState(null);
+  const [currentChildren, setCurrentChildren] = useState([]);
+  const [currentChildLevel, setCurrentChildLevel] = useState();
+  const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
+  const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
+  const [sort, setSort] = useState("New");
+  //
+  const goToPost = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
 
-  // useEffect(() => {
-  //   setCurrentUser(useUser);
-  // }, [currentPost]);
+      if (response.ok) {
+        const postData = await response.json();
+        setCurrentPost(postData);
+        setShowPostCreation(false); // Hide post creation when navigating to a new post
+      } else {
+        console.error("Failed to fetch post data:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching post data:", error);
+    }
+  };
 
-  //Couldn't get it to work with userContext but this works fine considering it'd have to re-fetch anyway
+  // const handleNextButtonClick = async (postid) => {
+  //   if (postid) {
+  //     await fetchChildrenData(postid);
+  //   }
+  // };
+  // const handlePrevButtonClick = async (postid) => {
+  //   const parent = postid.parentPost;
+  //   try {
+  //     await fetchParentPostForBack(parent);
+
+  //     // await fetchChildrenData(parent.parentPost, true);
+  //   } catch (error) {
+  //     console.error(`Error:`, error);
+  //   }
+  //   console.log("back");
+  // };
+
+  const handleUpClick = () => {
+    console.log("up");
+    const prevSibling = currentChildren[currentChildLevel - 1];
+    setCurrentPost(prevSibling);
+    setCurrentChildLevel(currentChildLevel - 1);
+    setShowPostCreation(false);
+  };
+  const handleDownClick = () => {
+    console.log("down");
+    const nextSibling = currentChildren[currentChildLevel + 1];
+    setCurrentPost(nextSibling);
+    setCurrentChildLevel(currentChildLevel + 1);
+    setShowPostCreation(false);
+  };
+
+  const fetchChildrenData = async (post, isCalledfromPrevClick) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4578/posts/${post}/children`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        let sortedData;
+        switch (sort) {
+          case "New":
+            sortedData = data
+              .slice()
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            break;
+          case "Relevancy":
+            sortedData = data
+              .slice()
+              .sort((a, b) => b.relevancyScore - a.relevancyScore);
+            console.log(sortedData, "sorted by relevancy score");
+            break;
+          case "Interest":
+            sortedData = data
+              .slice()
+              .sort((a, b) => b.interestScore - a.interestScore);
+            console.log(sortedData, "sorted by interest score");
+            break;
+          case "Length":
+            // Map each post to a Promise calculating its depth
+            // eslint-disable-next-line no-case-declarations
+            const depthPromises = data.map((post) => calculateDepth(post));
+            // Wait for all depth calculations to finish
+            Promise.all(depthPromises).then((depths) => {
+              // Sort posts based on depth
+              sortedData = data
+                .slice()
+                .sort(
+                  (a, b) => depths[data.indexOf(b)] - depths[data.indexOf(a)]
+                );
+              console.log(sortedData, "sorted by length");
+
+              // Once sorting is done, update state or perform other operations
+              if (!isCalledfromPrevClick) {
+                setCurrentPost(sortedData[0]);
+                setCurrentChildLevel(0);
+              }
+              setCurrentChildren(sortedData);
+            });
+            break;
+          default:
+            console.error("Invalid sort option");
+        }
+
+        if (sort != "Length") {
+          if (!isCalledfromPrevClick) {
+            setCurrentPost(sortedData[0]);
+            setCurrentChildLevel(0);
+          }
+
+          setCurrentChildren(sortedData);
+        }
+        console.log("children got");
+        return sortedData;
+      } else {
+        console.error(`Failed to fetch descendants for post ${post}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching descendants for post ${post}:`, error);
+    }
+  };
+  const fetchParentPostForBack = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+        method: "GET",
+      });
+
+      if (response.ok) {
+        const parentPost = await response.json();
+        setCurrentPost(parentPost);
+        console.log("Parent post retrieved!");
+        if (parentPost.children.length != 0) {
+          try {
+            const children = await fetchChildrenData(
+              parentPost.parentPost,
+              true
+            );
+            setCurrentChildren(children);
+            const parentIndex = children.findIndex(
+              (child) => child._id === parentPost._id
+            );
+            console.log(currentChildren, "see");
+            if (parentIndex !== -1) {
+              setCurrentChildLevel(parentIndex);
+              console.log(parentIndex, "hmmmmmmm");
+            } else {
+              console.error(
+                "Parent post not found in the current children array"
+              );
+            }
+          } catch (error) {
+            console.error(error);
+          }
+
+          // return parentPostData;
+        }
+      } else {
+        const error = await response.json();
+        console.error("Error retrieving parent post:", error);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
+
+  const preToggle = (rootPost) => {
+    if (currentPost === null) {
+      setCurrentPost(rootPost);
+    }
+    toggleDetails();
+  };
+
+  const toggleDetails = async () => {
+    console.log("k", currentPost);
+    setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
+    setSelectedArticle(currentPost.article); // Store selected article
+  };
+
+  //
+
   const getUserData = async () => {
     const cookies = new Cookies();
     const token = cookies.get("token");
@@ -113,14 +296,23 @@ function Carousel({
   }, [currentPost, rootPost, currentChildLevel, currentChildren]);
 
   if (!currentPost) {
-    currentPost = rootPost;
+    setCurrentPost(rootPost);
   }
 
-  const handleNextButtonClick = () => {
-    onNextButtonClick(currentPost._id);
+  const handleNextButtonClick = async () => {
+    await fetchChildrenData(currentPost._id);
   };
-  const handlePreviousButtonClick = () => {
-    onPrevButtonClick(currentPost);
+
+  const handlePreviousButtonClick = async () => {
+    const parent = currentPost.parentPost;
+    try {
+      await fetchParentPostForBack(parent);
+
+      // await fetchChildrenData(parent.parentPost, true);
+    } catch (error) {
+      console.error(`Error:`, error);
+    }
+    console.log("back");
   };
 
   const handleRootPostClick = () => {
@@ -151,17 +343,16 @@ function Carousel({
     }
   };
 
-  const formattedTimestamp = new Date(currentPost.timestamp).toLocaleDateString(
-    "en-US",
-    {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }
-  );
+  const formattedTimestamp = new Date(
+    currentPost?.timestamp
+  ).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
   const handleInterest = async () => {
     try {
       if (!hasVotedInterest) {
@@ -329,9 +520,25 @@ function Carousel({
       return null;
     }
   };
+  const handleSort = (event) => {
+    setSort(event.target.value);
+  };
+  useEffect(() => {
+    // Fetch root posts when component mounts
+    fetchChildrenData(currentPost?.parentPost);
+  }, [sort]);
 
   return (
     <div className="carousel">
+      <div>
+        <label htmlFor="dropdown">Sort By:</label>
+        <select id="dropdown" onChange={handleSort}>
+          <option value="New">New</option>
+          <option value="Length">Longest Route</option>
+          <option value="Relevancy">Relevancy</option>
+          <option value="Interest">Interest</option>
+        </select>
+      </div>
       <div className="article-headers">
         {!atRoot && (
           <div>
@@ -345,36 +552,52 @@ function Carousel({
             </a>
           </div>
         )}
-        <h1>{currentPost.article}</h1>
-        <img
-          src={`https://en.wikipedia.org/wiki/Special:FilePath/${currentPost.image}`}
-          alt=""
-          height="100px"
-        />{" "}
+        <h1>{currentPost?.article}</h1>
+        <img src={currentPost?.image} alt="" height="100px" />{" "}
       </div>
-      <p>{currentPost.content}</p>
-      <p>{currentPost.author}</p>
+      <p>{currentPost?.content}</p>
+      <p>{currentPost?.author}</p>
       <p>{formattedTimestamp}</p>
       {!hasVotedInterest && (
         <button onClick={handleInterest}>Oh Interesting</button>
       )}
       {hasVotedInterest && <button onClick={handleInterest}>Interested</button>}
-      <p>Interest: {currentPost.interestScore}</p>{" "}
+      <p>Interest: {currentPost?.interestScore}</p>{" "}
       {!hasVotedRelevance && (
         <button onClick={handleRelevance}>Relevant</button>
       )}
       {hasVotedRelevance && (
         <button onClick={handleRelevance}>Irrelevant</button>
       )}
-      <p>Relevance: {currentPost.relevancyScore}</p>
+      <p>Relevance: {currentPost?.relevancyScore}</p>
       <div className="carousel-navigation">
         {!atRoot && (
           <button onClick={handlePreviousButtonClick}>Previous</button>
         )}
-        {!atFirst && <button onClick={onUpClick}>/\</button>}
-        {!atLast && <button onClick={onDownClick}>\/</button>}
+        {!atFirst && <button onClick={handleUpClick}>/\</button>}
+        {!atLast && <button onClick={handleDownClick}>\/</button>}
 
         {!atEnd && <button onClick={handleNextButtonClick}>Next</button>}
+      </div>
+      <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
+      <button onClick={() => preToggle(rootPost)}>Show Article</button>
+      <div
+        id={`details-${currentPost?.article}`}
+        style={{
+          width: "700px",
+          height: "1500px",
+          backgroundColor: "lightgray",
+          overflow: "auto",
+          border: "solid",
+          display:
+            showPostCreation && currentPost.article === selectedArticle
+              ? "block"
+              : "none", // Conditionally show/hide the details div based on showPostCreation state and selected article
+        }}
+      >
+        {showPostCreation && currentPost.article === selectedArticle && (
+          <PostCreation parentPost={currentPost} goToPost={goToPost} />
+        )}
       </div>
     </div>
   );
