@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import Tree from "../components/Tree";
 import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
+import "../styles/carousel.css";
 
 function Carousel({
   rootPost,
@@ -530,56 +531,59 @@ function Carousel({
 
   return (
     <div className="carousel">
-      <div>
-        <label htmlFor="dropdown">Sort By:</label>
-        <select id="dropdown" onChange={handleSort}>
-          <option value="New">New</option>
-          <option value="Length">Longest Route</option>
-          <option value="Relevancy">Relevancy</option>
-          <option value="Interest">Interest</option>
-        </select>
-      </div>
-      <div className="article-headers">
+      <div className="post-headers">
         {!atRoot && (
-          <div>
-            {" "}
+          <div className="ancestor-headers">
             <a href="#" onClick={() => handleRootPostClick()}>
               {rootPost.article}
             </a>
-            <p>...</p>
+            <a>...</a>
             <a href="#" onClick={() => handlePreviousButtonClick()}>
               {currentParent?.article}
             </a>
           </div>
         )}
-        <h1>{currentPost?.article}</h1>
-        <img src={currentPost?.image} alt="" height="100px" />{" "}
-      </div>
+        <div className="sort-dropdown">
+          <label htmlFor="dropdown">Sort By:</label>
+          <select id="dropdown" onChange={handleSort}>
+            <option value="New">New</option>
+            <option value="Length">Longest Route</option>
+            <option value="Relevancy">Relevancy</option>
+            <option value="Interest">Interest</option>
+          </select>
+        </div>
+        <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
+      </div>{" "}
+      <h1>{currentPost?.article}</h1>
+      <img src={currentPost?.image} alt="" height="100px" />{" "}
       <p>{currentPost?.content}</p>
-      <p>{currentPost?.author}</p>
-      <p>{formattedTimestamp}</p>
-      {!hasVotedInterest && (
-        <button onClick={handleInterest}>Oh Interesting</button>
-      )}
-      {hasVotedInterest && <button onClick={handleInterest}>Interested</button>}
-      <p>Interest: {currentPost?.interestScore}</p>{" "}
-      {!hasVotedRelevance && (
-        <button onClick={handleRelevance}>Relevant</button>
-      )}
-      {hasVotedRelevance && (
-        <button onClick={handleRelevance}>Irrelevant</button>
-      )}
-      <p>Relevance: {currentPost?.relevancyScore}</p>
-      <div className="carousel-navigation">
-        {!atRoot && (
-          <button onClick={handlePreviousButtonClick}>Previous</button>
+      <div className="post-details">
+        <p>{currentPost?.author}</p>
+        <p>{formattedTimestamp}</p>
+      </div>
+      <div className="voting-info">
+        {!hasVotedInterest && (
+          <button onClick={handleInterest}>Oh Interesting</button>
         )}
+        {hasVotedInterest && (
+          <button onClick={handleInterest}>Interested</button>
+        )}
+        <p>Interest: {currentPost?.interestScore}</p>{" "}
+        {!hasVotedRelevance && (
+          <button onClick={handleRelevance}>Relevant</button>
+        )}
+        {hasVotedRelevance && (
+          <button onClick={handleRelevance}>Irrelevant</button>
+        )}
+        <p>Relevance: {currentPost?.relevancyScore}</p>
+      </div>
+      <div className="carousel-navigation">
+        {!atRoot && <button onClick={handlePreviousButtonClick}>Back</button>}
         {!atFirst && <button onClick={handleUpClick}>/\</button>}
         {!atLast && <button onClick={handleDownClick}>\/</button>}
 
         {!atEnd && <button onClick={handleNextButtonClick}>Next</button>}
       </div>
-      <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
       <button onClick={() => preToggle(rootPost)}>Show Article</button>
       <div
         id={`details-${currentPost?.article}`}

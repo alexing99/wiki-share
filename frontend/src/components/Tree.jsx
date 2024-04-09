@@ -117,7 +117,7 @@ function Tree({ rootPost, currentPost }) {
       <p>
         Depth: {currentDepth}/{maxDepth}
       </p>
-      <p>Route Depth: {routeDepth}</p>
+      {/* <p>Route Depth: {routeDepth}</p> */}
     </div>
   );
 }

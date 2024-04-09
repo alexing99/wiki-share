@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Carousel from "../components/Carousel"; // Assume you have a Carousel component
 
 import Navbar from "../components/NavBar";
+import "../styles/feed.css";
 // import PostCreation from "./PostCreatePage";
 // import Tree from "../components/Tree";
 // import { calculateDepth } from "../components/calculateDepth";
