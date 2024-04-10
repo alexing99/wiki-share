@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../../src/App.css";
+import "../../src/styles/carousel.css";
 
 import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
@@ -255,6 +256,7 @@ function PostCreation({ parentPost, goToPost }) {
           {/* Article content */}
           <div
             id="article"
+            className="article-text"
             dangerouslySetInnerHTML={{ __html: article }}
             onClick={handleLinkClick}
           ></div>

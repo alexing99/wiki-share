@@ -216,6 +216,10 @@ function Carousel({
     console.log("k", currentPost);
     setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
     setSelectedArticle(currentPost.article); // Store selected article
+    // const containerElement = document.querySelector(".post-content");
+    // if (containerElement) {
+    //   containerElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    // }
   };
 
   //
@@ -553,10 +557,38 @@ function Carousel({
           </select>
         </div>
         <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
-      </div>{" "}
+      </div>
       <h1>{currentPost?.article}</h1>
       <img src={currentPost?.image} alt="" height="100px" />{" "}
-      <p>{currentPost?.content}</p>
+      <div className="post-content">
+        {showPostCreation && currentPost.article === selectedArticle && (
+          <div
+            id={`details-${currentPost?.article}`}
+            className="article-window"
+            style={{
+              width: "700px",
+              height: "160px",
+              backgroundColor: "lightgray",
+              overflow: "auto",
+              border: "solid",
+              resize: "both",
+
+              display:
+                showPostCreation && currentPost.article === selectedArticle
+                  ? "block"
+                  : "none", // Conditionally show/hide the details div based on showPostCreation state and selected article
+            }}
+          >
+            {showPostCreation && currentPost.article === selectedArticle && (
+              <PostCreation parentPost={currentPost} goToPost={goToPost} />
+            )}
+          </div>
+        )}
+        {!showPostCreation && (
+          <p className="article-content">{currentPost?.content}</p>
+        )}
+        <button onClick={() => preToggle(rootPost)}>Show Article</button>
+      </div>
       <div className="post-details">
         <p>{currentPost?.author}</p>
         <p>{formattedTimestamp}</p>
@@ -584,15 +616,16 @@ function Carousel({
 
         {!atEnd && <button onClick={handleNextButtonClick}>Next</button>}
       </div>
-      <button onClick={() => preToggle(rootPost)}>Show Article</button>
-      <div
+      {/* <div
         id={`details-${currentPost?.article}`}
         style={{
           width: "700px",
-          height: "1500px",
+          height: "160px",
           backgroundColor: "lightgray",
           overflow: "auto",
           border: "solid",
+          resize: "both",
+
           display:
             showPostCreation && currentPost.article === selectedArticle
               ? "block"
@@ -602,7 +635,7 @@ function Carousel({
         {showPostCreation && currentPost.article === selectedArticle && (
           <PostCreation parentPost={currentPost} goToPost={goToPost} />
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

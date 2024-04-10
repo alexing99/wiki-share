@@ -16,6 +16,14 @@
   justify-content: space-around;
 }
 
+.post-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
 .post-details {
   display: flex;
   flex-direction: row;
@@ -30,4 +38,9 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.article-container {
+  resize: both;
+  overflow: auto;
 }
