@@ -21,7 +21,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 50px;
 }
 
 .post-details {
@@ -43,4 +42,8 @@ p {
 .article-container {
   resize: both;
   overflow: auto;
+}
+
+.highlight {
+  background-color: yellow;
 }

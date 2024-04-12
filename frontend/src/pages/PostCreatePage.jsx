@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect, useRef } from "react";
 import "../../src/App.css";
 import "../../src/styles/carousel.css";
 
@@ -19,22 +20,9 @@ function PostCreation({ parentPost, goToPost }) {
   const [linkClickLimit, setLinkClickLimit] = useState(1);
   const [imageString, setImageString] = useState(null);
 
-  const extractMainImage = (html) => {
-    // console.log("extracting");
-    // // Regular expression to extract the main image URL from the HTML content
+  const articleRef = useRef(null);
 
-    // const regex = /image\d":{"wt":"([^"]+)"/g;
-    // let matches = [];
-    // let match;
-    // while ((match = regex.exec(html)) !== null) {
-    //   matches.push(match[1]);
-    // }
-    // if (matches) {
-    //   console.log(matches[0]);
-    //   return matches[0];
-    // } else {
-    //   return null;
-    // }
+  const extractMainImage = (html) => {
     let mainImageUrl = null;
     const $ = cheerio.load(html);
     // Traverse the DOM tree to find the first image URL in the article
@@ -87,13 +75,54 @@ function PostCreation({ parentPost, goToPost }) {
       }
     }
   };
+  const scrollToTop = async () => {
+    console.log("to top");
+    const articleWindow = articleRef.current;
+    articleWindow.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  // const [pageViews, setPageViews] = useState(null);
-  // const [articleTitle, setArticleTitle] = useState(null);
+  useEffect(() => {
+    if (article) {
+      scrollToContent();
+    }
+  }, [article]);
 
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const scrollToContent = async () => {
+    // Assuming targetText is the target text you want to scroll to
+
+    const cleanedText = parentPost.content.replace(/^"|"$/g, "");
+    console.log("scrolling");
+    const targetText = cleanedText;
+    const articleDiv = articleRef.current;
+
+    if (articleDiv) {
+      const paragraphs = articleDiv.getElementsByTagName("p");
+
+      for (let i = 0; i < paragraphs.length; i++) {
+        const paragraph = paragraphs[i];
+        const paragraphText = paragraph.textContent;
+
+        if (paragraphText.includes(targetText)) {
+          // Create a new span element to wrap the target text
+          const span = document.createElement("span");
+          span.className = "highlight";
+          span.textContent = targetText;
+
+          // Replace the target text within the paragraph with the highlighted span
+          const newText = paragraphText.replace(targetText, span.outerHTML);
+          paragraph.innerHTML = newText;
+
+          // Scroll to the paragraph containing the target text
+          // articleRef.scrollIntoView({ behavior: "smooth", block: "start" });
+          setTimeout(() => {
+            paragraph.scrollIntoView({ behavior: "smooth" });
+          }, 200); // Adjust the delay as needed
+
+          break; // Stop searching after finding the first match
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     // fetchRandomArticle();
@@ -215,6 +244,7 @@ function PostCreation({ parentPost, goToPost }) {
         setArticle(html);
         setLinkClickLimit(linkClickLimit - 1);
         setSelectedText(null);
+        scrollToTop();
       } catch (error) {
         console.error(error);
         setArticle("Failed to load linked article");
@@ -245,14 +275,19 @@ function PostCreation({ parentPost, goToPost }) {
       )}
 
       {article && (
-        <div className="article-container">
+        <div
+          className="article-container"
+          id="article-container"
+          ref={articleRef}
+        >
+          {" "}
+          <button onClick={scrollToContent}>scroll</button>
           {/* Back button */}
           {linkClickLimit === 0 && (
             <button className="back-button" onClick={handleBackButtonClick}>
               Back
             </button>
           )}
-
           {/* Article content */}
           <div
             id="article"
@@ -260,6 +295,9 @@ function PostCreation({ parentPost, goToPost }) {
             dangerouslySetInnerHTML={{ __html: article }}
             onClick={handleLinkClick}
           ></div>
+          <div className="target">
+            <p>target</p> <button onClick={scrollToTop}>Scroll to Top</button>
+          </div>
         </div>
       )}
       {(linkClickLimit === 0 || !replyMode) && (
@@ -284,6 +322,7 @@ function PostCreation({ parentPost, goToPost }) {
           }
           .article-container {
             position: relative;
+        
           }
           .back-button {
             position: sticky;

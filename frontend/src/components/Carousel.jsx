@@ -216,6 +216,7 @@ function Carousel({
     console.log("k", currentPost);
     setShowPostCreation(!showPostCreation); // Toggle PostCreation visibility
     setSelectedArticle(currentPost.article); // Store selected article
+
     // const containerElement = document.querySelector(".post-content");
     // if (containerElement) {
     //   containerElement.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -306,6 +307,7 @@ function Carousel({
 
   const handleNextButtonClick = async () => {
     await fetchChildrenData(currentPost._id);
+    setShowPostCreation(false);
   };
 
   const handlePreviousButtonClick = async () => {
@@ -318,10 +320,12 @@ function Carousel({
       console.error(`Error:`, error);
     }
     console.log("back");
+    setShowPostCreation(false);
   };
 
   const handleRootPostClick = () => {
     goToPost(rootPost._id);
+    setShowPostCreation(false);
   };
 
   useEffect(() => {
@@ -568,9 +572,11 @@ function Carousel({
             style={{
               width: "700px",
               height: "160px",
-              backgroundColor: "lightgray",
+              // backgroundColor: "lightgray",
               overflow: "auto",
               border: "solid",
+              borderTop: "none",
+              borderBottom: "none",
               resize: "both",
 
               display:
