@@ -76,9 +76,13 @@ function PostCreation({ parentPost, goToPost }) {
     }
   };
   const scrollToTop = async () => {
-    console.log("to top");
     const articleWindow = articleRef.current;
-    articleWindow.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (articleWindow) {
+      const firstParagraph = articleWindow.querySelector("p");
+      if (firstParagraph) {
+        firstParagraph.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
   };
 
   useEffect(() => {
@@ -94,13 +98,17 @@ function PostCreation({ parentPost, goToPost }) {
     console.log("scrolling");
     const targetText = cleanedText;
     const articleDiv = articleRef.current;
+    console.log(targetText, articleDiv);
 
     if (articleDiv) {
       const paragraphs = articleDiv.getElementsByTagName("p");
+      console.log(paragraphs);
 
       for (let i = 0; i < paragraphs.length; i++) {
         const paragraph = paragraphs[i];
         const paragraphText = paragraph.textContent;
+
+        console.log(paragraphText, "tecxt");
 
         if (paragraphText.includes(targetText)) {
           // Create a new span element to wrap the target text
@@ -115,11 +123,11 @@ function PostCreation({ parentPost, goToPost }) {
           // Scroll to the paragraph containing the target text
           // articleRef.scrollIntoView({ behavior: "smooth", block: "start" });
           setTimeout(() => {
-            paragraph.scrollIntoView({ behavior: "smooth" });
+            paragraph.scrollIntoView({ behavior: "smooth", block: "center" });
           }, 200); // Adjust the delay as needed
 
           break; // Stop searching after finding the first match
-        }
+        } else console.log("no match");
       }
     }
   };
@@ -296,7 +304,7 @@ function PostCreation({ parentPost, goToPost }) {
             onClick={handleLinkClick}
           ></div>
           <div className="target">
-            <p>target</p> <button onClick={scrollToTop}>Scroll to Top</button>
+            <p>targeet</p> <button onClick={scrollToTop}>Scroll to Top</button>
           </div>
         </div>
       )}

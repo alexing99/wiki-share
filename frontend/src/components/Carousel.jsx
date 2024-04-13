@@ -570,8 +570,9 @@ function Carousel({
             id={`details-${currentPost?.article}`}
             className="article-window"
             style={{
-              width: "700px",
-              height: "160px",
+              width: "800px",
+              height: "260px",
+              padding: "50px",
               // backgroundColor: "lightgray",
               overflow: "auto",
               border: "solid",
