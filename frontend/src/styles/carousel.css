@@ -39,11 +39,21 @@ p {
   justify-content: space-evenly;
 }
 
-.article-container {
-  resize: both;
-  overflow: auto;
-}
-
 .highlight {
   background-color: yellow;
+}
+
+.post-button {
+  position: sticky;
+  top: 10px;
+  left: 800px;
+  margin-right: 20px;
+  border-color: #ffff00;
+  box-shadow: #ffff00;
+  background-color: #ffff00;
+
+  z-index: 999;
+}
+::selection {
+  background-color: #ffff00; /* Orange */
 }

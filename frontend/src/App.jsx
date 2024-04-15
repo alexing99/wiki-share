@@ -3,7 +3,6 @@ import "../src/App.css";
 import Cookies from "universal-cookie";
 // import { Route, Switch } from "react-router-dom";
 
-import BottomBox from "./components/BottomBox";
 import CreateUserForm from "./components/CreateUserForm";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/NavBar";
@@ -11,9 +10,9 @@ import Navbar from "./components/NavBar";
 function App() {
   const [article, setArticle] = useState(null);
 
-  const [selectedText, setSelectedText] = useState(null);
+  // const [selectedText, setSelectedText] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showText, setShowText] = useState(false);
+  // const [showText, setShowText] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [showCreateUserForm, setShowCreateUserForm] = useState(false); // Track visibility of create user form
   const [showLoginForm, setShowLoginForm] = useState(false); // Track visibility of login form
@@ -24,12 +23,12 @@ function App() {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    // fetchRandomArticle();
-    // handleArticleClick();
+  // useEffect(() => {
+  //   // fetchRandomArticle();
+  //   // handleArticleClick();
 
-    addSelectionListener();
-  }, []);
+  //   addSelectionListener();
+  // }, []);
 
   console.log(Cookies);
 
@@ -73,25 +72,25 @@ function App() {
     }
   };
 
-  const addSelectionListener = () => {
-    document.addEventListener("selectionchange", handleSelectionChange);
-  };
+  // const addSelectionListener = () => {
+  //   document.addEventListener("selectionchange", handleSelectionChange);
+  // };
 
-  const handleSelectionChange = () => {
-    const currentSearch = searchQuery;
-    const selectedText = window.getSelection().toString();
-    if (
-      selectedText != "" &&
-      selectedText != " " &&
-      selectedText != currentSearch &&
-      selectedText.length < 1000
-    ) {
-      setSelectedText(`"${selectedText}"`);
-      setShowText(true);
-    } else {
-      setShowText(false);
-    }
-  };
+  // const handleSelectionChange = () => {
+  //   const currentSearch = searchQuery;
+  //   const selectedText = window.getSelection().toString();
+  //   if (
+  //     selectedText != "" &&
+  //     selectedText != " " &&
+  //     selectedText != currentSearch &&
+  //     selectedText.length < 1000
+  //   ) {
+  //     setSelectedText(`"${selectedText}"`);
+  //     setShowText(true);
+  //   } else {
+  //     setShowText(false);
+  //   }
+  // };
 
   const handleLinkClick = async (event) => {
     event.preventDefault();
@@ -198,9 +197,6 @@ function App() {
           onClick={handleLinkClick}
         ></div>
       )}
-
-      {/* Bottom box component */}
-      {showText && <BottomBox selectedText={selectedText} />}
     </div>
   );
 }

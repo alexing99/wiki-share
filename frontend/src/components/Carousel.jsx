@@ -8,18 +8,7 @@ import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
 import "../styles/carousel.css";
 
-function Carousel({
-  rootPost,
-  // currentPost,
-  // setCurrentPost,
-  // currentChildren,
-  // currentChildLevel,
-  // onNextButtonClick,
-  // onPrevButtonClick,
-  // onUpClick,
-  // onDownClick,
-  // goToPost,
-}) {
+function Carousel({ rootPost }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [atLast, setAtLast] = useState(false);
@@ -573,7 +562,6 @@ function Carousel({
               width: "800px",
               height: "260px",
               padding: "50px",
-              // backgroundColor: "lightgray",
               overflow: "auto",
               border: "solid",
               borderTop: "none",
@@ -586,6 +574,7 @@ function Carousel({
                   : "none", // Conditionally show/hide the details div based on showPostCreation state and selected article
             }}
           >
+            {/* <button className="back-butt">Bakc</button> */}
             {showPostCreation && currentPost.article === selectedArticle && (
               <PostCreation parentPost={currentPost} goToPost={goToPost} />
             )}

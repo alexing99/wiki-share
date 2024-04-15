@@ -3,9 +3,10 @@ import { useState, useEffect, useRef } from "react";
 import "../../src/App.css";
 import "../../src/styles/carousel.css";
 
-import BottomBox from "../components/BottomBox";
 import Navbar from "../components/NavBar";
 import * as cheerio from "cheerio";
+
+import { useUser } from "../UserContext.jsx";
 
 // eslint-disable-next-line react/prop-types
 function PostCreation({ parentPost, goToPost }) {
@@ -264,6 +265,67 @@ function PostCreation({ parentPost, goToPost }) {
     getReplyArticle(); // Reload the parent article
   };
 
+  const user = useUser();
+
+  const postPost = async () => {
+    let content = selectedText;
+
+    const author = user.name;
+    const url = wikiURL;
+    const parts = url.split("/");
+    const article = parts[parts.length - 1].split("?")[0];
+    let parent = "";
+
+    if (replyMode) {
+      parent = articleFrom._id;
+      console.log(parent, "ye");
+    }
+
+    try {
+      console.log(parent);
+      const response = await fetch("http://localhost:4578/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ article, content, author, parent, imageString }),
+      });
+
+      if (response.ok) {
+        const postData = await response.json();
+        const newPostId = postData._id;
+        const replyingWith = postData._id;
+        console.log("Post created successfully!", replyingWith);
+        if (replyMode) {
+          const nextResponse = await fetch(
+            `http://localhost:4578/posts/${articleFrom._id}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ replyingWith }),
+            }
+          );
+          if (nextResponse.ok) {
+            console.log("reply post created successfully");
+            goToPost(newPostId);
+            // window.location.reload();
+          } else {
+            const error = await nextResponse.text();
+            console.error("Error creating reply post:", error);
+          }
+        }
+      } else {
+        const error = await response.text();
+        console.error("Error creating post:", error);
+        // goToPost()
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
   return (
     <>
       {!replyMode && (
@@ -289,11 +351,18 @@ function PostCreation({ parentPost, goToPost }) {
           ref={articleRef}
         >
           {" "}
-          <button onClick={scrollToContent}>scroll</button>
+          {linkClickLimit === 1 && (
+            <button onClick={scrollToContent}>Scroll to Clipping</button>
+          )}
           {/* Back button */}
           {linkClickLimit === 0 && (
             <button className="back-button" onClick={handleBackButtonClick}>
               Back
+            </button>
+          )}
+          {linkClickLimit === 0 && showText === true && (
+            <button className="post-button" onClick={postPost}>
+              Post
             </button>
           )}
           {/* Article content */}
@@ -303,27 +372,11 @@ function PostCreation({ parentPost, goToPost }) {
             dangerouslySetInnerHTML={{ __html: article }}
             onClick={handleLinkClick}
           ></div>
-          <div className="target">
-            <p>targeet</p> <button onClick={scrollToTop}>Scroll to Top</button>
-          </div>
         </div>
       )}
-      {(linkClickLimit === 0 || !replyMode) && (
-        <>
-          {/* Bottom box component */}
-          {showText && (
-            <BottomBox
-              key={wikiURL}
-              selectedText={selectedText}
-              wikiURL={wikiURL}
-              replyMode={replyMode}
-              articleFrom={articleFrom}
-              goToPost={goToPost}
-              imageString={imageString}
-            />
-          )}
-          <style>
-            {`
+
+      <style>
+        {`
           a {
             color: ${linkClickLimit > 0 ? "#0645ad" : "black"};
             pointer-events: ${linkClickLimit > 0 ? "auto" : "none"};
@@ -342,9 +395,7 @@ function PostCreation({ parentPost, goToPost }) {
           }
   
         `}
-          </style>
-        </>
-      )}
+      </style>
     </>
   );
 }

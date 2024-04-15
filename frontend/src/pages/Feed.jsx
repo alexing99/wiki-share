@@ -3,18 +3,9 @@ import Carousel from "../components/Carousel"; // Assume you have a Carousel com
 
 import Navbar from "../components/NavBar";
 import "../styles/feed.css";
-// import PostCreation from "./PostCreatePage";
-// import Tree from "../components/Tree";
-// import { calculateDepth } from "../components/calculateDepth";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
-  // const [sort, setSort] = useState("New");
-  // const [currentPost, setCurrentPost] = useState(null);
-  // const [currentChildren, setCurrentChildren] = useState([]);
-  // const [currentChildLevel, setCurrentChildLevel] = useState();
-  // const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
-  // const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
 
   useEffect(() => {
     // Fetch root posts when component mounts
