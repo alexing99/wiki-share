@@ -1,6 +1,9 @@
 .carousel {
   border: black solid 1px;
-  margin: 5px;
+  margin: 20px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .post-headers {
@@ -54,6 +57,71 @@ p {
 
   z-index: 999;
 }
-::selection {
-  background-color: #ffff00; /* Orange */
+.custom-highlight ::selection {
+  background-color: #ffff00;
+}
+.custom-highlight {
+  cursor: url("../images/highlighter.png"), text;
+}
+.article-container {
+  position: relative;
+}
+.article-window {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.back-button {
+  position: sticky;
+  top: 10px;
+  right: 800px;
+  margin-left: 20px;
+
+  z-index: 999; /* Ensure the button is on top of the article content */
+}
+
+.article-content {
+  padding: 50px;
+}
+
+.up-down {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-navigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.voting-info svg {
+  width: 50px;
+  height: auto;
+}
+.voting-info svg path {
+  transition: fill 0.5s ease-in-out;
+}
+
+.voting-info svg:hover {
+  cursor: pointer;
+}
+
+.voting-info svg.animate path {
+  fill: green; /* Change the fill color to blue */
+}
+
+.content-and-vote {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.voting-info {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #ffff00;
 }

@@ -254,6 +254,9 @@ function PostCreation({ parentPost, goToPost }) {
         setLinkClickLimit(linkClickLimit - 1);
         setSelectedText(null);
         scrollToTop();
+        document
+          .getElementById("article-container")
+          .classList.add("custom-highlight");
       } catch (error) {
         console.error(error);
         setArticle("Failed to load linked article");
@@ -263,6 +266,9 @@ function PostCreation({ parentPost, goToPost }) {
   const handleBackButtonClick = async () => {
     setLinkClickLimit(1); // Reset link click limit
     getReplyArticle(); // Reload the parent article
+    document
+      .getElementById("article-container")
+      .classList.remove("custom-highlight");
   };
 
   const user = useUser();
@@ -381,19 +387,6 @@ function PostCreation({ parentPost, goToPost }) {
             color: ${linkClickLimit > 0 ? "#0645ad" : "black"};
             pointer-events: ${linkClickLimit > 0 ? "auto" : "none"};
           }
-          .article-container {
-            position: relative;
-        
-          }
-          .back-button {
-            position: sticky;
-            top: 10px;
-            right: 800px;
-            margin-left: 20px;
-            
-            z-index: 999; /* Ensure the button is on top of the article content */
-          }
-  
         `}
       </style>
     </>
