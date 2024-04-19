@@ -97,20 +97,26 @@ p {
 }
 .voting-info svg {
   width: 50px;
-  height: auto;
+  height: 50px;
 }
-.voting-info svg path {
-  transition: fill 0.5s ease-in-out;
+.animateInt {
+  transition: fill 1s ease-in-out;
 }
 
+.animateRel {
+  transition: stroke-opacity 1.9s ease-in-out;
+}
+
+.animateRel {
+  stroke-opacity: 0.9;
+}
+
+.animateInt {
+  fill: #ffff00; /* Change the fill color to blue */
+}
 .voting-info svg:hover {
   cursor: pointer;
 }
-
-.voting-info svg.animate path {
-  fill: green; /* Change the fill color to blue */
-}
-
 .content-and-vote {
   display: flex;
   flex-direction: row;
@@ -120,6 +126,7 @@ p {
 .voting-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 body {

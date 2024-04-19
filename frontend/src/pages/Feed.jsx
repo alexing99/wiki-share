@@ -216,7 +216,7 @@ function Feed() {
   // }, [sort]);
 
   return (
-    <div>
+    <div className="feed">
       {" "}
       <Navbar></Navbar>{" "}
       {rootPosts.map((rootPost, index) => (

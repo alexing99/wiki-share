@@ -1,0 +1,46 @@
+.menu-container {
+  position: relative;
+}
+
+.menu-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.menu-list {
+  position: absolute;
+  top: 0;
+  right: 100%; /* Position to the right of the button */
+  transform: translateX(100%); /* Initially translate the list out of view */
+  transition: transform 0.3s ease; /* Add a transition effect */
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  list-style: none;
+}
+
+.menu-list li {
+  padding: 8px;
+}
+
+.menu-list li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.menu-list li a:hover {
+  background-color: #ddd;
+}
+/* 
+Show the menu list when the menu button is hovered */
+.menu-container:hover .menu-list {
+  transform: translateX(0); /* Move the list into view */
+}

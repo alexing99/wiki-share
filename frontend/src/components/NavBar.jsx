@@ -1,36 +1,34 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import "../styles/nav.css";
 
 function Navbar() {
-  // const handleCreateUserClick = () => {
-  //     setShowCreateUserForm(true);
-  //     setShowLoginForm(false);
-  //   };
+  const [isOpen, setIsOpen] = useState(false);
 
-  //   const handleLoginClick = () => {
-  //     setShowLoginForm(true);
-  //     setShowCreateUserForm(false);
-  //   };
-
-  //   const handleLogOut = () => {
-  //     const cookies = new Cookies();
-  //     cookies.remove("token");
-
-  //     setLoggedIn(false);
-  //   };
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <nav>
-      <ul>
-        <li>
-          <Link to="/profile">User</Link>
-        </li>
-        <li>
-          <Link to="/feed">Feed</Link>
-        </li>
-        <li>
-          <Link to="/post">Create Post</Link>
-        </li>
-      </ul>
+      <div className="menu-container">
+        <button className="menu-btn" onClick={toggleMenu}>
+          Menu
+        </button>
+        {isOpen && (
+          <ul className="menu-list">
+            <li>
+              <Link to="/profile">User</Link>
+            </li>
+            <li>
+              <Link to="/feed">Feed</Link>
+            </li>
+            <li>
+              <Link to="/post">Create Post</Link>
+            </li>
+          </ul>
+        )}
+      </div>
     </nav>
   );
 }
