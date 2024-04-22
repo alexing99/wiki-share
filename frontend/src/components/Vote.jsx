@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import "../styles/vote.css";
 // import { useUser } from "../UserContext";
 import Cookies from "universal-cookie";
 function Vote({ currentPost }) {
@@ -421,7 +422,7 @@ function Vote({ currentPost }) {
             id={`relevanceImg-${currentPost?._id}`}
             d="M219.962 158.69C301.398 167.678 215.1 108.884 284.641 112.13C309.301 113.281 287.258 146.158 293.857 154.973C299.085 161.97 334.878 147.654 341.615 156.653C345.643 162.039 327.578 197.327 334.074 199.496C339.004 201.142 350.98 188.742 359.204 191.096C376.15 195.952 380.691 231.713 365.907 238.979C351.123 246.245 341.747 240.521 340.777 241.5C336.129 246.154 349.597 267.685 346.642 275.102C344.754 279.832 305.714 287.83 301.398 283.503C292.4 274.481 309.369 240.976 291.344 236.459C265.56 229.998 276.039 267.893 267.046 270.902C254.301 275.16 229.326 272.582 215.1 272.582"
             stroke="#000000"
-            className={hasVotedRelevance ? "animateRel" : ""}
+            className={hasVotedRelevance ? "animateRel" : "hideRel"}
             strokeOpacity="0.0"
             strokeWidth="16"
             strokeLinecap="round"

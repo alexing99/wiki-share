@@ -92,27 +92,27 @@ function App() {
   //   }
   // };
 
-  const handleLinkClick = async (event) => {
-    event.preventDefault();
-    const linkWord = event.target.textContent.trim();
-    if (event.target.nodeName === "A" && event.target.hasAttribute("href")) {
-      try {
-        const response = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-            linkWord
-          )}?redirects=1`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch linked article");
-        }
-        const html = await response.text();
-        setArticle(html);
-      } catch (error) {
-        console.error(error);
-        setArticle("Failed to load linked article");
-      }
-    }
-  };
+  // const handleLinkClick = async (event) => {
+  //   event.preventDefault();
+  //   const linkWord = event.target.textContent.trim();
+  //   if (event.target.nodeName === "A" && event.target.hasAttribute("href")) {
+  //     try {
+  //       const response = await fetch(
+  //         `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+  //           linkWord
+  //         )}?redirects=1`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch linked article");
+  //       }
+  //       const html = await response.text();
+  //       setArticle(html);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setArticle("Failed to load linked article");
+  //     }
+  //   }
+  // };
 
   const handleCreateUserClick = () => {
     setShowCreateUserForm(true);

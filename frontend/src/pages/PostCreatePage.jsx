@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "../../src/App.css";
 import "../../src/styles/carousel.css";
 
@@ -22,6 +24,7 @@ function PostCreation({ parentPost, goToPost }) {
   const [imageString, setImageString] = useState(null);
 
   const articleRef = useRef(null);
+  const navigateTo = useNavigate();
 
   const extractMainImage = (html) => {
     let mainImageUrl = null;
@@ -93,8 +96,6 @@ function PostCreation({ parentPost, goToPost }) {
   }, [article]);
 
   const scrollToContent = async () => {
-    // Assuming targetText is the target text you want to scroll to
-
     const cleanedText = parentPost.content.replace(/^"|"$/g, "");
     console.log("scrolling");
     const targetText = cleanedText;
@@ -134,15 +135,13 @@ function PostCreation({ parentPost, goToPost }) {
   };
 
   useEffect(() => {
-    // fetchRandomArticle();
-    // handleArticleClick();
     getReplyArticle();
     addSelectionListener();
   }, []);
 
   const handleSearch = async (event) => {
     event.preventDefault();
-
+    setLinkClickLimit(0);
     const urlRegex =
       /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+)(?:\.[a-zA-Z]{2,})+(?:\/\S*)?$/;
 
@@ -173,6 +172,9 @@ function PostCreation({ parentPost, goToPost }) {
           ""
         );
         setArticle(html);
+        document
+          .getElementById("article-container")
+          .classList.add("custom-highlight");
       } catch (error) {
         console.error(error);
         setArticle("No Articles");
@@ -200,6 +202,9 @@ function PostCreation({ parentPost, goToPost }) {
             ""
           );
           setArticle(html);
+          document
+            .getElementById("article-container")
+            .classList.add("custom-highlight");
         } catch (error) {
           console.error(error);
           setArticle("No Articles");
@@ -229,7 +234,6 @@ function PostCreation({ parentPost, goToPost }) {
 
   const handleLinkClick = async (event) => {
     event.preventDefault();
-
     const linkURL = event.target.getAttribute("href");
     if (event.target.nodeName === "A" && linkURL && linkClickLimit > 0) {
       const articleTitle = linkURL
@@ -247,9 +251,7 @@ function PostCreation({ parentPost, goToPost }) {
         const html = await response.text();
         const imageURL = extractMainImage(html);
         setImageString(imageURL);
-
         setWikiURL(response.url);
-
         setArticle(html);
         setLinkClickLimit(linkClickLimit - 1);
         setSelectedText(null);
@@ -302,6 +304,9 @@ function PostCreation({ parentPost, goToPost }) {
         const newPostId = postData._id;
         const replyingWith = postData._id;
         console.log("Post created successfully!", replyingWith);
+        const redirectUrl = `/feed/${newPostId}`;
+        console.log("Redirecting to:", redirectUrl);
+        navigateTo(redirectUrl); // Use history.push to navigate to the new URL
         if (replyMode) {
           const nextResponse = await fetch(
             `http://localhost:4578/posts/${articleFrom._id}`,
@@ -361,7 +366,7 @@ function PostCreation({ parentPost, goToPost }) {
             <button onClick={scrollToContent}>Scroll to Clipping</button>
           )}
           {/* Back button */}
-          {linkClickLimit === 0 && (
+          {linkClickLimit === 0 && replyMode && (
             <button className="back-button" onClick={handleBackButtonClick}>
               Back
             </button>

@@ -1,0 +1,57 @@
+.voting-info svg {
+  width: 50px;
+  height: 50px;
+}
+.animateInt {
+  transition: fill 1s ease-in-out;
+}
+
+.animateRel {
+  transition: stroke-dashoffset 2.5s ease;
+}
+
+.animateRel {
+  stroke-dashoffset: 0;
+}
+
+.hideRel {
+  stroke-dasharray: 1000; /* Set a large dash array */
+  stroke-dashoffset: 1000;
+}
+.voting-info svg:hover {
+  cursor: pointer;
+}
+.animateInt {
+  fill: #ffff00; /* Change the fill color to blue */
+}
+.voting-info svg:hover {
+  cursor: pointer;
+}
+.voting-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* .puzzle-piece-container {
+  position: relative;
+}
+
+.puzzle-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: transform 0.5s ease;
+}
+
+.path-1 {
+  transform: translate(-50%, -50%);
+}
+
+.path-2 {
+  transform: translate(100%, -50%);
+}
+
+.connected .path-2 {
+  transform: translate(-50%, -50%);
+} */

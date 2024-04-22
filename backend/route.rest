@@ -9,7 +9,7 @@ Content-Type: application/json
     "name": "Alex Inglis",
     "email": "alexinglis7799@gmail.com",
     "password": "fidelis99"
-}
+} 
 
 ###
 
@@ -23,3 +23,9 @@ Content-Type: application/json
 ###
 
 GET http://localhost:4578/users/65e7658b225fac15d63b08fe
+
+###
+GET http://localhost:4578/posts/rootposts
+
+###
+GET http://localhost:4578/posts/65f4848bc58b6f6cd858f841/children

@@ -22,6 +22,10 @@ const router = createBrowserRouter([
     element: <Feed />,
   },
   {
+    path: "feed/:redPostId", // path for being redirected to newly created roots
+    element: <Feed />,
+  },
+  {
     path: "post",
     element: <PostCreator />,
   },

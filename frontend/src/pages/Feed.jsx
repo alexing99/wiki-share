@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import Carousel from "../components/Carousel"; // Assume you have a Carousel component
-
+import { useParams } from "react-router-dom";
 import Navbar from "../components/NavBar";
 import "../styles/feed.css";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
+  const { redPostId } = useParams();
 
   useEffect(() => {
     // Fetch root posts when component mounts
@@ -234,6 +235,7 @@ function Feed() {
           <Carousel
             key={index}
             rootPost={rootPost}
+            redPostId={redPostId}
             // currentPost={currentPost}
             // setCurrentPost={setCurrentPost}
             // currentChildren={currentChildren}

@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   foundRelevant: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post", // Reference to the same Post schema for nested replieschema}],
+      ref: "Post",
     },
   ],
 });

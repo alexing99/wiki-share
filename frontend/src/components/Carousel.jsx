@@ -9,7 +9,7 @@ import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
 import "../styles/carousel.css";
 
-function Carousel({ rootPost }) {
+function Carousel({ rootPost, redPostId }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [atLast, setAtLast] = useState(false);
@@ -22,7 +22,9 @@ function Carousel({ rootPost }) {
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
+
   //
+
   const goToPost = async (postId) => {
     try {
       const response = await fetch(`http://localhost:4578/posts/${postId}`, {
@@ -291,8 +293,19 @@ function Carousel({ rootPost }) {
     fetchChildrenData(currentPost?.parentPost);
   }, [sort]);
 
+  useEffect(() => {
+    // Scroll to the newly created post when the component mounts
+    if (redPostId) {
+      console.log(redPostId.toString());
+      const newPostElement = document.getElementById(redPostId.toString());
+      if (newPostElement) {
+        newPostElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [redPostId]);
+
   return (
-    <div className="carousel">
+    <div className="carousel" id={`${rootPost._id}`}>
       <div className="post-headers">
         {!atRoot && (
           <div className="ancestor-headers">
@@ -324,10 +337,11 @@ function Carousel({ rootPost }) {
         <div className="post-content">
           {showPostCreation && currentPost.article === selectedArticle && (
             <div
-              id={`details-${currentPost?.article}`}
+              id={`details-${currentPost?.id}`}
               className="article-window"
               style={{
                 width: "800px",
+                minWidth: "700px",
                 height: "260px",
                 padding: "50px",
                 overflow: "auto",
@@ -359,6 +373,11 @@ function Carousel({ rootPost }) {
             <button onClick={() => preToggle(rootPost)}>Hide Article</button>
           )}
         </div>
+        {!atEnd && (
+          <button className="nextButt" onClick={handleNextButtonClick}>
+            Next
+          </button>
+        )}
       </div>
       <div className="post-details">
         <p>{currentPost?.author}</p>
@@ -370,8 +389,6 @@ function Carousel({ rootPost }) {
           {!atFirst && <button onClick={handleUpClick}>/\</button>}
           {!atLast && <button onClick={handleDownClick}>\/</button>}
         </div>
-
-        {!atEnd && <button onClick={handleNextButtonClick}>Next</button>}
       </div>
       {/* <div
         id={`details-${currentPost?.article}`}

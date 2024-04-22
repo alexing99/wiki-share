@@ -80,6 +80,8 @@ p {
   z-index: 999; /* Ensure the button is on top of the article content */
 }
 
+.nextButt {
+}
 .article-content {
   padding: 50px;
 }
@@ -111,24 +113,38 @@ p {
   stroke-opacity: 0.9;
 }
 
+/* .animateRel {
+  transition: stroke-dashoffset 2.5s ease;
+}
+
+.animateRel {
+  stroke-dashoffset: 0;
+}
+
+.hideRel {
+  stroke-dasharray: 1000; /* Set a large dash array */
+/* stroke-dashoffset: 1000;
+}  */
+
 .animateInt {
-  fill: #ffff00; /* Change the fill color to blue */
+  fill: #ffff00;
+}
+
+.content-and-vote {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-around;
+}
+
+* body {
+  background-color: grey;
 }
 .voting-info svg:hover {
   cursor: pointer;
 }
-.content-and-vote {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .voting-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-body {
-  background-color: #ffff00;
 }
