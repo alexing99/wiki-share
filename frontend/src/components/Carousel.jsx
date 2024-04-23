@@ -23,8 +23,7 @@ function Carousel({ rootPost, redPostId }) {
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
 
-  //
-
+// makes the user's new reply the current post 
   const goToPost = async (postId) => {
     try {
       const response = await fetch(`http://localhost:4578/posts/${postId}`, {
@@ -42,7 +41,6 @@ function Carousel({ rootPost, redPostId }) {
       console.error("Error fetching post data:", error);
     }
   };
-
   const handleUpClick = () => {
     console.log("up");
     const prevSibling = currentChildren[currentChildLevel - 1];
@@ -273,7 +271,7 @@ function Carousel({ rootPost, redPostId }) {
       return null;
     }
   };
-
+// makes date and time shown like this: March 30, 2024 at 6:12 PM
   const formattedTimestamp = new Date(
     currentPost?.timestamp
   ).toLocaleDateString("en-US", {

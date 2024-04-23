@@ -194,7 +194,7 @@ function App() {
         <div
           id="article"
           dangerouslySetInnerHTML={{ __html: article }}
-          onClick={handleLinkClick}
+          // onClick={handleLinkClick}
         ></div>
       )}
     </div>

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/nav.css";
+// import "../styles/nav.css";
 
-function Navbar() {
+// eslint-disable-next-line react/prop-types
+function Navbar({ onClick }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -16,15 +17,21 @@ function Navbar() {
           Menu
         </button>
         {isOpen && (
-          <ul className="menu-list">
+          <ul id="menu" className="menu-list">
             <li>
-              <Link to="/profile">User</Link>
+              <Link to="/profile" onClick={onClick}>
+                User
+              </Link>
             </li>
             <li>
-              <Link to="/feed">Feed</Link>
+              <Link to="/feed" onClick={onClick}>
+                Feed
+              </Link>
             </li>
             <li>
-              <Link to="/post">Create Post</Link>
+              <Link className="post-creation-link" onClick={onClick} to="/post">
+                Create Post
+              </Link>
             </li>
           </ul>
         )}

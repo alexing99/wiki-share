@@ -4,8 +4,6 @@ names; typeless, clippings,
 
 Steps to Deploy:
 
--scroll to new post when creating
--disable links from navbar as they are getting called as wikis
 -root post errors and warnings
 -sort for feed (esp in leiu of search bar)
 
@@ -14,10 +12,10 @@ Steps to Deploy:
 
 -background color and no border
 -buttons need to be fixed when going from post to post
--logo
--loading animations
+
 -signin with google
 -show liked posts and creations in user (links to private carosel) (style as wikipage)
+
 -question book bug (image)
 -redirect bug (eg. article for mire redirects to peatland)
 -article titles with commas bug
@@ -25,14 +23,13 @@ Steps to Deploy:
 -should maybe say where in the article the quote is from
 
 -some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half
-
+-logo
 -footer (<a href="https://www.flaticon.com/free-icons/marker" title="marker icons">Marker icons
 created by mavadee - Flaticon</a>)
 <a href="https://www.flaticon.com/free-icons/led" title="led icons">Led icons created by Payungkead - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/partnership" title="partnership icons">Partnership icons created by kosonicon - Flaticon</a>
 -about page and coming soon
-
--
+-loading animations
 
 Later Steps Unordered:
 -commenting all code

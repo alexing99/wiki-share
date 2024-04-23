@@ -1,4 +1,4 @@
-export const calculateDepth = async (postId) => {
+export const calculateDepth = async (postId) => { //function takes a starting postId 
   try {
     const children = await fetchChildrenData(postId);
     if (Array.isArray(children)) {
@@ -27,7 +27,7 @@ export const calculateDepth = async (postId) => {
   }
 };
 
-const fetchChildrenData = async (postId) => {
+const fetchChildrenData = async (postId) => { //helper function to fetch children from wherever 
   try {
     const response = await fetch(
       `http://localhost:4578/posts/${postId._id}/children`

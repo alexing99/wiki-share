@@ -15,7 +15,7 @@
   position: absolute;
   top: 0;
   right: 100%; /* Position to the right of the button */
-  transform: translateX(100%); /* Initially translate the list out of view */
+  /* transform: translateX(100%); /* Initially translate the list out of view */
   transition: transform 0.3s ease; /* Add a transition effect */
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   list-style: none;
-}
+} */
 
 .menu-list li {
   padding: 8px;

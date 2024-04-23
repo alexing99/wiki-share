@@ -3,11 +3,13 @@ import Carousel from "../components/Carousel"; // Assume you have a Carousel com
 import { useParams } from "react-router-dom";
 import Navbar from "../components/NavBar";
 import "../styles/feed.css";
+import { useNavigate } from "react-router-dom";
 
 function Feed() {
   const [rootPosts, setRootPosts] = useState([]);
   const { redPostId } = useParams();
 
+  const navigateTo = useNavigate();
   useEffect(() => {
     // Fetch root posts when component mounts
     fetchRootPosts();
@@ -215,11 +217,20 @@ function Feed() {
   //   // Fetch root posts when component mounts
   //   fetchChildrenData(currentPost?.parentPost);
   // }, [sort]);
+  const handleFuck = () => {
+    window.location.href = "/post";
+  };
 
+  const handleNavClick = (event) => {
+    event.preventDefault();
+    console.log("hmm");
+    navigateTo("/post");
+  };
   return (
     <div className="feed">
       {" "}
-      <Navbar></Navbar>{" "}
+      <Navbar onClick={handleNavClick}></Navbar>{" "}
+      <button onClick={handleFuck}>fuck</button>
       {rootPosts.map((rootPost, index) => (
         <>
           {/* <div>
