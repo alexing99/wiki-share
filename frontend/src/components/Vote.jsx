@@ -2,17 +2,17 @@
 import { useState, useEffect } from "react";
 import "../styles/vote.css";
 // import { useUser } from "../UserContext";
-import Cookies from "universal-cookie";
-function Vote({ currentPost }) {
+// import Cookies from "universal-cookie";
+function Vote({ currentPost, currentUser }) {
   const [hasVotedInterest, setHasVotedInterest] = useState(false);
   const [hasVotedRelevance, setHasVotedRelevance] = useState(false);
 
   const [renderCount, setRenderCount] = useState(0); // State to trigger re-render
 
-  const [currentUser, setCurrentUser] = useState();
+  // const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    getUserData();
+    // getUserData();
     if (currentUser?.interestedIn?.includes(currentPost._id)) {
       setHasVotedInterest(true);
       console.log("interested already");
@@ -29,33 +29,33 @@ function Vote({ currentPost }) {
     }
   }, [currentPost]);
 
-  const getUserData = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
+  // const getUserData = async () => {
+  //   const cookies = new Cookies();
+  //   const token = cookies.get("token");
 
-    const tokenArray = token.split(".");
-    const payload = tokenArray[1];
+  //   const tokenArray = token.split(".");
+  //   const payload = tokenArray[1];
 
-    const decodedPayload = JSON.parse(atob(payload));
+  //   const decodedPayload = JSON.parse(atob(payload));
 
-    const userId = decodedPayload.id;
-    try {
-      const response = await fetch(`http://localhost:4578/users/${userId}`, {
-        method: "GET",
-      });
+  //   const userId = decodedPayload.id;
+  //   try {
+  //     const response = await fetch(`http://localhost:4578/users/${userId}`, {
+  //       method: "GET",
+  //     });
 
-      if (response.ok) {
-        console.log("user information retreived!");
-        const data = await response.json();
-        setCurrentUser(data);
-      } else {
-        const error = await response.json();
-        console.error("Error retreiving user information:", error);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       console.log("user information retreived!");
+  //       const data = await response.json();
+  //       setCurrentUser(data);
+  //     } else {
+  //       const error = await response.json();
+  //       console.error("Error retreiving user information:", error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   //   const animateInterest = () => {
   //     const interestImg = document.getElementById(

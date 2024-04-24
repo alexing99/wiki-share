@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import "../styles/nav.css";
+import "../styles/nav.css";
 
-// eslint-disable-next-line react/prop-types
-function Navbar({ onClick }) {
+function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -13,28 +12,30 @@ function Navbar({ onClick }) {
   return (
     <nav>
       <div className="menu-container">
-        <button className="menu-btn" onClick={toggleMenu}>
-          Menu
-        </button>
-        {isOpen && (
-          <ul id="menu" className="menu-list">
-            <li>
-              <Link to="/profile" onClick={onClick}>
-                User
-              </Link>
-            </li>
-            <li>
-              <Link to="/feed" onClick={onClick}>
-                Feed
-              </Link>
-            </li>
-            <li>
-              <Link className="post-creation-link" onClick={onClick} to="/post">
-                Create Post
-              </Link>
-            </li>
-          </ul>
-        )}
+        <ul
+          id="menu"
+          onClick={toggleMenu}
+          className={`menu-list slide-horizontal ${isOpen ? "open" : ""}`}
+        >
+          <li>
+            <Link to="/profile">User</Link>
+          </li>
+          <li>
+            <Link to="/feed">Feed</Link>
+          </li>
+          <li>
+            <Link className="post-creation-link" to="/post">
+              Create Post
+            </Link>
+          </li>
+          <li className="menu-icon">
+            <svg width="30" height="40" viewBox="0 0 10 5">
+              <circle cx="2" cy="2" r="1" fill="black" />{" "}
+              <circle cx="5" cy="2" r="1" fill="black" />{" "}
+              <circle cx="8" cy="2" r="1" fill="black" />{" "}
+            </svg>
+          </li>
+        </ul>
       </div>
     </nav>
   );

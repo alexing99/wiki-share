@@ -5,6 +5,9 @@
   background-color: white;
   border-radius: 10px;
 }
+.root-post {
+  background-color: rgba(255, 0, 0, 0.3); /* Transparent red */
+}
 
 .post-headers {
   display: flex;

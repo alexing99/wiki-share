@@ -1,46 +1,39 @@
-.menu-container {
-  position: relative;
-}
-
-.menu-btn {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.menu-list {
-  position: absolute;
-  top: 0;
-  right: 100%; /* Position to the right of the button */
-  /* transform: translateX(100%); /* Initially translate the list out of view */
-  transition: transform 0.3s ease; /* Add a transition effect */
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.slide-horizontal {
+  position: absolute; /* Makes the menu positioned relative to its container */
+  top: 0; /* Positions the menu at the top of the container */
+  left: -94%; /* Positions the menu off-screen to the right initially */
+  transition: all 0.3s ease-in-out; /* Defines the animation for sliding */
+  list-style: none; /* Removes default list styling */
+  padding: 5px 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+  display: flex; /* Makes the menu items display horizontally */
+  flex-direction: row; /* Arranges the menu items in a row */
+  justify-content: flex-start;
   list-style: none;
-} */
-
-.menu-list li {
-  padding: 8px;
+  background-color: #fff; /* Sets the background color of the menu */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  width: 100%; /* Sets the width of the menu to 100% of its container */
 }
 
-.menu-list li a {
-  text-decoration: none;
-  color: #333;
+.slide-horizontal.open {
+  /* Styles applied when the menu is open */
+  left: 0; /* Slides the menu into view from the right */
 }
 
-.menu-list li a:hover {
-  background-color: #ddd;
+.slide-horizontal:hover:not(.open) {
+  left: -93%;
+  cursor: pointer;
 }
-/* 
-Show the menu list when the menu button is hovered */
-.menu-container:hover .menu-list {
-  transform: translateX(0); /* Move the list into view */
+
+a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.menu-icon {
+  position: absolute;
+  right: 5px; /* Adjust positioning as needed */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the icon */
+  display: flex;
+  align-items: center; /* Center the icon content horizontally */
 }

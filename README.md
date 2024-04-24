@@ -2,14 +2,11 @@
 
 names; typeless, clippings,
 
+---
+
 Steps to Deploy:
 
--root post errors and warnings
--sort for feed (esp in leiu of search bar)
-
--if root post is equal to parent dont display parent
 -color code, roots with children, roots without children, children with children, children without children
-
 -background color and no border
 -buttons need to be fixed when going from post to post
 
@@ -21,17 +18,19 @@ Steps to Deploy:
 -article titles with commas bug
 -credibility rating
 -should maybe say where in the article the quote is from
-
--some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half
+-loading animations
+-some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
 -logo
 -footer (<a href="https://www.flaticon.com/free-icons/marker" title="marker icons">Marker icons
 created by mavadee - Flaticon</a>)
 <a href="https://www.flaticon.com/free-icons/led" title="led icons">Led icons created by Payungkead - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/partnership" title="partnership icons">Partnership icons created by kosonicon - Flaticon</a>
 -about page and coming soon
--loading animations
+
+---
 
 Later Steps Unordered:
+-pages (10 per)
 -commenting all code
 -usecallback and usememo?
 -only select text from article window

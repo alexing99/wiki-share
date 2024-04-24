@@ -9,7 +9,7 @@ import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
 import "../styles/carousel.css";
 
-function Carousel({ rootPost, redPostId }) {
+function Carousel({ rootPost, redPostId, currentUser }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [atLast, setAtLast] = useState(false);
@@ -23,7 +23,27 @@ function Carousel({ rootPost, redPostId }) {
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
 
-// makes the user's new reply the current post 
+  const [backgroundColor, setBackgroundColor] = useState(
+    "rgba(255, 0, 0, 0.3)"
+  ); // Initial background color
+
+  useEffect(() => {
+    if (currentPost._id === rootPost._id) {
+      setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
+      console.log("back to red");
+    } else {
+      console.log("bakc to white");
+      setBackgroundColor(""); // Default background color
+    }
+  }, [currentPost, rootPost]);
+  useEffect(() => {
+    if (currentPost._id === rootPost._id) {
+      setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
+      console.log("red again");
+    }
+  }, [currentPost, rootPost]);
+
+  // makes the user's new reply the current post
   const goToPost = async (postId) => {
     try {
       const response = await fetch(`http://localhost:4578/posts/${postId}`, {
@@ -57,74 +77,76 @@ function Carousel({ rootPost, redPostId }) {
   };
 
   const fetchChildrenData = async (post, isCalledfromPrevClick) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4578/posts/${post}/children`
-      );
+    if (post) {
+      try {
+        const response = await fetch(
+          `http://localhost:4578/posts/${post}/children`
+        );
 
-      if (response.ok) {
-        const data = await response.json();
-        let sortedData;
-        switch (sort) {
-          case "New":
-            sortedData = data
-              .slice()
-              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            break;
-          case "Relevancy":
-            sortedData = data
-              .slice()
-              .sort((a, b) => b.relevancyScore - a.relevancyScore);
-            console.log(sortedData, "sorted by relevancy score");
-            break;
-          case "Interest":
-            sortedData = data
-              .slice()
-              .sort((a, b) => b.interestScore - a.interestScore);
-            console.log(sortedData, "sorted by interest score");
-            break;
-          case "Length":
-            // Map each post to a Promise calculating its depth
-            // eslint-disable-next-line no-case-declarations
-            const depthPromises = data.map((post) => calculateDepth(post));
-            // Wait for all depth calculations to finish
-            Promise.all(depthPromises).then((depths) => {
-              // Sort posts based on depth
+        if (response.ok) {
+          const data = await response.json();
+          let sortedData;
+          switch (sort) {
+            case "New":
               sortedData = data
                 .slice()
-                .sort(
-                  (a, b) => depths[data.indexOf(b)] - depths[data.indexOf(a)]
-                );
-              console.log(sortedData, "sorted by length");
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-              // Once sorting is done, update state or perform other operations
-              if (!isCalledfromPrevClick) {
-                setCurrentPost(sortedData[0]);
-                setCurrentChildLevel(0);
-              }
-              setCurrentChildren(sortedData);
-            });
-            break;
-          default:
-            console.error("Invalid sort option");
-        }
+              break;
+            case "Relevancy":
+              sortedData = data
+                .slice()
+                .sort((a, b) => b.relevancyScore - a.relevancyScore);
+              console.log(sortedData, "sorted by relevancy score");
+              break;
+            case "Interest":
+              sortedData = data
+                .slice()
+                .sort((a, b) => b.interestScore - a.interestScore);
+              console.log(sortedData, "sorted by interest score");
+              break;
+            case "Length":
+              // Map each post to a Promise calculating its depth
+              // eslint-disable-next-line no-case-declarations
+              const depthPromises = data.map((post) => calculateDepth(post));
+              // Wait for all depth calculations to finish
+              Promise.all(depthPromises).then((depths) => {
+                // Sort posts based on depth
+                sortedData = data
+                  .slice()
+                  .sort(
+                    (a, b) => depths[data.indexOf(b)] - depths[data.indexOf(a)]
+                  );
+                console.log(sortedData, "sorted by length");
 
-        if (sort != "Length") {
-          if (!isCalledfromPrevClick) {
-            setCurrentPost(sortedData[0]);
-            setCurrentChildLevel(0);
+                // Once sorting is done, update state or perform other operations
+                if (!isCalledfromPrevClick) {
+                  setCurrentPost(sortedData[0]);
+                  setCurrentChildLevel(0);
+                }
+                setCurrentChildren(sortedData);
+              });
+              break;
+            default:
+              console.error("Invalid sort option");
           }
 
-          setCurrentChildren(sortedData);
+          if (sort != "Length") {
+            if (!isCalledfromPrevClick) {
+              setCurrentPost(sortedData[0]);
+              setCurrentChildLevel(0);
+            }
+
+            setCurrentChildren(sortedData);
+          }
+          console.log("children got");
+          return sortedData;
+        } else {
+          console.error(`Failed to fetch descendants for post ${post}`);
         }
-        console.log("children got");
-        return sortedData;
-      } else {
-        console.error(`Failed to fetch descendants for post ${post}`);
+      } catch (error) {
+        console.error(`Error fetching descendants for post ${post}:`, error);
       }
-    } catch (error) {
-      console.error(`Error fetching descendants for post ${post}:`, error);
     }
   };
   const fetchParentPostForBack = async (postId) => {
@@ -144,17 +166,20 @@ function Carousel({ rootPost, redPostId }) {
               true
             );
             setCurrentChildren(children);
-            const parentIndex = children.findIndex(
-              (child) => child._id === parentPost._id
-            );
-            console.log(currentChildren, "see");
-            if (parentIndex !== -1) {
-              setCurrentChildLevel(parentIndex);
-              console.log(parentIndex, "hmmmmmmm");
-            } else {
-              console.error(
-                "Parent post not found in the current children array"
+            if (children) {
+              const parentIndex = children.findIndex(
+                (child) => child._id === parentPost._id
               );
+
+              console.log(currentChildren, "see");
+              if (parentIndex !== -1) {
+                setCurrentChildLevel(parentIndex);
+                console.log(parentIndex, "hmmmmmmm");
+              } else {
+                console.error(
+                  "Parent post not found in the current children array"
+                );
+              }
             }
           } catch (error) {
             console.error(error);
@@ -192,6 +217,7 @@ function Carousel({ rootPost, redPostId }) {
   };
 
   useEffect(() => {
+    //useEffect for setting setters that conditionally render navigation buttons
     if (currentPost._id === rootPost._id) {
       setAtRoot(true);
       setAtLast(true);
@@ -249,29 +275,33 @@ function Carousel({ rootPost, redPostId }) {
   };
 
   useEffect(() => {
+    // useEffect for getting the parentPost of currentPost
     fetchParentPost(currentPost.parentPost);
   }, [currentPost]);
 
   const fetchParentPost = async (postId) => {
-    try {
-      const response = await fetch(`http://localhost:4578/posts/${postId}`, {
-        method: "GET",
-      });
+    //the postId is the parent as the function
+    if (postId) {
+      try {
+        const response = await fetch(`http://localhost:4578/posts/${postId}`, {
+          method: "GET",
+        });
 
-      if (response.ok) {
-        const parentPost = await response.json();
-        setCurrentParent(parentPost);
-      } else {
-        const error = await response.json();
-        console.error("Error retrieving parent post:", error);
+        if (response.ok) {
+          const parentPost = await response.json();
+          setCurrentParent(parentPost);
+        } else {
+          const error = await response.json();
+          console.error("Error retrieving parent post:", error);
+          return null;
+        }
+      } catch (error) {
+        console.error("Error:", error);
         return null;
       }
-    } catch (error) {
-      console.error("Error:", error);
-      return null;
     }
   };
-// makes date and time shown like this: March 30, 2024 at 6:12 PM
+  // makes date and time shown like this: March 30, 2024 at 6:12 PM
   const formattedTimestamp = new Date(
     currentPost?.timestamp
   ).toLocaleDateString("en-US", {
@@ -287,7 +317,7 @@ function Carousel({ rootPost, redPostId }) {
     setSort(event.target.value);
   };
   useEffect(() => {
-    // Fetch root posts when component mounts
+    //if sort changes they need to fetch the children again?
     fetchChildrenData(currentPost?.parentPost);
   }, [sort]);
 
@@ -303,17 +333,26 @@ function Carousel({ rootPost, redPostId }) {
   }, [redPostId]);
 
   return (
-    <div className="carousel" id={`${rootPost._id}`}>
+    <div
+      className="carousel"
+      id={`${rootPost._id}`}
+      style={{ backgroundColor }}
+    >
       <div className="post-headers">
         {!atRoot && (
           <div className="ancestor-headers">
             <a href="#" onClick={() => handleRootPostClick()}>
               {rootPost.article}
             </a>
-            <a>...</a>
-            <a href="#" onClick={() => handlePreviousButtonClick()}>
-              {currentParent?.article}
-            </a>
+
+            {currentParent?.article !== rootPost.article && (
+              <>
+                <a>...</a>
+                <a href="#" onClick={() => handlePreviousButtonClick()}>
+                  {currentParent?.article}
+                </a>
+              </>
+            )}
           </div>
         )}
         <div className="sort-dropdown">
@@ -331,8 +370,15 @@ function Carousel({ rootPost, redPostId }) {
       <h1>{currentPost?.article}</h1>
       <img src={currentPost?.image} alt="" height="100px" />{" "}
       <div className="content-and-vote">
-        <Vote currentPost={currentPost} setCurrentPost={setCurrentPost}></Vote>
-        <div className="post-content">
+        <Vote
+          currentUser={currentUser}
+          currentPost={currentPost}
+          setCurrentPost={setCurrentPost}
+        ></Vote>
+        <div
+          key={`${currentPost?._id}-${showPostCreation}`}
+          className="post-content"
+        >
           {showPostCreation && currentPost.article === selectedArticle && (
             <div
               id={`details-${currentPost?.id}`}

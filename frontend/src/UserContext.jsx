@@ -32,7 +32,6 @@ export const UserProvider = ({ children }) => {
         console.log("user information retreived!");
         const data = await response.json();
         setUser(data);
-        console.log("nav", user);
       } else {
         const error = await response.json();
         console.error("Error retreiving user information:", error);
