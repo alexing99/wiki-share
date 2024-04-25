@@ -23,25 +23,25 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
 
-  const [backgroundColor, setBackgroundColor] = useState(
-    "rgba(255, 0, 0, 0.3)"
-  ); // Initial background color
+  // const [backgroundColor, setBackgroundColor] = useState(
+  //   "rgba(255, 0, 0, 0.3)"
+  // ); // Initial background color
 
-  useEffect(() => {
-    if (currentPost._id === rootPost._id) {
-      setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
-      console.log("back to red");
-    } else {
-      console.log("bakc to white");
-      setBackgroundColor(""); // Default background color
-    }
-  }, [currentPost, rootPost]);
-  useEffect(() => {
-    if (currentPost._id === rootPost._id) {
-      setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
-      console.log("red again");
-    }
-  }, [currentPost, rootPost]);
+  // useEffect(() => {
+  //   if (currentPost._id === rootPost._id) {
+  //     setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
+  //     console.log("back to red");
+  //   } else {
+  //     console.log("bakc to white");
+  //     setBackgroundColor(""); // Default background color
+  //   }
+  // }, [currentPost, rootPost]);
+  // useEffect(() => {
+  //   if (currentPost._id === rootPost._id) {
+  //     setBackgroundColor("rgba(255, 0, 0, 0.3)"); // Transparent red
+  //     console.log("red again");
+  //   }
+  // }, [currentPost, rootPost]);
 
   // makes the user's new reply the current post
   const goToPost = async (postId) => {
@@ -336,7 +336,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
     <div
       className="carousel"
       id={`${rootPost._id}`}
-      style={{ backgroundColor }}
+      // style={{ backgroundColor }}
     >
       <div className="post-headers">
         {!atRoot && (
@@ -370,11 +370,6 @@ function Carousel({ rootPost, redPostId, currentUser }) {
       <h1>{currentPost?.article}</h1>
       <img src={currentPost?.image} alt="" height="100px" />{" "}
       <div className="content-and-vote">
-        <Vote
-          currentUser={currentUser}
-          currentPost={currentPost}
-          setCurrentPost={setCurrentPost}
-        ></Vote>
         <div
           key={`${currentPost?._id}-${showPostCreation}`}
           className="post-content"
@@ -424,11 +419,20 @@ function Carousel({ rootPost, redPostId, currentUser }) {
         )}
       </div>
       <div className="post-details">
-        <p>{currentPost?.author}</p>
-        <p>{formattedTimestamp}</p>
+        <Vote
+          currentUser={currentUser}
+          currentPost={currentPost}
+          setCurrentPost={setCurrentPost}
+          rootPost={rootPost}
+        ></Vote>
+        <p>{formattedTimestamp}</p> <p>{currentPost?.author}</p>
       </div>
       <div className="carousel-navigation">
-        {!atRoot && <button onClick={handlePreviousButtonClick}>Back</button>}
+        {!atRoot && (
+          <button onClick={handlePreviousButtonClick} className="backButt">
+            Back
+          </button>
+        )}
         <div className="up-down">
           {!atFirst && <button onClick={handleUpClick}>/\</button>}
           {!atLast && <button onClick={handleDownClick}>\/</button>}

@@ -1,12 +1,17 @@
 .carousel {
-  border: black solid 1px;
+  border: black solid 3px;
   margin: 20px;
   padding: 10px;
-  background-color: white;
+  background-color: #b7cece;
   border-radius: 10px;
+  position: relative;
+}
+h1 {
+  margin-bottom: 25px;
+  margin-top: 0px;
 }
 .root-post {
-  background-color: rgba(255, 0, 0, 0.3); /* Transparent red */
+  background-color: #3366cc; /* Transparent red */
 }
 
 .post-headers {
@@ -33,16 +38,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  padding-top: 10px;
 }
 
 p {
   font-family: Arial, Helvetica, sans-serif;
-}
-
-.voting-info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
 }
 
 .highlight {
@@ -82,11 +82,56 @@ p {
 
   z-index: 999; /* Ensure the button is on top of the article content */
 }
-
 .nextButt {
+  position: absolute; /* Positions the button absolutely relative to the carousel */
+  top: 50%; /* Vertically centers the button within the carousel height */
+  transform: translateY(-50%); /* Adjusts vertical positioning for centering */
+  right: -4%; /* Positions the button at the right edge of the carousel */
+  display: block; /* Makes the button element behave like a block-level element */
+  padding: 10px 20px; /* Adjust padding for button size and content spacing */
+  background-color: #000; /* Button background color (adjust as needed) */
+  color: #fff; /* Button text color (adjust as needed) */
+  border: none; /* Removes default button border */
+  cursor: pointer; /* Sets cursor to pointer on hover */
+  z-index: 2; /* Ensures the button appears above carousel content (adjust if needed) */
+  width: 100px; /* Sets the width of the button */
+  height: 100px; /* Sets the height of the button */
+  border-radius: 50%; /* Makes the button a circle */
+  line-height: 50px; /* Ensures text is vertically centered within the circle */
+  text-align: center; /* Centers the text horizontally within the circle */
+  opacity: 70%;
+}
+.backButt {
+  position: absolute; /* Positions the button absolutely relative to the carousel */
+  top: 50%; /* Vertically centers the button within the carousel height */
+  transform: translateY(-50%); /* Adjusts vertical positioning for centering */
+  left: -0%; /* Positions the button off-screen to the left by 50% of its width */
+  display: block; /* Makes the button element behave like a block-level element */
+  width: 100px; /* Sets the width of the button */
+  height: 100px; /* Sets the height of the button */
+  border-radius: 50%; /* Makes the button a circle */
+  line-height: 50px; /* Ensures text is vertically centered within the circle */
+  text-align: center; /* Centers the text horizontally within the circle */
+  background-color: #000; /* Button background color (adjust as needed) */
+  color: #fff; /* Button text color (adjust as needed) */
+  border: none; /* Removes default button border */
+  cursor: pointer; /* Sets cursor to pointer on hover */
+  z-index: 2; /* Ensures the button appears above carousel content (adjust if needed) */
+  margin-left: -50px; /* Applies a negative margin to bring half the */
+  opacity: 80%;
+}
+
+.backButt:hover {
+  opacity: 100%;
+}
+
+.nextButt:hover {
+  opacity: 100%;
 }
 .article-content {
-  padding: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 5px;
 }
 
 .up-down {
@@ -146,8 +191,12 @@ p {
 .voting-info svg:hover {
   cursor: pointer;
 }
-.voting-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+
+.searchbar {
+  border-radius: 5px;
+  padding: 7px;
+  margin: 10px;
 }
+
+/* .searchButt {
+} */

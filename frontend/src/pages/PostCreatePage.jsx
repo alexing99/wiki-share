@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
-
+import Navbar from "../components/NavBar.jsx";
 import "../../src/App.css";
 import "../../src/styles/carousel.css";
 
@@ -31,21 +31,25 @@ function PostCreation({ parentPost, goToPost }) {
   const extractMainImage = (html) => {
     let mainImageUrl = null;
     const $ = cheerio.load(html);
-    // Traverse the DOM tree to find the first image URL in the article
-    $("img").each((index, element) => {
-      if (!mainImageUrl) {
-        const imageUrl = $(element).attr("src");
-        if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
-          // Set the main image URL
-          mainImageUrl = imageUrl;
-          // Exit the loop once the main image URL is found
-          return false;
+    // Traverse the DOM tree to find the first non-SVG image URL in the article, excluding Question-book-new.svg
+    $("img:not([src$='.svg']):not([src$='Question-book-new.svg'])").each(
+      (index, element) => {
+        if (!mainImageUrl) {
+          const imageUrl = $(element).attr("src");
+          // Check if the image URL is not empty
+          if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
+            // Set the main image URL
+            mainImageUrl = imageUrl;
+            // Exit the loop once the main image URL is found
+            return false;
+          }
         }
       }
-    });
+    );
     console.log(mainImageUrl);
     return mainImageUrl;
   };
+
   let articleFrom = parentPost;
   const getReplyArticle = async () => {
     if (parentPost) {
@@ -142,7 +146,23 @@ function PostCreation({ parentPost, goToPost }) {
     getReplyArticle();
     addSelectionListener();
   }, []);
+  function checkForGoodArticle(html) {
+    // Load the HTML into Cheerio
+    const $ = cheerio.load(html);
 
+    // Get the text content of the body element
+    const bodyText = $("body").text();
+
+    // Log the body text to inspect it
+    console.log(bodyText);
+
+    // Search for the string "This is a good article" case-insensitively
+    const containsGoodArticle = bodyText
+      .toLowerCase()
+      .includes("this is a good article");
+
+    return containsGoodArticle;
+  }
   const handleSearch = async (event) => {
     event.preventDefault();
     setLinkClickLimit(0);
@@ -166,16 +186,19 @@ function PostCreation({ parentPost, goToPost }) {
           throw new Error("Failed to fetch search results");
         }
         setWikiURL(response.url);
+        console.log("here", response);
 
         let html = await response.text();
         const imageURL = extractMainImage(html);
         setImageString(imageURL);
+        console.log("ho", html);
 
         html = html.replace(
           /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
           ""
         );
-
+        const isGoodArticle = checkForGoodArticle(html);
+        console.log(isGoodArticle);
         const cleanHtml = DOMPurify.sanitize(html);
         setArticle(cleanHtml);
         document
@@ -395,7 +418,11 @@ function PostCreation({ parentPost, goToPost }) {
     <>
       {!replyMode && (
         <>
-          {/* <Navbar className="navbar" onClick={handleNavClick}></Navbar>{" "} */}
+          <Navbar className="navbar"></Navbar>{" "}
+          <p>
+            Paste Wikipedia link below. Or type, but that is not in the spirit
+            of the site
+          </p>
           <form onSubmit={handleSearch}>
             <input
               className={"searchbar"}
@@ -404,7 +431,9 @@ function PostCreation({ parentPost, goToPost }) {
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Enter article title or link"
             />
-            <button type="submit">Search</button>
+            <button className="searchButt" type="submit">
+              Search
+            </button>
           </form>
         </>
       )}
@@ -442,6 +471,7 @@ function PostCreation({ parentPost, goToPost }) {
           .article-text a {
             color: ${linkClickLimit > 0 ? "#0645ad" : "black"};
             pointer-events: ${linkClickLimit > 0 ? "auto" : "none"};
+            padding: 0px;
           }
         `}
       </style>

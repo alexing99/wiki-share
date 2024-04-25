@@ -6,20 +6,19 @@ names; typeless, clippings,
 
 Steps to Deploy:
 
--color code, roots with children, roots without children, children with children, children without children
--background color and no border
--buttons need to be fixed when going from post to post
-
 -signin with google
 -show liked posts and creations in user (links to private carosel) (style as wikipage)
+-style post creation lightly
+-no relevancy scores for rootposts
 
 -question book bug (image)
 -redirect bug (eg. article for mire redirects to peatland)
 -article titles with commas bug
--credibility rating
+
 -should maybe say where in the article the quote is from
--loading animations
+-loading animations (in next button)
 -some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
+
 -logo
 -footer (<a href="https://www.flaticon.com/free-icons/marker" title="marker icons">Marker icons
 created by mavadee - Flaticon</a>)
@@ -30,7 +29,9 @@ created by mavadee - Flaticon</a>)
 ---
 
 Later Steps Unordered:
+-credibility rating
 -pages (10 per)
+-transition to white slowly
 -commenting all code
 -usecallback and usememo?
 -only select text from article window

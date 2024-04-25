@@ -27,10 +27,17 @@
 .voting-info svg:hover {
   cursor: pointer;
 }
+
 .voting-info {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 15px;
+}
+
+.interest-info {
+  display: flex;
+}
+.relevance-info {
+  display: flex;
 }
 
 /* .puzzle-piece-container {

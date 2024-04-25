@@ -1,23 +1,24 @@
 .slide-horizontal {
-  position: absolute; /* Makes the menu positioned relative to its container */
-  top: 0; /* Positions the menu at the top of the container */
-  left: -94%; /* Positions the menu off-screen to the right initially */
+  position: fixed; /* Make the menu fixed to the viewport */
+  top: 0; /* Positions the menu at the top of the viewport */
+  left: -94%; /* Positions the menu at the left edge of the viewport */
   transition: all 0.3s ease-in-out; /* Defines the animation for sliding */
-  list-style: none; /* Removes default list styling */
+  list-style: none;
   padding: 5px 0; /* Removes default padding */
   margin: 0; /* Removes default margin */
   display: flex; /* Makes the menu items display horizontally */
   flex-direction: row; /* Arranges the menu items in a row */
   justify-content: flex-start;
-  list-style: none;
   background-color: #fff; /* Sets the background color of the menu */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
-  width: 100%; /* Sets the width of the menu to 100% of its container */
+  width: 100%; /* Sets the width of the menu to 100% of the viewport */
+  margin-top: 10px;
+  z-index: 10; /* Ensures the menu remains above other content (adjust if needed) */
 }
 
 .slide-horizontal.open {
   /* Styles applied when the menu is open */
-  left: 0; /* Slides the menu into view from the right */
+  left: 0%; /* Slides the menu into view from the right */
 }
 
 .slide-horizontal:hover:not(.open) {
