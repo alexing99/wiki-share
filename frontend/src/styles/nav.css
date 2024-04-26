@@ -14,6 +14,7 @@
   width: 100%; /* Sets the width of the menu to 100% of the viewport */
   margin-top: 10px;
   z-index: 10; /* Ensures the menu remains above other content (adjust if needed) */
+  clip-path: polygon(0% 0%, 100% 0%, 97% 50%, 100% 100%, 0% 100%, 0% 50%);
 }
 
 .slide-horizontal.open {
@@ -29,12 +30,4 @@
 a {
   padding-right: 20px;
   padding-left: 20px;
-}
-.menu-icon {
-  position: absolute;
-  right: 5px; /* Adjust positioning as needed */
-  top: 50%;
-  transform: translateY(-50%); /* Vertically center the icon */
-  display: flex;
-  align-items: center; /* Center the icon content horizontally */
 }

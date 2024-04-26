@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import Cookies from "universal-cookie";
+import "../../src/styles/userPage.css";
+import Carousel from "../components/Carousel"; // Assume you have a Carousel component
 
 function Profile() {
   const [name, setName] = useState("");
@@ -14,6 +16,11 @@ function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const cookies = new Cookies();
+  const [showAuth, setShowAuth] = useState(false);
+  const [showInt, setShowInt] = useState(false);
+
+  const [authoredPosts, setAuthoredPosts] = useState([]);
+  const [postsOfInt, setPostsOfInt] = useState([]);
 
   const token = cookies.get("token");
 
@@ -40,7 +47,10 @@ function Profile() {
         const data = await response.json();
         setEmail(data.email);
         setName(data.name);
+
         console.log(data);
+        fetchAuthoredPosts(data.name);
+        fetchPostsOfInt(data.interestedIn);
       } else {
         const error = await response.json();
         console.error("Error retreiving user information:", error);
@@ -122,79 +132,177 @@ function Profile() {
     }
     updateUser();
   };
+  const fetchPostsOfInt = async (interests) => {
+    console.log("int", interests);
 
+    try {
+      const posts = [];
+      for (const postId of interests) {
+        const response = await fetch(`http://localhost:4578/posts/${postId}`);
+        if (response.ok) {
+          const post = await response.json();
+          posts.push(post);
+        } else {
+          console.error(`Error fetching post with ID ${postId}`);
+        }
+      }
+      console.log("Posts:", posts);
+      // Now you can do whatever you want with the fetched posts, like setting state
+      setPostsOfInt(posts);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  const fetchAuthoredPosts = async (name) => {
+    console.log(name);
+    try {
+      const response = await fetch(
+        `http://localhost:4578/posts/${name}/author`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("author", data);
+        setAuthoredPosts(data);
+      }
+    } catch (error) {
+      console.error("Error fetching root posts:", error);
+    }
+  };
+  const showAuthored = () => {
+    if (!showAuth) {
+      setShowAuth(true);
+      setShowInt(false);
+    } else if (showAuth) {
+      setShowAuth(false);
+    }
+  };
+  const showInterested = () => {
+    if (!showInt) {
+      setShowInt(true);
+      setShowAuth(false);
+    } else if (showInt) {
+      setShowInt(false);
+    }
+  };
   return (
     <>
       <Navbar></Navbar>
-      <p>
-        Name:{" "}
-        {editName ? (
-          <>
-            {" "}
-            <input
-              type="text"
-              placeholder={name}
-              value={editedName}
-              onChange={(e) => setEditedName(e.target.value)}
-            />
-            <button onClick={updateUser}>Save</button>
-          </>
-        ) : (
-          <>
-            <span>{name}</span>{" "}
-            <button onClick={() => setEditName(!editName)}>Edit</button>
-          </>
-        )}
-      </p>
-      <p>
-        Email:{" "}
-        {editEmail ? (
-          <>
-            <input
-              type="email"
-              placeholder={email}
-              value={editedEmail}
-              onChange={(e) => setEditedEmail(e.target.value)}
-            />{" "}
-            <button onClick={updateUser}>Save</button>
-          </>
-        ) : (
-          <>
-            <span>{email}</span>
-            <button onClick={() => setEditEmail(!editEmail)}>Edit</button>
-          </>
-        )}
-      </p>
-      {!showChangePasswordForm ? (
-        <button onClick={handleChangePassword}>Change Password</button>
-      ) : (
-        <form onSubmit={validatePasswordChange}>
-          {/* <input
+      <div className="user-div">
+        <table className="bioBar">
+          <tbody>
+            <tr>
+              <th colSpan="2" className="userName">
+                <div>
+                  {editName ? (
+                    <>
+                      {" "}
+                      <input
+                        type="text"
+                        placeholder={name}
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                      />
+                      <button onClick={updateUser}>[save]</button>
+                    </>
+                  ) : (
+                    <>
+                      <span>{name}</span>{" "}
+                      <button onClick={() => setEditName(!editName)}>
+                        [edit]
+                      </button>
+                    </>
+                  )}
+                </div>
+              </th>
+            </tr>
+
+            <tr>
+              <th scope="row" className="email">
+                Email
+              </th>
+
+              {editEmail ? (
+                <>
+                  <input
+                    type="email"
+                    placeholder={email}
+                    value={editedEmail}
+                    onChange={(e) => setEditedEmail(e.target.value)}
+                  />{" "}
+                  <button onClick={updateUser}>[save]</button>
+                </>
+              ) : (
+                <>
+                  <td>{email}</td>
+                  <button onClick={() => setEditEmail(!editEmail)}>
+                    [edit]
+                  </button>
+                </>
+              )}
+            </tr>
+          </tbody>
+        </table>
+        <div className="buttons">
+          {!showChangePasswordForm ? (
+            <button onClick={handleChangePassword}>[Change Password]</button>
+          ) : (
+            <form onSubmit={validatePasswordChange}>
+              {/* <input
             type="password"
             placeholder="Current Password"
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             required
           /> */}
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Confirm New Password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Save</button>
-        </form>
-      )}
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                required
+              />
+              <button type="submit">[save]</button>
+            </form>
+          )}
 
-      <button onClick={deleteUser}>Delete Account</button>
+          <button onClick={deleteUser}>[Delete Account]</button>
+          <button onClick={showAuthored}>
+            {showAuth ? "Hide Your Posts" : "Show Your Posts"}
+          </button>
+          <button onClick={showInterested}>
+            {" "}
+            {showInt ? "Hide Posts of Interest" : "Show Posts of Interest"}
+          </button>
+
+          <div className="userPosts"></div>
+          <div className="userInterest"></div>
+        </div>
+        {/* Render authored posts if showAuthored is true */}
+        {showAuth && (
+          <div className="userPosts">
+            {authoredPosts.map((rootPost) => (
+              <Carousel key={rootPost._id} rootPost={rootPost} />
+            ))}
+          </div>
+        )}
+
+        {/* Render interested posts if showAuthored is false */}
+        {showInt && (
+          <div className="userInterests">
+            {postsOfInt.map((rootPost) => (
+              <Carousel key={rootPost._id} rootPost={rootPost} forUser={true} />
+            ))}
+          </div>
+        )}
+      </div>
     </>
   );
 }

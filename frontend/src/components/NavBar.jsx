@@ -28,13 +28,6 @@ function Navbar() {
               Create Post
             </Link>
           </li>
-          <li className="menu-icon">
-            <svg width="30" height="40" viewBox="0 0 10 5">
-              <circle cx="2" cy="2" r="1" fill="black" />{" "}
-              <circle cx="5" cy="2" r="1" fill="black" />{" "}
-              <circle cx="8" cy="2" r="1" fill="black" />{" "}
-            </svg>
-          </li>
         </ul>
       </div>
     </nav>

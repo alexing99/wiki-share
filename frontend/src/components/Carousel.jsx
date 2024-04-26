@@ -9,7 +9,7 @@ import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
 import "../styles/carousel.css";
 
-function Carousel({ rootPost, redPostId, currentUser }) {
+function Carousel({ rootPost, redPostId, currentUser, forUser }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [atLast, setAtLast] = useState(false);

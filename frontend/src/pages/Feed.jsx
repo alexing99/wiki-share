@@ -11,6 +11,9 @@ function Feed() {
   const { redPostId } = useParams();
   const [currentUser, setCurrentUser] = useState();
   const [feedSort, setFeedSort] = useState("New");
+  // const [pageNumber, setPageNumber] = useState(1); // Track page number for pagination
+  // const [isLoading, setIsLoading] = useState(false); // Track loading state
+  // const endOfPostsRef = useRef(null); // Reference to end of posts element
 
   useEffect(() => {
     // Fetch root posts when component mounts
@@ -21,6 +24,68 @@ function Feed() {
     // Fetch root posts when component mounts
     getUserData();
   }, []);
+  // const fetchRootPosts = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await fetch(
+  //       `http://localhost:4578/posts/rootposts?page=${pageNumber}&limit=10`
+  //     );
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(typeof data);
+  //       // Update root posts based on feed sort
+  //       let sortedData;
+  //       switch (feedSort) {
+  //         case "New":
+  //           sortedData = data
+  //             .slice()
+  //             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  //           break;
+
+  //         case "Interest":
+  //           sortedData = data
+  //             .slice()
+  //             .sort((a, b) => b.interestScore - a.interestScore);
+
+  //           break;
+  //         case "Length":
+  //           // Map each post to a Promise calculating its depth
+  //           // eslint-disable-next-line no-case-declarations
+  //           const depthPromises = data.map((post) => calculateDepth(post));
+  //           // Wait for all depth calculations to finish
+  //           Promise.all(depthPromises).then((depths) => {
+  //             // Sort posts based on depth
+  //             sortedData = data
+  //               .slice()
+  //               .sort(
+  //                 (a, b) => depths[data.indexOf(b)] - depths[data.indexOf(a)]
+  //               );
+  //             console.log(sortedData, "sorted by length");
+  //             setRootPosts(sortedData);
+  //             // Once sorting is done, update state or perform other operations
+  //           });
+  //           break;
+  //         default:
+  //           console.error("Invalid sort option");
+  //       }
+
+  //       setRootPosts(sortedData);
+  //       switch (feedSort) {
+  //         // Sorting logic
+  //         default:
+  //           console.error("Invalid sort option");
+  //       }
+  //       setRootPosts((prevPosts) => [...prevPosts, ...data]); // Append new posts to existing posts
+  //       setIsLoading(false); // Set loading state to false
+  //     } else {
+  //       console.error("Failed to fetch root posts");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching root posts:", error);
+  //     setIsLoading(false); // Set loading state to false
+  //   }
+  // };
   const fetchRootPosts = async () => {
     try {
       const response = await fetch("http://localhost:4578/posts/rootposts");
@@ -102,6 +167,23 @@ function Feed() {
   const handleFeedSort = (event) => {
     setFeedSort(event.target.value);
   };
+  // const handleScroll = () => {
+  //   // Check if user has scrolled to the bottom of the page
+  //   if (
+  //     endOfPostsRef.current &&
+  //     window.innerHeight + window.scrollY >= endOfPostsRef.current.offsetTop
+  //   ) {
+  //     setPageNumber((prevPageNumber) => prevPageNumber + 1); // Increment page number
+  //   }
+  // };
+  // useEffect(() => {
+  //   // Add event listener for scrolling when component mounts
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     // Clean up event listener when component unmounts
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   return (
     <div className="feed">
@@ -126,6 +208,8 @@ function Feed() {
           currentUser={currentUser}
         />
       ))}
+      {/* <div ref={endOfPostsRef}></div> 
+      {isLoading && <p>Loading...</p> */}
     </div>
   );
 }

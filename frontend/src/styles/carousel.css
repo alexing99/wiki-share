@@ -137,6 +137,7 @@ p {
 .up-down {
   display: flex;
   flex-direction: column;
+  gap: 1px;
 }
 
 .carousel-navigation {

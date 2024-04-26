@@ -6,17 +6,13 @@ names; typeless, clippings,
 
 Steps to Deploy:
 
--signin with google
--show liked posts and creations in user (links to private carosel) (style as wikipage)
--style post creation lightly
--no relevancy scores for rootposts
-
--question book bug (image)
+-loading animations (in next button)
 -redirect bug (eg. article for mire redirects to peatland)
 -article titles with commas bug
+-question book bug (image)
 
 -should maybe say where in the article the quote is from
--loading animations (in next button)
+
 -some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
 
 -logo
@@ -29,6 +25,8 @@ created by mavadee - Flaticon</a>)
 ---
 
 Later Steps Unordered:
+-10 at a time w/ infinite scroll
+-signin with google
 -credibility rating
 -pages (10 per)
 -transition to white slowly

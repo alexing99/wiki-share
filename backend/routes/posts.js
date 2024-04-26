@@ -56,6 +56,30 @@ router.get("/", async (req, res) => {
 });
 
 //Route for fetching root posts
+// router.get("/rootposts", async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 10;
+//     const startIndex = (page - 1) * limit;
+
+//     // Query the database for paginated root posts
+//     const allRoots = await Post.find({
+//       $or: [{ parentPost: { $exists: false } }],
+//     })
+//       .skip(startIndex)
+//       .limit(limit);
+
+//     // Optionally, you can also fetch the total count of root posts
+//     // const totalCount = await Post.countDocuments({
+//     //   $or: [{ parentPost: { $exists: false } }],
+//     // });
+
+//     // Send paginated root posts and total count in the response
+//     res.status(200).json(allRoots);
+//   } catch (err) {
+//     res.status(400).json({ message: err.message });
+//   }
+// });
 router.get("/rootposts", async (req, res) => {
   try {
     const allRoots = await Post.find({
@@ -85,6 +109,20 @@ router.get("/:id/children", async (req, res) => {
     const children = await Post.find({ _id: { $in: childrenIds } });
 
     res.status(200).json(children);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+// Route for getting all post by a specific author
+router.get("/:author/author", async (req, res) => {
+  try {
+    const author = req.params.author;
+    console.log(author);
+    const postsByAuthor = await Post.find({ author: author });
+    if (!postsByAuthor) {
+      return res.status(404).json({ message: "Posts by author not found" });
+    }
+    res.status(200).json(postsByAuthor);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -163,9 +201,6 @@ router.patch("/:id/score", async (req, res) => {
 
 // Route for deleting a post
 router.delete("/:id", async (req, res) => {});
-
-// Route for getting all post by a specific author
-// router.get("?author=:authorId", async (req, res) => {});
 
 // // Route for pagination
 // router.get("?page=:page&limit=:limit", async (req, res) => {});
