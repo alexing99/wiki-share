@@ -10,7 +10,8 @@ const router = express.Router();
 // Route handler for creating a new post
 router.post("/", async (req, res) => {
   try {
-    const articleTitle = req.body.article.replace(/%20/g, " ");
+    let articleTitle = req.body.article.replace(/%20/g, " ");
+    articleTitle = articleTitle.replace(/%2C/g, ", ");
     if (req.body.parent != "") {
       console.log("parent", req.body.parent);
       const post = new Post({

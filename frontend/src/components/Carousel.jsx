@@ -9,7 +9,7 @@ import { calculateDepth } from "../components/calculateDepth";
 import PostCreation from "../pages/PostCreatePage";
 import "../styles/carousel.css";
 
-function Carousel({ rootPost, redPostId, currentUser, forUser }) {
+function Carousel({ rootPost, redPostId, currentUser }) {
   const [atRoot, setAtRoot] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [atLast, setAtLast] = useState(false);
@@ -405,11 +405,13 @@ function Carousel({ rootPost, redPostId, currentUser, forUser }) {
             <>
               {" "}
               <p className="article-content">{currentPost?.content}</p>
-              <button onClick={() => preToggle(rootPost)}>Show Article</button>
+              <button onClick={() => preToggle(rootPost)}>
+                [Show Article]
+              </button>
             </>
           )}
           {showPostCreation && (
-            <button onClick={() => preToggle(rootPost)}>Hide Article</button>
+            <button onClick={() => preToggle(rootPost)}>[Hide Article]</button>
           )}
         </div>
         {!atEnd && (

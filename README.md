@@ -6,9 +6,8 @@ names; typeless, clippings,
 
 Steps to Deploy:
 
--loading animations (in next button)
+-loading animations (in next button) (border of button?)
 -redirect bug (eg. article for mire redirects to peatland)
--article titles with commas bug
 -question book bug (image)
 
 -should maybe say where in the article the quote is from
@@ -16,11 +15,8 @@ Steps to Deploy:
 -some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
 
 -logo
--footer (<a href="https://www.flaticon.com/free-icons/marker" title="marker icons">Marker icons
-created by mavadee - Flaticon</a>)
-<a href="https://www.flaticon.com/free-icons/led" title="led icons">Led icons created by Payungkead - Flaticon</a>
-<a href="https://www.flaticon.com/free-icons/partnership" title="partnership icons">Partnership icons created by kosonicon - Flaticon</a>
--about page and coming soon
+
+-about page style
 
 ---
 

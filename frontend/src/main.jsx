@@ -6,6 +6,7 @@ import "./index.css";
 import Feed from "./pages/Feed";
 import Profile from "./pages/UserPage";
 import PostCreator from "./pages/PostCreatePage";
+import About from "./pages/About.jsx";
 import { UserProvider } from "./UserContext.jsx";
 
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "post",
     element: <PostCreator />,
+  },
+  {
+    path: "about",
+    element: <About />,
   },
 ]);
 

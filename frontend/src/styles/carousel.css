@@ -2,8 +2,9 @@
   border: black solid 3px;
   margin: 20px;
   padding: 10px;
-  background-color: #b7cece;
+  background-color: #f8f9fa;
   border-radius: 10px;
+  border-color: black;
   position: relative;
 }
 h1 {
@@ -198,6 +199,6 @@ p {
   padding: 7px;
   margin: 10px;
 }
-
-/* .searchButt {
-} */
+.searchDiv {
+  min-height: 100vh;
+}

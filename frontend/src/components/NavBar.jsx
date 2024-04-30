@@ -17,7 +17,7 @@ function Navbar() {
           onClick={toggleMenu}
           className={`menu-list slide-horizontal ${isOpen ? "open" : ""}`}
         >
-          <li>
+          <li className="firstLi">
             <Link to="/profile">User</Link>
           </li>
           <li>
@@ -27,6 +27,9 @@ function Navbar() {
             <Link className="post-creation-link" to="/post">
               Create Post
             </Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
           </li>
         </ul>
       </div>

@@ -12,7 +12,7 @@ function Feed() {
   const [currentUser, setCurrentUser] = useState();
   const [feedSort, setFeedSort] = useState("New");
   // const [pageNumber, setPageNumber] = useState(1); // Track page number for pagination
-  // const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
   // const endOfPostsRef = useRef(null); // Reference to end of posts element
 
   useEffect(() => {
@@ -88,6 +88,7 @@ function Feed() {
   // };
   const fetchRootPosts = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch("http://localhost:4578/posts/rootposts");
       if (response.ok) {
         const data = await response.json();
@@ -128,6 +129,7 @@ function Feed() {
         }
 
         setRootPosts(sortedData);
+        setIsLoading(false);
         console.log("roots fetched");
       } else {
         console.error("Failed to fetch root posts");
@@ -208,8 +210,7 @@ function Feed() {
           currentUser={currentUser}
         />
       ))}
-      {/* <div ref={endOfPostsRef}></div> 
-      {isLoading && <p>Loading...</p> */}
+      {isLoading && <p>Loading...</p>}
     </div>
   );
 }

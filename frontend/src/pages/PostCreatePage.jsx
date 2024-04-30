@@ -14,6 +14,7 @@ import { useUser } from "../UserContext.jsx";
 // eslint-disable-next-line react/prop-types
 function PostCreation({ parentPost, goToPost }) {
   const [replyMode, setReplyMode] = useState(false);
+  const [searchMode, setSearchMode] = useState(false);
   // const [replyArticle, setReplyArticle] = useState();
   const [article, setArticle] = useState(null);
 
@@ -23,6 +24,7 @@ function PostCreation({ parentPost, goToPost }) {
   const [wikiURL, setWikiURL] = useState("");
   const [linkClickLimit, setLinkClickLimit] = useState(1);
   const [imageString, setImageString] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Track loading state
 
   const articleRef = useRef(null);
 
@@ -98,6 +100,11 @@ function PostCreation({ parentPost, goToPost }) {
     if (article) {
       scrollToContent();
     }
+    if (searchMode) {
+      document
+        .getElementById("article-container")
+        .classList.add("custom-highlight");
+    }
   }, [article]);
 
   //scroll to where post content is in article
@@ -164,6 +171,7 @@ function PostCreation({ parentPost, goToPost }) {
     return containsGoodArticle;
   }
   const handleSearch = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     setLinkClickLimit(0);
     const urlRegex =
@@ -187,6 +195,7 @@ function PostCreation({ parentPost, goToPost }) {
         }
         setWikiURL(response.url);
         console.log("here", response);
+        setSearchMode(true);
 
         let html = await response.text();
         const imageURL = extractMainImage(html);
@@ -204,6 +213,7 @@ function PostCreation({ parentPost, goToPost }) {
         document
           .getElementById("article-container")
           .classList.add("custom-highlight");
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
         setArticle("No Articles");
@@ -211,6 +221,7 @@ function PostCreation({ parentPost, goToPost }) {
     } else {
       if (searchQuery)
         try {
+          setIsLoading(true);
           const response = await fetch(
             `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
               searchQuery
@@ -230,11 +241,10 @@ function PostCreation({ parentPost, goToPost }) {
             /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
             ""
           );
-          const cleanHtml = DOMPurify.sanitize(html);
+          const cleanHtml = await DOMPurify.sanitize(html);
           setArticle(cleanHtml);
-          document
-            .getElementById("article-container")
-            .classList.add("custom-highlight");
+          setSearchMode(true);
+          setIsLoading(false);
         } catch (error) {
           console.error(error);
           setArticle("No Articles");
@@ -339,6 +349,8 @@ function PostCreation({ parentPost, goToPost }) {
         } catch (error) {
           console.error(error);
           setArticle("Failed to load linked article");
+          setReplyMode(true);
+          setLinkClickLimit(0);
         }
       }
     }
@@ -375,6 +387,9 @@ function PostCreation({ parentPost, goToPost }) {
         const newPostId = postData._id;
         const replyingWith = postData._id;
         console.log("Post created successfully!", replyingWith);
+        document
+          .getElementById("article-container")
+          .classList.remove("custom-highlight");
         if (!replyMode) {
           const redirectUrl = `/feed/${newPostId}`;
           console.log("Redirecting to:", redirectUrl);
@@ -413,6 +428,7 @@ function PostCreation({ parentPost, goToPost }) {
   //   console.log("Navbar link clicked!");
   //   // Your custom logic for handling navbar link click (optional)
   // };
+  useEffect;
 
   return (
     <>
@@ -423,7 +439,7 @@ function PostCreation({ parentPost, goToPost }) {
             Paste Wikipedia link below. Or type, but that is not in the spirit
             of the site
           </p>
-          <form onSubmit={handleSearch}>
+          <form className="searchForm" onSubmit={handleSearch}>
             <input
               className={"searchbar"}
               type="text"
@@ -437,7 +453,7 @@ function PostCreation({ parentPost, goToPost }) {
           </form>
         </>
       )}
-
+      {isLoading && <p>Loading...</p>}
       {article && (
         <div
           className="article-container"
