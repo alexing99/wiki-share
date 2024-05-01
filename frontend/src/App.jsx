@@ -8,10 +8,10 @@ import LoginForm from "./components/LoginForm";
 import Navbar from "./components/NavBar";
 
 function App() {
-  const [article, setArticle] = useState(null);
+  // const [article, setArticle] = useState(null);
 
   // const [selectedText, setSelectedText] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
   // const [showText, setShowText] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [showCreateUserForm, setShowCreateUserForm] = useState(false); // Track visibility of create user form
@@ -45,32 +45,30 @@ function App() {
     }
   }, []); // Run this effect only once when component mounts
 
-  console.log("h", isLoggedIn);
+  // const handleSearch = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const response = await fetch(
+  //       `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+  //         searchQuery
+  //       )}?redirects=1`
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch search results");
+  //     }
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
-          searchQuery
-        )}?redirects=1`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch search results");
-      }
+  //     let html = await response.text();
 
-      let html = await response.text();
-
-      html = html.replace(
-        /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
-        ""
-      );
-      setArticle(html);
-    } catch (error) {
-      console.error(error);
-      setArticle("No Articles");
-    }
-  };
+  //     html = html.replace(
+  //       /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+  //       ""
+  //     );
+  //     setArticle(html);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setArticle("No Articles");
+  //   }
+  // };
 
   // const addSelectionListener = () => {
   //   document.addEventListener("selectionchange", handleSelectionChange);
@@ -152,12 +150,16 @@ function App() {
           <div>
             {!showCreateUserForm && (
               <div>
-                <button onClick={handleCreateUserClick}>Create Account</button>
+                <button className="createButt" onClick={handleCreateUserClick}>
+                  Create Account
+                </button>
               </div>
             )}
             {!showLoginForm && (
               <div>
-                <button onClick={handleLoginClick}>Log In</button>
+                <button className="loginButt" onClick={handleLoginClick}>
+                  Log In
+                </button>
               </div>
             )}
           </div>
@@ -174,12 +176,15 @@ function App() {
 
       {isLoggedIn && (
         <>
-          <button onClick={handleLogOut}>Log Out</button>
+          <button className="logoutButt" onClick={handleLogOut}>
+            Log Out
+          </button>
         </>
       )}
+
       <Navbar></Navbar>
 
-      <form onSubmit={handleSearch}>
+      {/* <form onSubmit={handleSearch}>
         <input
           className={"searchbar"}
           type="text"
@@ -196,7 +201,7 @@ function App() {
           dangerouslySetInnerHTML={{ __html: article }}
           // onClick={handleLinkClick}
         ></div>
-      )}
+      )} */}
     </div>
   );
 }

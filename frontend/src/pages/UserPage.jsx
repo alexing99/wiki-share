@@ -185,6 +185,11 @@ function Profile() {
       setShowInt(false);
     }
   };
+  const handleLogOut = async () => {
+    const cookies = new Cookies();
+    cookies.remove("token");
+    window.location.href = "/";
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -244,6 +249,7 @@ function Profile() {
           </tbody>
         </table>
         <div className="buttons">
+          <button onClick={handleLogOut}>[Log Out]</button>
           {!showChangePasswordForm ? (
             <button onClick={handleChangePassword}>[Change Password]</button>
           ) : (

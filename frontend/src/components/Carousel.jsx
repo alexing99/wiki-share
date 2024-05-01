@@ -23,6 +23,8 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
 
+  // const [isLoading, setIsLoading] = useState(false); // Track loading state
+
   // const [backgroundColor, setBackgroundColor] = useState(
   //   "rgba(255, 0, 0, 0.3)"
   // ); // Initial background color
@@ -368,7 +370,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
         <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
       </div>
       <h1>{currentPost?.article}</h1>
-      <img src={currentPost?.image} alt="" height="100px" />{" "}
+      <img src={currentPost?.image} alt="" width="200px" height="auto" />{" "}
       <div className="content-and-vote">
         <div
           key={`${currentPost?._id}-${showPostCreation}`}

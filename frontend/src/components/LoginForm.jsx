@@ -28,7 +28,7 @@ function LoginForm() {
         cookies.set("token", token, { path: "/" }); // Adjust path as needed
         setEmail("");
         setPassword("");
-        window.location.href = "/";
+        window.location.href = "/feed";
       } else {
         const error = await response.json();
         console.error("Error logging in:", error);

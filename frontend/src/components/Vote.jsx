@@ -72,6 +72,10 @@ function Vote({ currentPost, currentUser, rootPost }) {
   //   };
 
   const handleInterest = async () => {
+    if (currentUser === undefined) {
+      window.location.href = "/";
+      return;
+    }
     try {
       if (!hasVotedInterest) {
         const response = await fetch(
@@ -160,6 +164,10 @@ function Vote({ currentPost, currentUser, rootPost }) {
   };
 
   const handleRelevance = async () => {
+    if (currentUser === undefined) {
+      window.location.href = "/";
+      return;
+    }
     console.log("rel");
     try {
       if (!hasVotedRelevance) {

@@ -9,7 +9,7 @@
   display: flex; /* Makes the menu items display horizontally */
   flex-direction: row; /* Arranges the menu items in a row */
   justify-content: flex-start;
-  background-color: #ffff; /* Sets the background color of the menu */
+  background-color: #1c1c1d; /* Sets the background color of the menu */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
   width: 100%; /* Sets the width of the menu to 100% of the viewport */
   margin-top: 10px;

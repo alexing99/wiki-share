@@ -359,6 +359,11 @@ function PostCreation({ parentPost, goToPost }) {
   const user = useUser();
 
   const postPost = async () => {
+    console.log(user);
+    if (user === null) {
+      window.location.href = "/";
+      return;
+    }
     let content = selectedText;
 
     const author = user.name;

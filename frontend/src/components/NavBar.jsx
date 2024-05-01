@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/nav.css";
-
+import { useUser } from "../UserContext";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isUser, setIsUser] = useState(false);
+  const user = useUser();
+  useEffect(() => {
+    // Scroll to the newly created post when the component mounts
+    console.log(user);
+    if (user != null) {
+      setIsUser(true);
+    }
+  }, [user]);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -17,17 +25,27 @@ function Navbar() {
           onClick={toggleMenu}
           className={`menu-list slide-horizontal ${isOpen ? "open" : ""}`}
         >
-          <li className="firstLi">
-            <Link to="/profile">User</Link>
-          </li>
+          {isUser ? (
+            <li className="firstLi">
+              <Link to="/profile">User</Link>
+            </li>
+          ) : (
+            <li className="firstLi">
+              <Link to="/">Login</Link>
+            </li>
+          )}
           <li>
             <Link to="/feed">Feed</Link>
           </li>
-          <li>
-            <Link className="post-creation-link" to="/post">
-              Create Post
-            </Link>
-          </li>
+          {isUser ? (
+            <li>
+              <Link to="/post">Create Post</Link>
+            </li>
+          ) : (
+            <li>
+              <Link to="/">Create Post</Link>
+            </li>
+          )}
           <li>
             <Link to="/about">About</Link>
           </li>
