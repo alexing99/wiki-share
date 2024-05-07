@@ -7,3 +7,9 @@
   justify-content: space-between;
   padding-top: 20px;
 }
+
+.logo {
+  font-family: "Hoefler Text", "Baskerville Old Face", Garamond,
+    "Times New Roman";
+  color: black;
+}

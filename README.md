@@ -1,22 +1,22 @@
 # wiki-share
 
-names; typeless, clippings,
+names; typeless, clippings, Luddy
 
 ---
 
 Steps to Deploy:
 
--question book bug (image)
--some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
-
+-populate with posts
 -logo
 
--about page style
+-about page diagram
 
 ---
 
 Later Steps Unordered:
--should maybe say where in the article the quote is from
+-question book bug (image)
+-some text cant be targetted? - remove reference tags and reference section? -multiple paragraphs idk -no select on headers? if going from paragraph to paragraph, cut and search for second half,
+-should maybe say where in the article the quote is from (info is actually in the link after #)
 -10 at a time w/ infinite scroll
 -signin with google
 -credibility rating
@@ -33,3 +33,4 @@ Later Steps Unordered:
 -accessibility
 -tree display
 -loading animations (in next button) (border of button?)
+-if content cant be found then offer a search list for clicking (video on this)

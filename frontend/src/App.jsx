@@ -131,7 +131,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Wiki Passion</h1>
+      <h1>Loody</h1>
 
       {/* <Switch>
         <Route exact path="/">

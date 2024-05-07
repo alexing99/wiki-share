@@ -48,7 +48,7 @@ function PostCreation({ parentPost, goToPost }) {
         }
       }
     );
-    console.log(mainImageUrl);
+
     return mainImageUrl;
   };
 
@@ -76,12 +76,12 @@ function PostCreation({ parentPost, goToPost }) {
           ""
         );
         const cleanHtml = DOMPurify.sanitize(html);
-        console.log(cleanHtml, html);
+
         setArticle(cleanHtml);
-        console.log(html);
       } catch (error) {
         console.error(error);
         setArticle("No Articles");
+        setIsLoading(false);
       }
     }
   };
@@ -111,20 +111,16 @@ function PostCreation({ parentPost, goToPost }) {
   const scrollToContent = async () => {
     if (linkClickLimit > 0) {
       const cleanedText = parentPost.content.replace(/^"|"$/g, "");
-      console.log("scrolling");
+
       const targetText = cleanedText;
       const articleDiv = articleRef.current;
-      console.log(targetText, articleDiv);
 
       if (articleDiv) {
         const paragraphs = articleDiv.getElementsByTagName("p");
-        console.log(paragraphs);
 
         for (let i = 0; i < paragraphs.length; i++) {
           const paragraph = paragraphs[i];
           const paragraphText = paragraph.textContent;
-
-          console.log(paragraphText, "tecxt");
 
           if (paragraphText.includes(targetText)) {
             // Create a new span element to wrap the target text
@@ -153,23 +149,7 @@ function PostCreation({ parentPost, goToPost }) {
     getReplyArticle();
     addSelectionListener();
   }, []);
-  function checkForGoodArticle(html) {
-    // Load the HTML into Cheerio
-    const $ = cheerio.load(html);
 
-    // Get the text content of the body element
-    const bodyText = $("body").text();
-
-    // Log the body text to inspect it
-    console.log(bodyText);
-
-    // Search for the string "This is a good article" case-insensitively
-    const containsGoodArticle = bodyText
-      .toLowerCase()
-      .includes("this is a good article");
-
-    return containsGoodArticle;
-  }
   const handleSearch = async (event) => {
     setIsLoading(true);
     event.preventDefault();
@@ -178,10 +158,10 @@ function PostCreation({ parentPost, goToPost }) {
       /^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+)(?:\.[a-zA-Z]{2,})+(?:\/\S*)?$/;
 
     if (urlRegex.test(searchQuery)) {
-      console.log("h");
       const articleTitle = searchQuery
-        .substring(searchQuery.lastIndexOf("/") + 1)
-        .replace(/_/g, " ");
+        .substring(searchQuery.lastIndexOf("/") + 1) // Get substring after last "/"
+        .split("#")[0] // Split on "#" and take the first element (before "#")
+        .replace(/_/g, " "); // Replace underscores with spaces
       console.log(articleTitle);
       try {
         const response = await fetch(
@@ -206,8 +186,7 @@ function PostCreation({ parentPost, goToPost }) {
           /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
           ""
         );
-        const isGoodArticle = checkForGoodArticle(html);
-        console.log(isGoodArticle);
+
         const cleanHtml = DOMPurify.sanitize(html);
         setArticle(cleanHtml);
         document
@@ -229,25 +208,93 @@ function PostCreation({ parentPost, goToPost }) {
           );
 
           if (!response.ok) {
-            throw new Error("Failed to fetch search results");
+            if (searchQuery.endsWith("s")) {
+              const searchSingular = searchQuery.slice(0, -1);
+              console.log(searchSingular);
+              try {
+                setIsLoading(true);
+                const response = await fetch(
+                  `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+                    searchSingular
+                  )}?redirects=1`
+                );
+
+                if (!response.ok) {
+                  console.log("hmm");
+                  throw new Error("Failed to fetch search results");
+                }
+                setWikiURL(response.url);
+
+                let html = await response.text();
+                const imageURL = extractMainImage(html);
+                setImageString(imageURL);
+
+                html = html.replace(
+                  /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+                  ""
+                );
+                const cleanHtml = await DOMPurify.sanitize(html);
+                setArticle(cleanHtml);
+                setSearchMode(true);
+                setIsLoading(false);
+              } catch (error) {
+                console.error(error);
+                setArticle("No articles found. Try adjusting capitalization.");
+              }
+              console.log("s");
+            } else if (!searchQuery.endsWith("s")) {
+              const searchPlural = searchQuery + "s";
+              console.log(searchPlural);
+              try {
+                setIsLoading(true);
+                const response = await fetch(
+                  `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+                    searchPlural
+                  )}?redirects=1`
+                );
+
+                if (!response.ok) {
+                  console.log("hmm");
+                  throw new Error("Failed to fetch search results");
+                }
+                setWikiURL(response.url);
+
+                let html = await response.text();
+                const imageURL = extractMainImage(html);
+                setImageString(imageURL);
+
+                html = html.replace(
+                  /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+                  ""
+                );
+                const cleanHtml = await DOMPurify.sanitize(html);
+                setArticle(cleanHtml);
+                setSearchMode(true);
+                setIsLoading(false);
+              } catch (error) {
+                console.error(error);
+                setArticle("No articles found. Try adjusting capitalization.");
+              }
+            }
+          } else if (response.ok) {
+            setWikiURL(response.url);
+
+            let html = await response.text();
+            const imageURL = extractMainImage(html);
+            setImageString(imageURL);
+
+            html = html.replace(
+              /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+              ""
+            );
+            const cleanHtml = await DOMPurify.sanitize(html);
+            setArticle(cleanHtml);
+            setSearchMode(true);
+            setIsLoading(false);
           }
-          setWikiURL(response.url);
-
-          let html = await response.text();
-          const imageURL = extractMainImage(html);
-          setImageString(imageURL);
-
-          html = html.replace(
-            /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
-            ""
-          );
-          const cleanHtml = await DOMPurify.sanitize(html);
-          setArticle(cleanHtml);
-          setSearchMode(true);
-          setIsLoading(false);
         } catch (error) {
           console.error(error);
-          setArticle("No Articles");
+          setArticle("No articles found. Try adjusting capitalization.");
         }
     }
   };
@@ -321,10 +368,11 @@ function PostCreation({ parentPost, goToPost }) {
       console.log("link clicked");
       const linkURL = event.target.getAttribute("href");
       if (event.target.nodeName === "A" && linkURL && linkClickLimit > 0) {
-        console.log(linkURL);
+        console.log(linkURL, "url");
         const articleTitle = linkURL
-          .substring(linkURL.lastIndexOf("/") + 1)
-          .replace(/_/g, " ");
+          .substring(linkURL.lastIndexOf("/") + 1) // Get substring after last "/"
+          .split("#")[0] // Split on "#" and take the first element (before "#")
+          .replace(/_/g, " "); // Replace underscores with spaces
         try {
           const response = await fetch(
             `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
@@ -332,20 +380,94 @@ function PostCreation({ parentPost, goToPost }) {
             )}?redirects=1`
           );
           if (!response.ok) {
-            throw new Error("Failed to fetch linked article");
+            if (articleTitle.endsWith("s")) {
+              const searchSingular = articleTitle.slice(0, -1);
+              console.log(searchSingular);
+              try {
+                setIsLoading(true);
+                const response = await fetch(
+                  `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+                    searchSingular
+                  )}?redirects=1`
+                );
+
+                if (!response.ok) {
+                  console.log("hmm");
+                  throw new Error("Failed to fetch search results");
+                }
+                setWikiURL(response.url);
+
+                let html = await response.text();
+                const imageURL = extractMainImage(html);
+                setImageString(imageURL);
+
+                html = html.replace(
+                  /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+                  ""
+                );
+                const cleanHtml = await DOMPurify.sanitize(html);
+                setArticle(cleanHtml);
+                setSearchMode(true);
+                setIsLoading(false);
+              } catch (error) {
+                console.error(error);
+                setArticle("No articles found.");
+                setReplyMode(true);
+                setLinkClickLimit(0);
+                setIsLoading(false);
+              }
+              console.log("s");
+            } else if (!articleTitle.endsWith("s")) {
+              const searchPlural = articleTitle + "s";
+              console.log(searchPlural);
+              try {
+                setIsLoading(true);
+                const response = await fetch(
+                  `https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(
+                    searchPlural
+                  )}?redirects=1`
+                );
+
+                if (!response.ok) {
+                  console.log("hmm");
+                  throw new Error("Failed to fetch search results");
+                }
+                setWikiURL(response.url);
+
+                let html = await response.text();
+                const imageURL = extractMainImage(html);
+                setImageString(imageURL);
+
+                html = html.replace(
+                  /<h2.*?id="References".*?<\/h2>[\s\S]*?<(?:div|table)[^>]+class=".*?references.*?">[\s\S]*?<\/(?:div|table)>/,
+                  ""
+                );
+                const cleanHtml = await DOMPurify.sanitize(html);
+                setArticle(cleanHtml);
+                setSearchMode(true);
+                setIsLoading(false);
+              } catch (error) {
+                console.error(error);
+                setArticle("No articles found.");
+                setReplyMode(true);
+                setLinkClickLimit(0);
+                setIsLoading(false);
+              }
+            }
+          } else if (response.ok) {
+            const html = await response.text();
+            const imageURL = extractMainImage(html);
+            setImageString(imageURL);
+            setWikiURL(response.url);
+            const cleanHtml = DOMPurify.sanitize(html);
+            setArticle(cleanHtml);
+            setLinkClickLimit(linkClickLimit - 1);
+            setSelectedText(null);
+            scrollToTop();
+            document
+              .getElementById("article-container")
+              .classList.add("custom-highlight");
           }
-          const html = await response.text();
-          const imageURL = extractMainImage(html);
-          setImageString(imageURL);
-          setWikiURL(response.url);
-          const cleanHtml = DOMPurify.sanitize(html);
-          setArticle(cleanHtml);
-          setLinkClickLimit(linkClickLimit - 1);
-          setSelectedText(null);
-          scrollToTop();
-          document
-            .getElementById("article-container")
-            .classList.add("custom-highlight");
         } catch (error) {
           console.error(error);
           setArticle("Failed to load linked article");
@@ -359,7 +481,6 @@ function PostCreation({ parentPost, goToPost }) {
   const user = useUser();
 
   const postPost = async () => {
-    console.log(user);
     if (user === null) {
       window.location.href = "/";
       return;
@@ -374,11 +495,9 @@ function PostCreation({ parentPost, goToPost }) {
 
     if (replyMode) {
       parent = articleFrom._id;
-      console.log(parent, "ye");
     }
 
     try {
-      console.log(parent);
       const response = await fetch("http://localhost:4578/posts", {
         method: "POST",
         headers: {

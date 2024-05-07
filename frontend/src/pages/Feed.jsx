@@ -191,7 +191,7 @@ function Feed() {
     <div className="feed">
       {" "}
       <div className="header">
-        <Navbar></Navbar>{" "}
+        <Navbar></Navbar> <h1 className="logo">Kuklo</h1>
         <div className="feed-sort-dropdown">
           <label htmlFor="dropdown">Sort Feed By:</label>
           <select id="dropdown" onChange={handleFeedSort}>
