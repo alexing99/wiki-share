@@ -4,7 +4,7 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
-    "start-backend": "node backend/server.js",
+    "start-backend": "babel-node backend/server.js",
     "start-frontend": "cd frontend && npm install && npm start",
     "build-frontend": "cd frontend && npm install && npm run build"
   },
@@ -29,6 +29,10 @@
     "universal-cookie": "^7.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.5",
+    "@babel/core": "^7.24.5",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.5",
     "@types/dotenv": "^8.2.0",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
