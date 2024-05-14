@@ -8,6 +8,19 @@ function About() {
         completing the Odin Project. It is built with React, Node.js, and
         MongoDB.{" "}
       </p>
+      <h3>How It Works</h3>
+      <p>
+        Copy and paste a Wikipedia link in the search bar of the create post
+        tab. Then highlight the desired excerpt and click on the post button.
+        Once a root post is created, you or other users can click on the [Show
+        Article] button to reveal the rest of the Wikipedia article. Then, if a
+        link within the root article is visited, a new post can be created as a
+        child. You may only travel one link away from wherever you are. The
+        posts do not need to be relevant to eachother. If they are, you can
+        click on the puzzle peice icon. If you find a post interesting, click on
+        the little LED icon. You can use this typeless platform however you
+        wish.{" "}
+      </p>
       <h3>Coming Soon</h3>
       <ul>
         <li>

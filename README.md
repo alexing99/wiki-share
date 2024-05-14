@@ -1,5 +1,9 @@
 # wiki-share
 
+Wiki Passion started in March of 2024 as a final project after
+completing the Odin Project. It is built with React, Node.js, and
+MongoDB.
+
 names; typeless, clippings, Luddy
 
 ---
@@ -8,7 +12,6 @@ Steps to Deploy:
 
 -populate with posts
 -logo
-
 -about page diagram
 
 ---
@@ -34,3 +37,4 @@ Later Steps Unordered:
 -tree display
 -loading animations (in next button) (border of button?)
 -if content cant be found then offer a search list for clicking (video on this)
+-api user agent

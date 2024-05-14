@@ -54,6 +54,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
 
       if (response.ok) {
         const postData = await response.json();
+        await fetchChildrenData(postData.parentPost);
         setCurrentPost(postData);
         setShowPostCreation(false); // Hide post creation when navigating to a new post
       } else {

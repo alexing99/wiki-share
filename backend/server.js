@@ -9,18 +9,20 @@ import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 
-// import User from "../models/user.js";
-
-dotenv.config({ path: "../.env" });
-
-console.log("here", process.env.PORT);
+dotenv.config({ path: "./.env" });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+  })
+);
+
 app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
