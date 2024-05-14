@@ -1,13 +1,23 @@
-import express from "express";
-import session from "express-session";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
-import passport from "./passport-config.js";
+// import express from "express";
+// import session from "express-session";
+// import mongoose from "mongoose";
+// import dotenv from "dotenv";
+// import cors from "cors";
+// import passport from "./passport-config.js";
 
-import loginRoutes from "./routes/login.js";
-import userRoutes from "./routes/users.js";
-import postRoutes from "./routes/posts.js";
+// import loginRoutes from "./routes/login.js";
+// import userRoutes from "./routes/users.js";
+// import postRoutes from "./routes/posts.js";
+const express = require("express");
+const session = require("express-session");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const passport = require("./passport-config.js");
+
+const loginRoutes = require("./routes/login.js");
+const userRoutes = require("./routes/users.js");
+const postRoutes = require("./routes/posts.js");
 
 dotenv.config({ path: "./.env" });
 
