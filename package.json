@@ -9,7 +9,8 @@
     "build-frontend": "cd frontend && npm install && npm run build"
   },
   "engines": {
-    "node": ">=16.x <=18.x"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,7 +22,7 @@
     "express": "^4.17.1",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "jwt-decode": "^4.0.0",
+    "jwt-decode": "^3.1.2",
     "mongoose": "^6.2.4",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
