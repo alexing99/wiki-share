@@ -15,8 +15,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.12",
-    "cookie": "^0.6.0",
     "concurrently": "^7.0.0",
+    "cookie": "^0.6.0",
     "cors": "^2.8.5",
     "dompurify": "^3.1.0",
     "dotenv": "^10.0.0",
@@ -31,6 +31,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.2",
+    "rxjs": "^7.8.1",
     "universal-cookie": "^7.1.0"
   },
   "devDependencies": {
