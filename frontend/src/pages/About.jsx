@@ -39,7 +39,11 @@ function About() {
         <li>Swipe functionality for navigation</li>
         <li>Separated quotes with ...</li>
         <li>Display of the sub header of the clipping</li>
-        <li>Article table of contents</li>
+        <li>Article table of contents directory</li>
+        <li>
+          A playful tech or modern retro tech aesthetic a la Glitch or Code
+          Academy{" "}
+        </li>
       </ul>
     </>
   );
