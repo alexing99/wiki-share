@@ -19,8 +19,9 @@ import postRoutes from "./routes/posts.js";
 // const userRoutes = require("./routes/users.js");
 // const postRoutes = require("./routes/posts.js");
 
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "../.env" });
 
+const uri = process.env.MONGODB_URI;
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -46,7 +47,7 @@ app.use("/posts", postRoutes);
 mongoose.set("strictQuery", false); // or true based on your preference
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
