@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 // import dotenv from "dotenv";
 import cors from "cors";
 import passport from "./passport-config.js";
+import path from "path";
 
 import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
@@ -36,12 +37,6 @@ app.use(
 // app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Serve static files (including favicon)
-app.use(express.static(path.join(__dirname, "..", "public")));
-
-// Serve the frontend build files
-app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
 // Routes
 app.get("/", (req, res) => {
