@@ -9,21 +9,10 @@ import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
 import MongoStore from "connect-mongo";
-// const express = require("express");
-// const session = require("express-session");
-// const mongoose = require("mongoose");
-// const dotenv = require("dotenv");
-// const cors = require("cors");
-// const passport = require("./passport-config.js");
-
-// const loginRoutes = require("./routes/login.js");
-// const userRoutes = require("./routes/users.js");
-// const postRoutes = require("./routes/posts.js");
 
 // dotenv.config({ path: "../.env" });
-
-const uri = process.env.MONGODB_URI;
 const app = express();
+const uri = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -34,19 +23,6 @@ app.use(
     credentials: true,
   })
 );
-
-// app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Routes
-app.get("/", (req, res) => {
-  res.send("Welcome to Wiki Share!");
-});
-app.use("/users", userRoutes);
-app.use("/login", loginRoutes);
-app.use("/posts", postRoutes);
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -57,6 +33,17 @@ app.use(
     }),
   })
 );
+// app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+// Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to Wiki Share!");
+});
+app.use("/users", userRoutes);
+app.use("/login", loginRoutes);
+app.use("/posts", postRoutes);
+
 // MongoDB connection
 mongoose.set("strictQuery", false); // or true based on your preference
 
