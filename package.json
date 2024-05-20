@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "backend/server.js",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "babel backend -d dist",
     "postinstall": "npm install rxjs",
     "heroku-postbuild": "npm run build-frontend",
-    "start": "node backend/server.js",
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "node dist/server.js",
     "start-frontend": "cd frontend && npm install && npm start",
     "build-frontend": "cd frontend && npm install && npm run build"
