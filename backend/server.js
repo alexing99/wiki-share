@@ -1,7 +1,7 @@
 import express from "express";
 import session from "express-session";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import cors from "cors";
 import passport from "./passport-config.js";
 
@@ -19,7 +19,7 @@ import postRoutes from "./routes/posts.js";
 // const userRoutes = require("./routes/users.js");
 // const postRoutes = require("./routes/posts.js");
 
-dotenv.config({ path: "../.env" });
+// dotenv.config({ path: "../.env" });
 
 const uri = process.env.MONGODB_URI;
 const app = express();
