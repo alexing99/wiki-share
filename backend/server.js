@@ -8,6 +8,7 @@ import passport from "./passport-config.js";
 import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import MongoStore from "connect-mongo";
 // const express = require("express");
 // const session = require("express-session");
 // const mongoose = require("mongoose");
@@ -34,15 +35,28 @@ app.use(
   })
 );
 
-app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
+// app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to Wiki Share!");
+});
 app.use("/users", userRoutes);
 app.use("/login", loginRoutes);
 app.use("/posts", postRoutes);
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+  })
+);
 // MongoDB connection
 mongoose.set("strictQuery", false); // or true based on your preference
 

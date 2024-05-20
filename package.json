@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "cheerio": "^1.0.0-rc.12",
     "concurrently": "^7.0.0",
+    "connect-mongo": "^5.1.0",
     "cookie": "^0.6.0",
     "cors": "^2.8.5",
     "dompurify": "^3.1.0",
