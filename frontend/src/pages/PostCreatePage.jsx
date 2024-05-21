@@ -498,7 +498,7 @@ function PostCreation({ parentPost, goToPost }) {
     }
 
     try {
-      const response = await fetch("http://localhost:4578/posts", {
+      const response = await fetch("${process.env.REACT_APP_API_URL}/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -520,7 +520,7 @@ function PostCreation({ parentPost, goToPost }) {
           navigateTo(redirectUrl);
         } else if (replyMode) {
           const nextResponse = await fetch(
-            `http://localhost:4578/posts/${articleFrom._id}`,
+            `${process.env.REACT_APP_API_URL}/posts/${articleFrom._id}`,
             {
               method: "PATCH",
               headers: {

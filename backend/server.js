@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import cors from "cors";
 import passport from "./passport-config.js";
 import path from "path";
-
 import loginRoutes from "./routes/login.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
@@ -40,7 +39,7 @@ app.use(passport.session());
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Welcome to Wiki Share!");
+  res.send("Welcome to Peecer!");
 });
 app.use("/users", userRoutes);
 app.use("/login", loginRoutes);

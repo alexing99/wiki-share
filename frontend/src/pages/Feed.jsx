@@ -28,7 +28,7 @@ function Feed() {
   //   try {
   //     setIsLoading(true);
   //     const response = await fetch(
-  //       `http://localhost:4578/posts/rootposts?page=${pageNumber}&limit=10`
+  //       `${process.env.REACT_APP_API_URL}/posts/rootposts?page=${pageNumber}&limit=10`
   //     );
   //     if (response.ok) {
   //       const data = await response.json();
@@ -89,7 +89,9 @@ function Feed() {
   const fetchRootPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:4578/posts/rootposts");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/posts/rootposts`
+      );
       if (response.ok) {
         const data = await response.json();
         let sortedData;
@@ -150,9 +152,12 @@ function Feed() {
 
     const userId = decodedPayload.id;
     try {
-      const response = await fetch(`http://localhost:4578/users/${userId}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          method: "GET",
+        }
+      );
 
       if (response.ok) {
         console.log("user information retreived!");

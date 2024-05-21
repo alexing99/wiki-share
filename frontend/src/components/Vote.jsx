@@ -40,7 +40,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
 
   //   const userId = decodedPayload.id;
   //   try {
-  //     const response = await fetch(`http://localhost:4578/users/${userId}`, {
+  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
   //       method: "GET",
   //     });
 
@@ -79,7 +79,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
     try {
       if (!hasVotedInterest) {
         const response = await fetch(
-          `http://localhost:4578/posts/${currentPost._id}/score/?vote=interest&action=up`,
+          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=interest&action=up`,
           {
             method: "PATCH",
           }
@@ -88,7 +88,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `http://localhost:4578/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=interest`,
+              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=interest`,
               {
                 method: "PATCH",
               }
@@ -117,7 +117,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
         }
       } else if (hasVotedInterest) {
         const response = await fetch(
-          `http://localhost:4578/posts/${currentPost._id}/score/?vote=interest&action=down`,
+          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=interest&action=down`,
           {
             method: "PATCH",
           }
@@ -126,7 +126,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `http://localhost:4578/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=interest`,
+              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=interest`,
               {
                 method: "PATCH",
               }
@@ -172,7 +172,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
     try {
       if (!hasVotedRelevance) {
         const response = await fetch(
-          `http://localhost:4578/posts/${currentPost._id}/score/?vote=relevance&action=up`,
+          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=relevance&action=up`,
           {
             method: "PATCH",
           }
@@ -181,7 +181,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `http://localhost:4578/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=relevance`,
+              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=relevance`,
               {
                 method: "PATCH",
               }
@@ -214,7 +214,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
         }
       } else if (hasVotedRelevance) {
         const response = await fetch(
-          `http://localhost:4578/posts/${currentPost._id}/score/?vote=relevance&action=down`,
+          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=relevance&action=down`,
           {
             method: "PATCH",
           }
@@ -223,7 +223,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `http://localhost:4578/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=relevance`,
+              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=relevance`,
               {
                 method: "PATCH",
               }

@@ -6,6 +6,8 @@ import Cookies from "universal-cookie";
 import CreateUserForm from "./components/CreateUserForm";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/NavBar";
+import dotenv from "dotenv";
+dotenv.config();
 
 function App() {
   // const [article, setArticle] = useState(null);

@@ -38,9 +38,12 @@ function Profile() {
 
   const getUserInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:4578/users/${userId}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          method: "GET",
+        }
+      );
 
       if (response.ok) {
         console.log("user information retreived!");
@@ -66,9 +69,12 @@ function Profile() {
     );
     if (!confirmed) return;
     try {
-      const response = await fetch(`http://localhost:4578/users/${userId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.ok) {
         console.log("User deleted");
         cookies.remove("token");
@@ -83,18 +89,21 @@ function Profile() {
   };
   const updateUser = async () => {
     try {
-      const response = await fetch(`http://localhost:4578/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: editedName,
-          email: editedEmail,
-          password: newPassword,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: editedName,
+            email: editedEmail,
+            password: newPassword,
+          }),
+        }
+      );
 
       if (response.ok) {
         console.log("User updated");
@@ -138,7 +147,9 @@ function Profile() {
     try {
       const posts = [];
       for (const postId of interests) {
-        const response = await fetch(`http://localhost:4578/posts/${postId}`);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/posts/${postId}`
+        );
         if (response.ok) {
           const post = await response.json();
           posts.push(post);
@@ -158,7 +169,7 @@ function Profile() {
     console.log(name);
     try {
       const response = await fetch(
-        `http://localhost:4578/posts/${name}/author`
+        `${process.env.REACT_APP_API_URL}/posts/${name}/author`
       );
       if (response.ok) {
         const data = await response.json();

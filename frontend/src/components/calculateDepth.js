@@ -1,4 +1,5 @@
-export const calculateDepth = async (postId) => { //function takes a starting postId 
+export const calculateDepth = async (postId) => {
+  //function takes a starting postId
   try {
     const children = await fetchChildrenData(postId);
     if (Array.isArray(children)) {
@@ -27,10 +28,12 @@ export const calculateDepth = async (postId) => { //function takes a starting po
   }
 };
 
-const fetchChildrenData = async (postId) => { //helper function to fetch children from wherever 
+const fetchChildrenData = async (postId) => {
+  //helper function to fetch children from wherever
   try {
     const response = await fetch(
-      `http://localhost:4578/posts/${postId._id}/children`
+      // eslint-disable-next-line no-undef
+      `${process.env.REACT_APP_API_URL}/posts/${postId._id}/children`
     );
     if (response.ok) {
       const data = await response.json();

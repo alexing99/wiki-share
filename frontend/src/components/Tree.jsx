@@ -62,7 +62,7 @@ function Tree({ rootPost, currentPost }) {
   const fetchChildrenData = async (postId) => {
     try {
       const response = await fetch(
-        `http://localhost:4578/posts/${postId._id}/children`
+        `${process.env.REACT_APP_API_URL}/posts/${postId._id}/children`
       );
       if (response.ok) {
         const data = await response.json();
@@ -79,7 +79,9 @@ function Tree({ rootPost, currentPost }) {
 
   const fetchParentPost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:4578/posts/${postId}/`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/posts/${postId}/`
+      );
       if (response.ok) {
         return await response.json();
       } else {
