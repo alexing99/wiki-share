@@ -6,6 +6,7 @@ function Tree({ rootPost, currentPost }) {
   const [maxDepth, setMaxDepth] = useState(0);
   const [currentDepth, setCurrentDepth] = useState(0);
   const [routeDepth, setRouteDepth] = useState(0);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchMaxDepth = async () => {
@@ -61,9 +62,7 @@ function Tree({ rootPost, currentPost }) {
 
   const fetchChildrenData = async (postId) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/${postId._id}/children`
-      );
+      const response = await fetch(`${apiUrl}/posts/${postId._id}/children`);
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -79,9 +78,7 @@ function Tree({ rootPost, currentPost }) {
 
   const fetchParentPost = async (postId) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/${postId}/`
-      );
+      const response = await fetch(`${apiUrl}/posts/${postId}/`);
       if (response.ok) {
         return await response.json();
       } else {

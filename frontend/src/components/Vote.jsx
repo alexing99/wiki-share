@@ -8,6 +8,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
   const [hasVotedRelevance, setHasVotedRelevance] = useState(false);
 
   const [renderCount, setRenderCount] = useState(0); // State to trigger re-render
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // const [currentUser, setCurrentUser] = useState();
 
@@ -40,7 +41,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
 
   //   const userId = decodedPayload.id;
   //   try {
-  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/users/${userId}`, {
+  //     const response = await fetch(`${apiUrl}/users/${userId}`, {
   //       method: "GET",
   //     });
 
@@ -79,7 +80,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
     try {
       if (!hasVotedInterest) {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=interest&action=up`,
+          `${apiUrl}/posts/${currentPost._id}/score/?vote=interest&action=up`,
           {
             method: "PATCH",
           }
@@ -88,7 +89,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=interest`,
+              `${apiUrl}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=interest`,
               {
                 method: "PATCH",
               }
@@ -117,7 +118,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
         }
       } else if (hasVotedInterest) {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=interest&action=down`,
+          `${apiUrl}/posts/${currentPost._id}/score/?vote=interest&action=down`,
           {
             method: "PATCH",
           }
@@ -126,7 +127,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=interest`,
+              `${apiUrl}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=interest`,
               {
                 method: "PATCH",
               }
@@ -172,7 +173,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
     try {
       if (!hasVotedRelevance) {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=relevance&action=up`,
+          `${apiUrl}/posts/${currentPost._id}/score/?vote=relevance&action=up`,
           {
             method: "PATCH",
           }
@@ -181,7 +182,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=relevance`,
+              `${apiUrl}/users/${currentUser._id}/score/?post=${currentPost._id}&action=add&field=relevance`,
               {
                 method: "PATCH",
               }
@@ -214,7 +215,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
         }
       } else if (hasVotedRelevance) {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${currentPost._id}/score/?vote=relevance&action=down`,
+          `${apiUrl}/posts/${currentPost._id}/score/?vote=relevance&action=down`,
           {
             method: "PATCH",
           }
@@ -223,7 +224,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
           console.log("post updated succesfully");
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=relevance`,
+              `${apiUrl}/users/${currentUser._id}/score/?post=${currentPost._id}&action=remove&field=relevance`,
               {
                 method: "PATCH",
               }

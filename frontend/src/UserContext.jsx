@@ -24,12 +24,9 @@ export const UserProvider = ({ children }) => {
 
     const userId = decodedPayload.id;
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         console.log("user information retreived!");

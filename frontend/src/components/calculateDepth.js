@@ -30,10 +30,11 @@ export const calculateDepth = async (postId) => {
 
 const fetchChildrenData = async (postId) => {
   //helper function to fetch children from wherever
+  const apiUrl = import.meta.env.VITE_API_URL;
   try {
     const response = await fetch(
       // eslint-disable-next-line no-undef
-      `${process.env.REACT_APP_API_URL}/posts/${postId._id}/children`
+      `${apiUrl}/posts/${postId._id}/children`
     );
     if (response.ok) {
       const data = await response.json();

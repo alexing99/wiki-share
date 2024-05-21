@@ -14,7 +14,7 @@ function Feed() {
   // const [pageNumber, setPageNumber] = useState(1); // Track page number for pagination
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   // const endOfPostsRef = useRef(null); // Reference to end of posts element
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     // Fetch root posts when component mounts
     fetchRootPosts();
@@ -28,7 +28,7 @@ function Feed() {
   //   try {
   //     setIsLoading(true);
   //     const response = await fetch(
-  //       `${process.env.REACT_APP_API_URL}/posts/rootposts?page=${pageNumber}&limit=10`
+  //       `${apiUrl}/posts/rootposts?page=${pageNumber}&limit=10`
   //     );
   //     if (response.ok) {
   //       const data = await response.json();
@@ -89,9 +89,7 @@ function Feed() {
   const fetchRootPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/rootposts`
-      );
+      const response = await fetch(`${apiUrl}/posts/rootposts`);
       if (response.ok) {
         const data = await response.json();
         let sortedData;
@@ -152,12 +150,9 @@ function Feed() {
 
     const userId = decodedPayload.id;
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         console.log("user information retreived!");

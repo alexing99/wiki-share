@@ -22,6 +22,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   const [showPostCreation, setShowPostCreation] = useState(false); // State to manage PostCreation vi
   const [selectedArticle, setSelectedArticle] = useState(null); // State to store selected article\
   const [sort, setSort] = useState("New");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // const [isLoading, setIsLoading] = useState(false); // Track loading state
 
@@ -48,12 +49,9 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   // makes the user's new reply the current post
   const goToPost = async (postId) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/${postId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiUrl}/posts/${postId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         const postData = await response.json();
@@ -85,9 +83,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   const fetchChildrenData = async (post, isCalledfromPrevClick) => {
     if (post) {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${post}/children`
-        );
+        const response = await fetch(`${apiUrl}/posts/${post}/children`);
 
         if (response.ok) {
           const data = await response.json();
@@ -157,12 +153,9 @@ function Carousel({ rootPost, redPostId, currentUser }) {
   };
   const fetchParentPostForBack = async (postId) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/${postId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiUrl}/posts/${postId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         const parentPost = await response.json();
@@ -292,12 +285,9 @@ function Carousel({ rootPost, redPostId, currentUser }) {
     //the postId is the parent as the function
     if (postId) {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${postId}`,
-          {
-            method: "GET",
-          }
-        );
+        const response = await fetch(`${apiUrl}/posts/${postId}`, {
+          method: "GET",
+        });
 
         if (response.ok) {
           const parentPost = await response.json();

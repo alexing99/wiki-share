@@ -6,6 +6,7 @@ function CreateUserForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (event) => {
     console.log("bet");
@@ -23,7 +24,7 @@ function CreateUserForm() {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+      const response = await fetch(`${apiUrl}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +53,7 @@ function CreateUserForm() {
 
   const autoLogin = async (email, password) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      const response = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

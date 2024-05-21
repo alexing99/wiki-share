@@ -27,6 +27,7 @@ function PostCreation({ parentPost, goToPost }) {
   const [isLoading, setIsLoading] = useState(false); // Track loading state
 
   const articleRef = useRef(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigateTo = useNavigate();
 
@@ -498,7 +499,7 @@ function PostCreation({ parentPost, goToPost }) {
     }
 
     try {
-      const response = await fetch("${process.env.REACT_APP_API_URL}/posts", {
+      const response = await fetch("${apiUrl}/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -520,7 +521,7 @@ function PostCreation({ parentPost, goToPost }) {
           navigateTo(redirectUrl);
         } else if (replyMode) {
           const nextResponse = await fetch(
-            `${process.env.REACT_APP_API_URL}/posts/${articleFrom._id}`,
+            `${apiUrl}/posts/${articleFrom._id}`,
             {
               method: "PATCH",
               headers: {

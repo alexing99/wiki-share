@@ -22,6 +22,8 @@ function Profile() {
   const [authoredPosts, setAuthoredPosts] = useState([]);
   const [postsOfInt, setPostsOfInt] = useState([]);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const token = cookies.get("token");
 
   const tokenArray = token.split(".");
@@ -38,12 +40,9 @@ function Profile() {
 
   const getUserInfo = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "GET",
+      });
 
       if (response.ok) {
         console.log("user information retreived!");
@@ -69,12 +68,9 @@ function Profile() {
     );
     if (!confirmed) return;
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "DELETE",
+      });
       if (response.ok) {
         console.log("User deleted");
         cookies.remove("token");
@@ -89,21 +85,18 @@ function Profile() {
   };
   const updateUser = async () => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/users/${userId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name: editedName,
-            email: editedEmail,
-            password: newPassword,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: editedName,
+          email: editedEmail,
+          password: newPassword,
+        }),
+      });
 
       if (response.ok) {
         console.log("User updated");
@@ -147,9 +140,7 @@ function Profile() {
     try {
       const posts = [];
       for (const postId of interests) {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/posts/${postId}`
-        );
+        const response = await fetch(`${apiUrl}/posts/${postId}`);
         if (response.ok) {
           const post = await response.json();
           posts.push(post);
@@ -168,9 +159,7 @@ function Profile() {
   const fetchAuthoredPosts = async (name) => {
     console.log(name);
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/${name}/author`
-      );
+      const response = await fetch(`${apiUrl}/posts/${name}/author`);
       if (response.ok) {
         const data = await response.json();
         console.log("author", data);

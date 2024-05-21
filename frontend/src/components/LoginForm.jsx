@@ -4,12 +4,13 @@ import Cookies from "universal-cookie";
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      const response = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
