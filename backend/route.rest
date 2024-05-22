@@ -1,8 +1,8 @@
-GET ${process.env.REACT_APP_API_URL}/users
+GET ${apiUrl}/users
 
 ###
 
-POST ${process.env.REACT_APP_API_URL}/users
+POST ${apiUrl}/users
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 
-POST ${process.env.REACT_APP_API_URL}/login
+POST ${apiUrl}/login
 Content-Type: application/json
 
 {
@@ -22,10 +22,10 @@ Content-Type: application/json
 }
 ###
 
-GET ${process.env.REACT_APP_API_URL}/users/65e7658b225fac15d63b08fe
+GET ${apiUrl}/users/65e7658b225fac15d63b08fe
 
 ###
-GET ${process.env.REACT_APP_API_URL}/posts/rootposts
+GET ${apiUrl}/posts/rootposts
 
 ###
-GET ${process.env.REACT_APP_API_URL}/posts/65f4848bc58b6f6cd858f841/children
+GET ${apiUrl}/posts/65f4848bc58b6f6cd858f841/children
