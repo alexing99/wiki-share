@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://peecer.netlify.app",
+    origin: "https://main--peecer.netlify.app",
     credentials: true,
   })
 );
