@@ -37,14 +37,19 @@ function PostCreation({ parentPost, goToPost }) {
     // Traverse the DOM tree to find the first non-SVG image URL in the article, excluding Question-book-new.svg
     $("img").each((index, element) => {
       if (!mainImageUrl) {
-        console.log(element);
-        const imageUrl = $(element).attr("src");
-        // Check if the image URL is not empty
-        if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
-          // Set the main image URL
-          mainImageUrl = imageUrl;
-          // Exit the loop once the main image URL is found
-          return false;
+        // Get the height of the image
+        const height = $(element).attr("height");
+        // Check if the height is defined and greater than 100 pixels
+        if (height && parseInt(height) > 99) {
+          console.log(element, element.height, height);
+          const imageUrl = $(element).attr("src");
+          // Check if the image URL is not empty
+          if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
+            // Set the main image URL
+            mainImageUrl = imageUrl;
+            // Exit the loop once the main image URL is found
+            return false;
+          }
         }
       }
     });
