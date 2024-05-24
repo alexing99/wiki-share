@@ -137,6 +137,16 @@ function PostCreation({ parentPost, goToPost }) {
             const newText = paragraphText.replace(targetText, span.outerHTML);
             paragraph.innerHTML = newText;
 
+            const links = span.getElementsByTagName("a");
+            for (let j = 0; j < links.length; j++) {
+              const link = links[j];
+              const linkText = link.textContent;
+              const linkHref = link.getAttribute("href");
+              link.innerHTML = linkText; // Set the innerHTML to link text
+              link.href = linkHref; // Set the href attribute
+              link.target = "_blank"; // Open links in a new tab
+            }
+
             // Scroll to the paragraph containing the target text
             // articleRef.scrollIntoView({ behavior: "smooth", block: "start" });
             setTimeout(() => {
