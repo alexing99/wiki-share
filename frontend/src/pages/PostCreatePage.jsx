@@ -35,20 +35,18 @@ function PostCreation({ parentPost, goToPost }) {
     let mainImageUrl = null;
     const $ = cheerio.load(html);
     // Traverse the DOM tree to find the first non-SVG image URL in the article, excluding Question-book-new.svg
-    $("img:not([src$='.svg']):not([src$='Question-book-new.svg'])").each(
-      (index, element) => {
-        if (!mainImageUrl) {
-          const imageUrl = $(element).attr("src");
-          // Check if the image URL is not empty
-          if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
-            // Set the main image URL
-            mainImageUrl = imageUrl;
-            // Exit the loop once the main image URL is found
-            return false;
-          }
+    $("img").each((index, element) => {
+      if (!mainImageUrl) {
+        const imageUrl = $(element).attr("src");
+        // Check if the image URL is not empty
+        if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
+          // Set the main image URL
+          mainImageUrl = imageUrl;
+          // Exit the loop once the main image URL is found
+          return false;
         }
       }
-    );
+    });
 
     return mainImageUrl;
   };

@@ -133,7 +133,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Loody</h1>
+      <h1>Peecer</h1>
 
       {/* <Switch>
         <Route exact path="/">

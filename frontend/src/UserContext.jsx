@@ -21,6 +21,7 @@ export const UserProvider = ({ children }) => {
     const payload = tokenArray[1];
 
     const decodedPayload = JSON.parse(atob(payload));
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const userId = decodedPayload.id;
     try {
