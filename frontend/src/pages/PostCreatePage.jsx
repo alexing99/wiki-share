@@ -112,54 +112,7 @@ function PostCreation({ parentPost, goToPost }) {
     }
   }, [article]);
 
-  //scroll to where post content is in article
-  // const scrollToContent = async () => {
-  //   if (linkClickLimit > 0) {
-  //     const cleanedText = parentPost.content.replace(/^"|"$/g, "");
-
-  //     const targetText = cleanedText;
-  //     const articleDiv = articleRef.current;
-
-  //     if (articleDiv) {
-  //       const paragraphs = articleDiv.getElementsByTagName("p");
-
-  //       for (let i = 0; i < paragraphs.length; i++) {
-  //         const paragraph = paragraphs[i];
-  //         const paragraphText = paragraph.textContent;
-
-  //         if (paragraphText.includes(targetText)) {
-  //           // Create a new span element to wrap the target text
-  //           const span = document.createElement("span");
-  //           span.className = "highlight";
-  //           span.textContent = targetText;
-
-  //           // Replace the target text within the paragraph with the highlighted span
-  //           const newText = paragraphText.replace(targetText, span.outerHTML);
-  //           paragraph.innerHTML = newText;
-
-  //           const links = span.getElementsByTagName("a");
-  //           for (let j = 0; j < links.length; j++) {
-  //             const link = links[j];
-  //             const linkText = link.textContent;
-  //             const linkHref = link.getAttribute("href");
-  //             link.innerHTML = linkText; // Set the innerHTML to link text
-  //             link.href = linkHref; // Set the href attribute
-  //             link.target = "_blank"; // Open links in a new tab
-  //           }
-
-  //           // Scroll to the paragraph containing the target text
-  //           // articleRef.scrollIntoView({ behavior: "smooth", block: "start" });
-  //           setTimeout(() => {
-  //             paragraph.scrollIntoView({ behavior: "smooth", block: "center" });
-  //           }, 200); // Adjust the delay as needed
-
-  //           break; // Stop searching after finding the first match
-  //         } else console.log("no match");
-  //       }
-  //     }
-  //   }
-  // };
-
+  // scroll to where post content is in article
   const scrollToContent = async () => {
     if (linkClickLimit > 0) {
       const cleanedText = parentPost.content.replace(/^"|"$/g, "");
@@ -172,19 +125,30 @@ function PostCreation({ parentPost, goToPost }) {
 
         for (let i = 0; i < paragraphs.length; i++) {
           const paragraph = paragraphs[i];
-          const paragraphHTML = paragraph.innerHTML;
+          const paragraphText = paragraph.textContent;
 
-          if (paragraphHTML.includes(targetText)) {
-            // Wrap the target text in a span with a highlight class
-            const highlightedHTML = paragraphHTML.replace(
-              new RegExp(targetText, "g"),
-              `<span class="highlight">${targetText}</span>`
-            );
+          if (paragraphText.includes(targetText)) {
+            // Create a new span element to wrap the target text
+            const span = document.createElement("span");
+            span.className = "highlight";
+            span.textContent = targetText;
 
-            // Set the modified HTML content back to the paragraph
-            paragraph.innerHTML = highlightedHTML;
+            // Replace the target text within the paragraph with the highlighted span
+            const newText = paragraphText.replace(targetText, span.outerHTML);
+            paragraph.innerHTML = newText;
+
+            const links = span.getElementsByTagName("a");
+            for (let j = 0; j < links.length; j++) {
+              const link = links[j];
+              const linkText = link.textContent;
+              const linkHref = link.getAttribute("href");
+              link.innerHTML = linkText; // Set the innerHTML to link text
+              link.href = linkHref; // Set the href attribute
+              link.target = "_blank"; // Open links in a new tab
+            }
 
             // Scroll to the paragraph containing the target text
+            // articleRef.scrollIntoView({ behavior: "smooth", block: "start" });
             setTimeout(() => {
               paragraph.scrollIntoView({ behavior: "smooth", block: "center" });
             }, 200); // Adjust the delay as needed
