@@ -37,6 +37,7 @@ function PostCreation({ parentPost, goToPost }) {
     // Traverse the DOM tree to find the first non-SVG image URL in the article, excluding Question-book-new.svg
     $("img").each((index, element) => {
       if (!mainImageUrl) {
+        console.log(element);
         const imageUrl = $(element).attr("src");
         // Check if the image URL is not empty
         if (imageUrl && /\.(jpeg|jpg|png|gif|bmp)$/i.test(imageUrl)) {
@@ -497,7 +498,7 @@ function PostCreation({ parentPost, goToPost }) {
     }
 
     try {
-      const response = await fetch("${apiUrl}/posts", {
+      const response = await fetch(`${apiUrl}/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

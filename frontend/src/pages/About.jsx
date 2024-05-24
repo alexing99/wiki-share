@@ -5,8 +5,9 @@ function About() {
       <Navbar /> <h1>About</h1>
       <p>
         Wiki Passion started in March of 2024 as a final project after
-        completing the Odin Project. It is built with React, Node.js, and
-        MongoDB.{" "}
+        completing the Odin Project. It is built with React, Node.js, Express,
+        and MongoDB. The backend was deployed on Heroku and the frontend on
+        Netlify.{" "}
       </p>
       <h3>How It Works</h3>
       <p>
@@ -23,6 +24,7 @@ function About() {
       </p>
       <h3>Coming Soon</h3>
       <ul>
+        <li>A logo</li>
         <li>
           For a full no typing reality, the site will only allow sign-up through
           Google
