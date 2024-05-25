@@ -2,15 +2,9 @@
 
 Wiki Passion started in March of 2024 as a final project after
 completing the Odin Project. It is built with a MERN stack and deployed on Heroku and Netlifly
-names; typeless, clippings, Luddy
+
 
 ---
-
-Steps to Deploy:
-
--populate with posts
--logo
--about page diagram
 
 ---
 
