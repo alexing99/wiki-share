@@ -43,7 +43,7 @@ function Navbar() {
             </li>
           ) : (
             <li>
-              <Link to="/">Create Post</Link>
+              <Link to="/auth">Create Post</Link>
             </li>
           )}
           <li>
