@@ -31,7 +31,7 @@ function Navbar() {
             </li>
           ) : (
             <li className="firstLi">
-              <Link to="/">Login</Link>
+              <Link to="/auth">Login</Link>
             </li>
           )}
           <li>

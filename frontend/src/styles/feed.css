@@ -12,4 +12,7 @@
   font-family: "Hoefler Text", "Baskerville Old Face", Garamond,
     "Times New Roman";
   color: black;
+  text-decoration: underline;
+  text-decoration-color: rgb(250, 235, 215);
+  text-decoration-thickness: 4px;
 }

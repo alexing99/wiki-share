@@ -497,7 +497,7 @@ function PostCreation({ parentPost, goToPost }) {
 
   const postPost = async () => {
     if (user === null) {
-      window.location.href = "/";
+      window.location.href = "/auth";
       return;
     }
     let content = selectedText;

@@ -74,7 +74,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
 
   const handleInterest = async () => {
     if (currentUser === undefined) {
-      window.location.href = "/";
+      window.location.href = "/auth";
       return;
     }
     try {
@@ -166,7 +166,7 @@ function Vote({ currentPost, currentUser, rootPost }) {
 
   const handleRelevance = async () => {
     if (currentUser === undefined) {
-      window.location.href = "/";
+      window.location.href = "/auth";
       return;
     }
     console.log("rel");

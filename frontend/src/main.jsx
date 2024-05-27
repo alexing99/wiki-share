@@ -12,8 +12,9 @@ import { UserProvider } from "./UserContext.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Feed />,
   },
+  { path: "/auth", element: <App /> },
   {
     path: "profile",
     element: <Profile />,

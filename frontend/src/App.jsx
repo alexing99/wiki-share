@@ -40,10 +40,8 @@ function App() {
     const token = cookies.get("token");
     if (token) {
       setLoggedIn(true);
-      console.log("ur in");
     } else {
       setLoggedIn(false);
-      console.log("nooo");
     }
   }, []); // Run this effect only once when component mounts
 

@@ -9,7 +9,6 @@ function CreateUserForm() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (event) => {
-    console.log("bet");
     event.preventDefault();
     // Validate password requirements
     if (password !== confirmPassword) {
@@ -72,7 +71,7 @@ function CreateUserForm() {
         cookies.set("token", token, { path: "/" }); // Adjust path as needed
         setEmail("");
         setPassword("");
-        window.location.href = "/";
+        window.location.href = "/auth";
       } else {
         const error = await response.json();
         console.error("Error logging in:", error);

@@ -358,7 +358,7 @@ function Carousel({ rootPost, redPostId, currentUser }) {
           </div>
         )}
         <div className="sort-dropdown">
-          <label htmlFor="dropdown">Sort By:</label>
+          <label htmlFor="dropdown"></label>
           <select id="dropdown" onChange={handleSort}>
             <option value="New">New</option>
             <option value="Length">Longest Route</option>
