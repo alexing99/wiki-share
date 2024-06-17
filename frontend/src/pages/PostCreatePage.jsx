@@ -39,8 +39,9 @@ function PostCreation({ parentPost, goToPost }) {
       if (!mainImageUrl) {
         // Get the height of the image
         const height = $(element).attr("height");
+        const width = $(element).attr("width");
         // Check if the height is defined and greater than 100 pixels
-        if (height && parseInt(height) > 99) {
+        if (height && width && parseInt(height * width) > 2000) {
           console.log(element, element.height, height);
           const imageUrl = $(element).attr("src");
           // Check if the image URL is not empty
