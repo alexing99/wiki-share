@@ -4,10 +4,9 @@ function About() {
     <>
       <Navbar /> <h1>About</h1>
       <p>
-        Wiki Passion started in March of 2024 as a final project after
-        completing the Odin Project. It is built with React, Node.js, Express,
-        and MongoDB. The backend was deployed on Heroku and the frontend on
-        Netlify.{" "}
+        Peecer started in March of 2024 as a final project after completing the
+        Odin Project. It is built with React, Node.js, Express, and MongoDB. The
+        backend was deployed on Heroku and the frontend on Netlify.{" "}
       </p>
       <h3>How It Works</h3>
       <p>
