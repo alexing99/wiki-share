@@ -370,11 +370,9 @@ function Carousel({ rootPost, redPostId, currentUser }) {
         <Tree rootPost={rootPost} currentPost={currentPost}></Tree>
       </div>
       <h1>{currentPost?.article}</h1>
-      {!showPostCreation &&
-        currentPost?.image !=
-          null(
-            <img src={currentPost?.image} alt="" width="200px" height="auto" />
-          )}{" "}
+      {!showPostCreation && currentPost?.image != null && (
+        <img src={currentPost?.image} alt="" width="200px" height="auto" />
+      )}{" "}
       <div className="content-and-vote">
         <div
           key={`${currentPost?._id}-${showPostCreation}`}
